@@ -4,8 +4,7 @@ import { trpc } from "../utils/trpc";
 import axios from "axios";
 import Image from "next/image";
 import UserProfilePicture from "./user-profile-image";
-
-const CLOUDINARY_UPLOAD_PRESET = "uvm9hyxi";
+import { uploadImage } from "src/utils/cloudinary";
 
 const PostInput = () => {
   const utils = trpc.useContext();
@@ -42,25 +41,10 @@ const PostInput = () => {
 
   const handleFormSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    const formData = new FormData();
-    let imageUrl: null | string = null;
-    if (selectedImage) {
-      formData.append("file", selectedImage);
-      formData.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
-      const tmppath = URL.createObjectURL(selectedImage);
-      // console.log("tmppath", tmppath);
-      const response = await axios.post(
-        "https://api.cloudinary.com/v1_1/dw6bikqwf/image/upload",
-        formData,
-        {
-          onUploadProgress: (progressEvent) =>
-            setImageUploadProgress(
-              (progressEvent.loaded / progressEvent.total) * 100
-            ),
-        }
-      );
-      imageUrl = response.data.url;
-    }
+    if (!selectedImage) return;
+    const imageUrl = await uploadImage(selectedImage, (progress) =>
+      setImageUploadProgress(progress)
+    );
 
     mutation.mutate({
       content: postContent,

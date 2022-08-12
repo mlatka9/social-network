@@ -42,16 +42,17 @@ model Session {
 }
 
 model User {
-  id            String    @id @default(cuid())
+  id            String        @id @default(cuid())
   name          String?
-  email         String?   @unique
+  email         String?       @unique
   emailVerified DateTime?
   image         String?
+  bannerImage String?
   accounts      Account[]
   sessions      Session[]
-  // followedBy    User[]    @relation("UserFollows")
-  // following     User[]    @relation("UserFollows")
-
+  followedBy    User[]        @relation("UserFollows")
+  following     User[]        @relation("UserFollows")
+  bio           String        @default("")
   posts         Post[]        @relation(name: "createdPosts")
   comments      Comment[]
   likedPosts    PostLike[]
@@ -76,6 +77,7 @@ model Post {
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
   images    Image[]    @relation(name: "addedImages")
+  isDeleted Boolean @default(false)
 }
 
 model Image {
@@ -99,6 +101,7 @@ model Comment {
   parent    Comment?      @relation("ParentChild", fields: [parentId], references: [id], onDelete: Cascade)
   children  Comment[]     @relation("ParentChild")
   parentId  String?
+  isDeleted Boolean @default(false)
 }
 
 model PostLike {

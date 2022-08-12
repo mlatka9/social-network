@@ -40,7 +40,12 @@ const CommentsList = ({
   if (!commentsWithCurrentDepth) return <></>;
 
   return (
-    <div className={clsx(["w-full", depth !== 0 && "pl-10"])}>
+    <div
+      className={clsx([
+        "w-full ",
+        depth !== 0 && "pl-10 border-l-2 border-l-neutral-300",
+      ])}
+    >
       {commentsWithCurrentDepth.map((comment) => (
         <div key={comment.id}>
           <CommentBox comment={comment} />

@@ -29,14 +29,27 @@ export const commentRouter = createProtectedRouter()
         },
       });
 
-      return comments.map(({ _count, likes, ...commentData }) => ({
-        ...commentData,
-        likeCount: _count.likes,
-        repliesCount: _count.children,
-        likedByMe: likes.some(
-          (postLike) => postLike.userId === ctx.session.user.id
-        ),
-      }));
+      return comments
+        .filter((comment) => comment._count.children > 0 || !comment.isDeleted)
+        .map((comment) => {
+          if (comment.isDeleted) {
+            const { message, ...commentData } = comment;
+            return {
+              ...commentData,
+              message: "Comment removed",
+            };
+          } else {
+            return comment;
+          }
+        })
+        .map(({ _count, likes, ...commentData }) => ({
+          ...commentData,
+          likeCount: _count.likes,
+          repliesCount: _count.children,
+          likedByMe: likes.some(
+            (postLike) => postLike.userId === ctx.session.user.id
+          ),
+        }));
     },
   })
   .mutation("add", {
@@ -73,6 +86,31 @@ export const commentRouter = createProtectedRouter()
           (postLike) => postLike.userId === ctx.session.user.id
         ),
       };
+    },
+  })
+  .mutation("delete", {
+    input: z.object({
+      commentId: z.string(),
+    }),
+    async resolve({ input, ctx }) {
+      const isCurretUserPostAuthor = await prisma.comment.count({
+        where: {
+          id: input.commentId,
+          userId: ctx.session.user.id,
+        },
+      });
+      if (!isCurretUserPostAuthor) {
+        throw Error("You are not the owner of the post");
+      }
+
+      await prisma.comment.update({
+        where: {
+          id: input.commentId,
+        },
+        data: {
+          isDeleted: true,
+        },
+      });
     },
   })
   .mutation("toggleLike", {
@@ -116,5 +154,31 @@ export const commentRouter = createProtectedRouter()
           },
         }),
       };
+    },
+  })
+  .mutation("update", {
+    input: z.object({
+      commentId: z.string(),
+      newContent: z.string(),
+    }),
+    async resolve({ input, ctx }) {
+      const isCurretUserPostAuthor = await prisma.comment.count({
+        where: {
+          id: input.commentId,
+          userId: ctx.session.user.id,
+        },
+      });
+      if (!isCurretUserPostAuthor) {
+        throw Error("You are not the owner of the post");
+      }
+
+      await prisma.comment.update({
+        where: {
+          id: input.commentId,
+        },
+        data: {
+          message: input.newContent,
+        },
+      });
     },
   });

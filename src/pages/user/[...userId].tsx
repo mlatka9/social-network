@@ -1,11 +1,36 @@
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { trpc } from "../../utils/trpc";
 import Image from "next/image";
 import PostCard from "../../components/post-card";
+import FollowersList from "@/components/followers-list";
+import ButtonFollow from "@/components/button-follow";
+import { FollowsListType } from "@/components/followers-list";
+import ProfileSettings from "@/components/profile-settings";
 
 const User = () => {
   const { query, isReady, push } = useRouter();
+  const [isFollowersModalOpen, setIsFollowersModalOpen] = useState(false);
+  const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
+  const [selectedFollowType, setSelectedFollowType] =
+    useState<FollowsListType>("following");
+
+  const closeFollowersModal = () => {
+    setIsFollowersModalOpen(false);
+  };
+
+  const closeSettingsModal = () => {
+    setIsSettingsModalOpen(false);
+  };
+
+  const handleOpenFollowersModal = (type: FollowsListType) => {
+    setIsFollowersModalOpen(true);
+    setSelectedFollowType(type);
+  };
+
+  const handleOpenSettingsModal = () => {
+    setIsSettingsModalOpen(true);
+  };
 
   useEffect(() => {
     if (!isReady) return;
@@ -15,6 +40,8 @@ const User = () => {
   }, [isReady]);
 
   const userId = ((query.userId as string[]) || [])[0] || "";
+
+  const me = trpc.useQuery(["user.me"]);
 
   const user = trpc.useQuery(["user.getById", { userId: userId }], {
     enabled: !!userId,
@@ -50,7 +77,7 @@ const User = () => {
   return (
     <div>
       <div className="w-full h-80 relative">
-        <Image layout="fill" src="/images/default-banner.jpg" />
+        <Image layout="fill" src={user.data?.bannerImage || ""} />
       </div>
 
       <div className="container mx-auto ">
@@ -66,17 +93,46 @@ const User = () => {
           </div>
 
           <div className="ml-6">
-            <h1 className="font-poppins font-semibold text-2xl">
-              {user.data?.name}
-            </h1>
+            <div className="flex items-baseline">
+              <h1 className="font-poppins font-semibold text-2xl">
+                {user.data?.name}
+              </h1>
+              <div className="text-xs  text-neutral-500 tracking-wide font-medium flex ml-7 space-x-4">
+                <p
+                  onClick={() => handleOpenFollowersModal("following")}
+                  className="cursor-pointer"
+                >
+                  <span className="text-neutral-800 font-semibold mr-1 font-poppins">
+                    {user.data?.followingCount}
+                  </span>
+                  Following
+                </p>
+                <p
+                  onClick={() => handleOpenFollowersModal("followers")}
+                  className="cursor-pointer"
+                >
+                  <span className="text-neutral-800 font-semibold mr-1 font-poppins">
+                    {user.data?.followedByCount}
+                  </span>
+                  Followers
+                </p>
+              </div>
+            </div>
+
             <p className="font-medium text-neutral-600 mt-6">
-              Photographer & Filmmaker based in Copenhagen, Denmark ✵ 🇩🇰
+              {user.data?.bio || "no bio"}
             </p>
           </div>
-
-          <button className="bg-blue-500 rounded px-6 py-2 ml-auto self-start text-white">
-            Follow
-          </button>
+          {userId === me.data?.id ? (
+            <button
+              onClick={handleOpenSettingsModal}
+              className="bg-slate-800 ml-auto text-white self-start py-2 px-4 rounded-lg cursor-pointer hover:bg-slate-700 transition-colors"
+            >
+              Settings
+            </button>
+          ) : (
+            <ButtonFollow userId={userId} />
+          )}
         </div>
 
         <div className="space-y-5 mb-10">
@@ -90,6 +146,16 @@ const User = () => {
             ))}
         </div>
       </div>
+      {isFollowersModalOpen && (
+        <FollowersList
+          selectedFollowType={selectedFollowType}
+          closeFollowersModal={closeFollowersModal}
+          userId={userId}
+        />
+      )}
+      {isSettingsModalOpen && (
+        <ProfileSettings handleCloseSettigns={closeSettingsModal} />
+      )}
     </div>
   );
 };
