@@ -1,0 +1,120 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Example {
+  id String @id @default(cuid())
+}
+
+// Necessary for Next auth
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  accounts      Account[]
+  sessions      Session[]
+  // followedBy    User[]    @relation("UserFollows")
+  // following     User[]    @relation("UserFollows")
+
+  posts         Post[]        @relation(name: "createdPosts")
+  comments      Comment[]
+  likedPosts    PostLike[]
+  likedComments CommentLike[]
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model Post {
+  id        String     @id @default(cuid())
+  content   String
+  user      User       @relation(name: "createdPosts", fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+  comments  Comment[]
+  likes     PostLike[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  images    Image[]    @relation(name: "addedImages")
+}
+
+model Image {
+  id     String @id @default(cuid())
+  url    String
+  alt    String
+  post   Post   @relation(name: "addedImages", fields: [postId], references: [id], onDelete: Cascade)
+  postId String
+}
+
+model Comment {
+  id        String        @id @default(uuid())
+  message   String
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+  user      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+  post      Post          @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId    String
+  likes     CommentLike[]
+  parent    Comment?      @relation("ParentChild", fields: [parentId], references: [id], onDelete: Cascade)
+  children  Comment[]     @relation("ParentChild")
+  parentId  String?
+}
+
+model PostLike {
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  postId String
+  post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@id([userId, postId])
+}
+
+model CommentLike {
+  userId    String
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  commentId String
+  comment   Comment @relation(fields: [commentId], references: [id], onDelete: Cascade)
+
+  @@id([userId, commentId])
+}
