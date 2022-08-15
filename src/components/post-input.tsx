@@ -1,18 +1,18 @@
-import { useSession } from "next-auth/react";
-import { FormEvent, useState, useCallback } from "react";
+import { FormEvent, useState } from "react";
 import { trpc } from "../utils/trpc";
-import axios from "axios";
 import Image from "next/image";
 import UserProfilePicture from "./user-profile-image";
 import { uploadImage } from "src/utils/cloudinary";
-import { DndProvider } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
-import type { DropTargetMonitor } from "react-dnd";
-import { useDrop } from "react-dnd";
-import { NativeTypes } from "react-dnd-html5-backend";
 import UploadImageThumbnail from "./upload-image-thumbnail";
+import { useDropzone } from "react-dropzone";
 
 const PostInput = () => {
+  const [postContent, setPostContent] = useState("");
+  const [imagesUploadProgress, setImagesUploadProgress] = useState<number[]>(
+    []
+  );
+  const [selectedImages, setSelectedImages] = useState<File[]>([]);
+
   const utils = trpc.useContext();
 
   const mutation = trpc.useMutation("post.addPost", {
@@ -21,56 +21,35 @@ const PostInput = () => {
     },
   });
 
-  const [postContent, setPostContent] = useState("");
-  const [selectedImages, setSelectedImages] = useState<File[]>([]);
-  const [imagesUploadProgress, setImagesUploadProgress] = useState<number[]>(
-    []
-  );
-
-  console.log(imagesUploadProgress);
-
-  const handleFileDrop = useCallback(
-    (item: { files: any[] }) => {
-      if (item) {
-        const files = item.files;
-        setSelectedImages([...selectedImages, ...files]);
-        setImagesUploadProgress([
-          ...imagesUploadProgress,
-          ...Array(files.length).fill(0),
-        ]);
-      }
+  const { getRootProps, getInputProps, open } = useDropzone({
+    noClick: true,
+    accept: {
+      "image/*": [".png", ".gif", ".jpeg", ".jpg"],
     },
-    [selectedImages, imagesUploadProgress]
-  );
-
-  const [{ canDrop, isOver }, drop] = useDrop(
-    () => ({
-      accept: [NativeTypes.FILE],
-      drop(item: { files: any[] }) {
-        if (handleFileDrop) {
-          handleFileDrop(item);
-        }
-      },
-      canDrop(item: any) {
-        console.log("canDrop", item.files, item.items);
-        return true;
-      },
-      hover(item: any) {
-        console.log("hover", item.files, item.items);
-      },
-      collect: (monitor: DropTargetMonitor) => {
-        const item = monitor.getItem() as any;
-        if (item) {
-          console.log("collect", item.files, item.items);
-        }
+    onDrop: (files: File[]) => {
+      setSelectedImages([...selectedImages, ...files]);
+      setImagesUploadProgress(
+        Array(selectedImages.length + files.length).fill(0)
+      );
+    },
+    validator: (file: File) => {
+      if (selectedImages.some((image) => image.name === file.name)) {
         return {
-          isOver: monitor.isOver(),
-          canDrop: monitor.canDrop(),
+          code: "file-exists",
+          message: `File with name ${file.name} was added already`,
         };
-      },
-    }),
-    [handleFileDrop]
-  );
+      }
+      return null;
+    },
+  });
+
+  const removeFile = (fileName: string) => {
+    setSelectedImages(
+      selectedImages.filter((image) => image.name !== fileName)
+    );
+  };
+
+  console.log("acceptedFiles", selectedImages);
 
   const me = trpc.useQuery(["user.me"]);
 
@@ -100,8 +79,6 @@ const PostInput = () => {
     setImagesUploadProgress([]);
   };
 
-  const isActive = canDrop && isOver;
-
   return (
     <form onSubmit={handleFormSubmit} className="px-5 py-3 bg-white rounded-xl">
       <p className="font-poppins font-semibold text-neutral-700">
@@ -115,7 +92,11 @@ const PostInput = () => {
             userID={me.data?.id || ""}
           />
         </div>
-        <div ref={drop} className="bg-red-200 ml-3 w-full">
+        <div
+          {...getRootProps({ className: "dropzone" })}
+          className=" ml-3 w-full"
+        >
+          <input {...getInputProps()} />
           <textarea
             value={postContent}
             onChange={({ target }) => setPostContent(target.value)}
@@ -124,9 +105,9 @@ const PostInput = () => {
         </div>
       </div>
       <div className="flex items-center ml-[50px]">
-        <label htmlFor="input-file" className="cursor-pointer self-start">
+        <div className="cursor-pointer self-start" onClick={open}>
           <Image src="/icons/photo.png" width="20" height="20" alt="" />
-        </label>
+        </div>
         {selectedImages.length > 0 &&
           selectedImages.map((image, index) => {
             return (
@@ -134,6 +115,7 @@ const PostInput = () => {
                 key={image.name}
                 image={image}
                 imageUploadProgress={imagesUploadProgress[index] || 0}
+                removeFile={removeFile}
               />
             );
           })}

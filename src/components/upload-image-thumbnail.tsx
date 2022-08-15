@@ -4,15 +4,18 @@ import { useMemo } from "react";
 interface UploadImageThumbnail {
   image: File;
   imageUploadProgress: number;
+  removeFile: (imageName: string) => void;
 }
 
 const UploadImageThumbnail = ({
   image,
   imageUploadProgress,
+  removeFile,
 }: UploadImageThumbnail) => {
   const imageSrc = useMemo(() => URL.createObjectURL(image), [image]);
   return (
     <div className="ml-5">
+      <button onClick={() => removeFile(image.name)}>X</button>
       <div className="w-32 h-20 relative ">
         <Image
           src={imageSrc}
