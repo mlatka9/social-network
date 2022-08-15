@@ -6,6 +6,8 @@ import { authOptions } from "./api/auth/[...nextauth]";
 import { useSession } from "next-auth/react";
 import PostCard from "../components/post-card";
 import PostInput from "@/components/post-input";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 
 const Home: NextPage = () => {
   const utils = trpc.useContext();
@@ -43,7 +45,9 @@ const Home: NextPage = () => {
       </Head>
 
       <main className="container mx-auto min-h-screen p-4">
-        <PostInput />
+        <DndProvider backend={HTML5Backend}>
+          <PostInput />
+        </DndProvider>
         <div className="mb-20" />
         <div className="space-y-5">
           {posts.isSuccess &&

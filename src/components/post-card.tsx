@@ -43,17 +43,18 @@ const PostCard = ({ post, handleToggleLike }: PostCardProps) => {
         </Link>
       </div>
 
-      {post.images[0]?.url && (
-        <div className="w-full h-80 relative mb-3">
-          <Image
-            layout="fill"
-            src={post.images[0]?.url || ""}
-            objectFit="cover"
-            className="rounded-lg"
-            alt=""
-          />
-        </div>
-      )}
+      {post.images.length > 0 &&
+        post.images.map((image) => (
+          <div key={image.id} className="w-full h-80 relative mb-3">
+            <Image
+              layout="fill"
+              src={image.url}
+              objectFit="cover"
+              className="rounded-lg"
+              alt=""
+            />
+          </div>
+        ))}
 
       <div className="font-medium text-xs text-gray-400 ml-auto w-fit">
         <p>{post.commentsCount} Comments</p>

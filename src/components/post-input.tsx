@@ -1,10 +1,16 @@
 import { useSession } from "next-auth/react";
-import { FormEvent, useState } from "react";
+import { FormEvent, useState, useCallback } from "react";
 import { trpc } from "../utils/trpc";
 import axios from "axios";
 import Image from "next/image";
 import UserProfilePicture from "./user-profile-image";
 import { uploadImage } from "src/utils/cloudinary";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
+import type { DropTargetMonitor } from "react-dnd";
+import { useDrop } from "react-dnd";
+import { NativeTypes } from "react-dnd-html5-backend";
+import UploadImageThumbnail from "./upload-image-thumbnail";
 
 const PostInput = () => {
   const utils = trpc.useContext();
@@ -16,45 +22,85 @@ const PostInput = () => {
   });
 
   const [postContent, setPostContent] = useState("");
-  const [selectedImage, setSelectedImage] = useState<File | undefined>(
-    undefined
+  const [selectedImages, setSelectedImages] = useState<File[]>([]);
+  const [imagesUploadProgress, setImagesUploadProgress] = useState<number[]>(
+    []
   );
-  const [imageUploadProgress, setImageUploadProgress] = useState(0);
 
-  console.log(selectedImage);
+  console.log(imagesUploadProgress);
+
+  const handleFileDrop = useCallback(
+    (item: { files: any[] }) => {
+      if (item) {
+        const files = item.files;
+        setSelectedImages([...selectedImages, ...files]);
+        setImagesUploadProgress([
+          ...imagesUploadProgress,
+          ...Array(files.length).fill(0),
+        ]);
+      }
+    },
+    [selectedImages, imagesUploadProgress]
+  );
+
+  const [{ canDrop, isOver }, drop] = useDrop(
+    () => ({
+      accept: [NativeTypes.FILE],
+      drop(item: { files: any[] }) {
+        if (handleFileDrop) {
+          handleFileDrop(item);
+        }
+      },
+      canDrop(item: any) {
+        console.log("canDrop", item.files, item.items);
+        return true;
+      },
+      hover(item: any) {
+        console.log("hover", item.files, item.items);
+      },
+      collect: (monitor: DropTargetMonitor) => {
+        const item = monitor.getItem() as any;
+        if (item) {
+          console.log("collect", item.files, item.items);
+        }
+        return {
+          isOver: monitor.isOver(),
+          canDrop: monitor.canDrop(),
+        };
+      },
+    }),
+    [handleFileDrop]
+  );
 
   const me = trpc.useQuery(["user.me"]);
 
-  const handleOnImageChange = async (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    if (e.target.files && e.target.files.length !== 0 && e.target.files[0]) {
-      const file = e.target.files[0];
-      setSelectedImage(file);
-      const cos = URL.createObjectURL(file);
-      console.log("cos", cos);
-      // mutation.mutate({ content: postContent });
-    } else {
-      setSelectedImage(undefined);
-    }
-  };
-
   const handleFormSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    if (!selectedImage) return;
-    const imageUrl = await uploadImage(selectedImage, (progress) =>
-      setImageUploadProgress(progress)
+    if (selectedImages.length === 0) return;
+
+    const imageUrls = await Promise.all(
+      selectedImages.map((file, index) =>
+        uploadImage(file, (progress) =>
+          setImagesUploadProgress((prev) =>
+            prev.map((val, i) => (i === index ? progress : val))
+          )
+        )
+      )
     );
 
     mutation.mutate({
       content: postContent,
-      images: imageUrl ? [{ imageAlt: "alt", imageUrl: imageUrl }] : null,
+      images: imageUrls.length
+        ? imageUrls.map((url) => ({ imageAlt: "alt", imageUrl: url }))
+        : null,
     });
 
     setPostContent("");
-    setSelectedImage(undefined);
-    setImageUploadProgress(0);
+    setSelectedImages([]);
+    setImagesUploadProgress([]);
   };
+
+  const isActive = canDrop && isOver;
 
   return (
     <form onSubmit={handleFormSubmit} className="px-5 py-3 bg-white rounded-xl">
@@ -69,45 +115,29 @@ const PostInput = () => {
             userID={me.data?.id || ""}
           />
         </div>
-        <textarea
-          value={postContent}
-          onChange={({ target }) => setPostContent(target.value)}
-          className="bg-blue-50 w-full rounded-lg placeholder:text-sm pl-2 ml-3 min-h-[100px] max-h-[200px]"
-        />
+        <div ref={drop} className="bg-red-200 ml-3 w-full">
+          <textarea
+            value={postContent}
+            onChange={({ target }) => setPostContent(target.value)}
+            className="bg-blue-50 w-full rounded-lg placeholder:text-sm pl-2 min-h-[100px] max-h-[200px] block"
+          />
+        </div>
       </div>
       <div className="flex items-center ml-[50px]">
         <label htmlFor="input-file" className="cursor-pointer self-start">
           <Image src="/icons/photo.png" width="20" height="20" alt="" />
         </label>
-        <input
-          className="hidden"
-          type="file"
-          id="input-file"
-          accept="image/*"
-          onChange={handleOnImageChange}
-        />
-        {selectedImage && (
-          <div className="ml-5">
-            <div className="w-32 h-20 relative ">
-              <Image
-                src={URL.createObjectURL(selectedImage)}
-                layout="fill"
-                objectFit="cover"
-                className="rounded-lg"
-                alt=""
+        {selectedImages.length > 0 &&
+          selectedImages.map((image, index) => {
+            return (
+              <UploadImageThumbnail
+                key={image.name}
+                image={image}
+                imageUploadProgress={imagesUploadProgress[index] || 0}
               />
-            </div>
+            );
+          })}
 
-            <div className="w-full h-1 rounded-sm overflow-hidden">
-              <div
-                className="bg-blue-500 w-full h-full"
-                style={{
-                  transform: `translateX(-${100 - imageUploadProgress}%)`,
-                }}
-              />
-            </div>
-          </div>
-        )}
         <button
           type="submit"
           className="bg-blue-500 rounded px-6 py-2 ml-auto self-start text-white"
