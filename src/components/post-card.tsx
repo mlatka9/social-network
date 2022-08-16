@@ -18,11 +18,24 @@ interface PostCardProps {
     likedByMe: boolean;
     commentsCount: number;
     likesCount: number;
+    bookmarkedByMe: boolean;
   };
   handleToggleLike: (postId: string) => void;
 }
 
 const PostCard = ({ post, handleToggleLike }: PostCardProps) => {
+  const utils = trpc.useContext();
+
+  const mutation = trpc.useMutation("bookmarks.add", {
+    onSuccess() {
+      utils.invalidateQueries(["bookmarks.getAll"]);
+    },
+  });
+
+  const handleToggleBookmark = async () => {
+    mutation.mutate({ postId: post.id });
+  };
+
   return (
     <div className="bg-white w-full p-5 shadow-sm rounded-lg">
       <div className="flex">
@@ -55,19 +68,41 @@ const PostCard = ({ post, handleToggleLike }: PostCardProps) => {
             />
           </div>
         ))}
-
-      <div className="font-medium text-xs text-gray-400 ml-auto w-fit">
-        <p>{post.commentsCount} Comments</p>
-      </div>
-      <div
-        className={clsx([
-          "flex items-center cursor-pointer w-fit",
-          post.likedByMe && "text-red-500",
-        ])}
-        onClick={() => handleToggleLike(post.id)}
-      >
-        <Image src="/icons/hart.png" width="20" height="20" layout="fixed" />
-        <p className="ml-2">{post.likesCount}</p>
+      <div className="flex items-center">
+        <div
+          className={clsx([
+            "flex items-center cursor-pointer w-fit",
+            post.likedByMe && "text-red-500",
+          ])}
+          onClick={() => handleToggleLike(post.id)}
+        >
+          <Image
+            src="/icons/hart.png"
+            width="20"
+            height="20"
+            layout="fixed"
+            alt=""
+          />
+          <p className="ml-2">{post.likesCount}</p>
+        </div>
+        <div
+          className={clsx([
+            "flex items-center cursor-pointer w-fit opacity-50 ml-5",
+            post.bookmarkedByMe && "opacity-100 bg-red-500",
+          ])}
+          onClick={handleToggleBookmark}
+        >
+          <Image
+            src="/icons/bookmark.png"
+            width="20"
+            height="20"
+            layout="fixed"
+            alt=""
+          />
+        </div>
+        <div className="font-medium text-xs text-gray-400 ml-auto w-fit">
+          <p>{post.commentsCount} Comments</p>
+        </div>
       </div>
     </div>
   );

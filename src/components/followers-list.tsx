@@ -74,7 +74,7 @@ const FollowersList = ({
                   </p>
                 </div>
 
-                <ButtonFollow userId={userId} />
+                <ButtonFollow userId={user.id} />
               </div>
               <p className="text-sm text-neutral-600">
                 {user.bio || "no bio no bio no bio no bio"}

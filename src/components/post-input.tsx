@@ -49,13 +49,12 @@ const PostInput = () => {
     );
   };
 
-  console.log("acceptedFiles", selectedImages);
+  // console.log("acceptedFiles", selectedImages);
 
   const me = trpc.useQuery(["user.me"]);
 
   const handleFormSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    if (selectedImages.length === 0) return;
 
     const imageUrls = await Promise.all(
       selectedImages.map((file, index) =>

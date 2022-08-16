@@ -22,10 +22,12 @@
     "clsx": "^1.2.1",
     "next": "12.2.3",
     "next-auth": "^4.10.3",
+    "nodemailer": "^6.7.8",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-dropzone": "^14.2.2",
     "react-hook-form": "^7.34.0",
+    "react-intersection-observer": "^9.4.0",
     "superjson": "^1.9.1",
     "zod": "^3.17.3"
   },

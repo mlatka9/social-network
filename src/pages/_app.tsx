@@ -6,6 +6,7 @@ import superjson from "superjson";
 import { SessionProvider } from "next-auth/react";
 import "../styles/globals.css";
 import { ReactQueryDevtools } from "react-query/devtools";
+import Header from "@/components/header";
 
 const MyApp: AppType = ({
   Component,
@@ -13,6 +14,7 @@ const MyApp: AppType = ({
 }) => {
   return (
     <SessionProvider session={session}>
+      <Header />
       <Component {...pageProps} />
       <ReactQueryDevtools initialIsOpen={false} />
     </SessionProvider>

@@ -6,15 +6,29 @@ import { authOptions } from "./api/auth/[...nextauth]";
 import { useSession } from "next-auth/react";
 import PostCard from "../components/post-card";
 import PostInput from "@/components/post-input";
+import React from "react";
+import { useInView } from "react-intersection-observer";
 
 const Home: NextPage = () => {
+  const { ref, inView } = useInView();
   const utils = trpc.useContext();
 
-  const posts = trpc.useQuery(["post.getAll"]);
-  const { data: session, status } = useSession();
+  const { data, fetchNextPage, isSuccess } = trpc.useInfiniteQuery(
+    [
+      "post.getInfiniteFeed",
+      {
+        limit: 5,
+      },
+    ],
+    {
+      getNextPageParam: (lastPage) => lastPage.nextCursor,
+    }
+  );
+
+  console.log("pages", data?.pages);
 
   const mutationToggleLike = trpc.useMutation("post.toggleLike", {
-    onSuccess(input) {
+    onSuccess() {
       utils.invalidateQueries(["post.getAll"]);
       //   if (!posts) return;
       //   utils.setQueryData(["post.getAll"], (posts) => {
@@ -32,6 +46,12 @@ const Home: NextPage = () => {
     mutationToggleLike.mutate({ postId: postId });
   };
 
+  React.useEffect(() => {
+    if (inView) {
+      fetchNextPage();
+    }
+  }, [inView, fetchNextPage]);
+
   // console.log(posts.data);
 
   return (
@@ -46,14 +66,19 @@ const Home: NextPage = () => {
         <PostInput />
         <div className="mb-20" />
         <div className="space-y-5">
-          {posts.isSuccess &&
-            posts.data.map((post) => (
-              <PostCard
-                key={post.id}
-                post={post}
-                handleToggleLike={handleToggleLike}
-              />
+          {isSuccess &&
+            data.pages.map((page) => (
+              <React.Fragment key={page.nextCursor}>
+                {page.posts.map((post) => (
+                  <PostCard
+                    key={post.id}
+                    post={post}
+                    handleToggleLike={handleToggleLike}
+                  />
+                ))}
+              </React.Fragment>
             ))}
+          <div ref={ref} className="w-full h-10 bg-orange-300" />
         </div>
       </main>
     </>

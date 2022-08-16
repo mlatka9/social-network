@@ -9,7 +9,7 @@ export const userRouter = createProtectedRouter()
       userId: z.string(),
     }),
     async resolve({ input, ctx }) {
-      const user = await prisma.user.findFirstOrThrow({
+      const user = await prisma.user.findUnique({
         where: {
           id: input.userId,
         },
@@ -23,6 +23,8 @@ export const userRouter = createProtectedRouter()
           },
         },
       });
+
+      if (!user) throw new Error("no user with id");
 
       const { _count, followedBy, ...userData } = user;
 
@@ -86,6 +88,25 @@ export const userRouter = createProtectedRouter()
       };
     },
   })
+  .query("getBySearchPhrase", {
+    input: z.object({
+      searchPhrase: z.string(),
+    }),
+
+    async resolve({ input }) {
+      if (!input.searchPhrase) {
+        return [];
+      }
+      return await prisma.user.findMany({
+        where: {
+          name: {
+            contains: input.searchPhrase,
+            mode: "insensitive",
+          },
+        },
+      });
+    },
+  })
   .mutation("followUser", {
     input: z.object({
       userId: z.string(),
@@ -108,7 +129,7 @@ export const userRouter = createProtectedRouter()
       const isUserFollowed =
         user?.following.some((user) => user.id === input.userId) || false;
 
-      console.log("isUserFollowed", isUserFollowed);
+      // console.log("isUserFollowed", isUserFollowed);
 
       await prisma.user.update({
         where: {

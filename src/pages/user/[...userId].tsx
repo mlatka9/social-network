@@ -7,8 +7,15 @@ import FollowersList from "@/components/followers-list";
 import ButtonFollow from "@/components/button-follow";
 import { FollowsListType } from "@/components/followers-list";
 import ProfileSettings from "@/components/profile-settings";
+import { unstable_getServerSession } from "next-auth/next";
+import { authOptions } from "src/pages/api/auth/[...nextauth]";
+import { useSession } from "next-auth/react";
+import type { GetServerSidePropsContext, NextPage } from "next";
+import PostList from "@/components/post-list";
 
 const User = () => {
+  const utils = trpc.useContext();
+  const { data: session } = useSession();
   const { query, isReady, push } = useRouter();
   const [isFollowersModalOpen, setIsFollowersModalOpen] = useState(false);
   const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
@@ -32,63 +39,38 @@ const User = () => {
     setIsSettingsModalOpen(true);
   };
 
-  useEffect(() => {
-    if (!isReady) return;
-    if (!query.userId) {
-      push("/");
-    }
-  }, [isReady]);
+  const currentUser = session?.user;
 
-  const userId = ((query.userId as string[]) || [])[0] || "";
+  const userId = query.userId?.[0] || "";
 
-  const me = trpc.useQuery(["user.me"]);
-
-  const user = trpc.useQuery(["user.getById", { userId: userId }], {
+  const user = trpc.useQuery(["user.getById", { userId }], {
     enabled: !!userId,
     retry: false,
   });
 
-  const utils = trpc.useContext();
-
-  const mutationToggleLike = trpc.useMutation("post.toggleLike", {
-    onSuccess(input) {
-      utils.invalidateQueries(["post.getAll", { userId: userId }]);
-      //   if (!posts) return;
-      //   utils.setQueryData(["post.getAll"], (posts) => {
-      //     if (!posts) return [];
-      //     return posts.map((post) =>
-      //       post.id === input.updatedPost?.id
-      //         ? { ...post, ...input.updatedPost }
-      //         : post
-      //     );
-      //   });
-    },
-  });
-
-  const handleToggleLike = async (postId: string) => {
-    mutationToggleLike.mutate({ postId: postId });
-  };
-
-  const userPosts = trpc.useQuery(["post.getAll", { userId: userId }], {
-    enabled: !!userId,
-    retry: false,
-  });
+  if (!user.data) return <div>Loading</div>;
 
   return (
     <div>
       <div className="w-full h-80 relative">
-        <Image layout="fill" src={user.data?.bannerImage || ""} />
+        <Image
+          alt=""
+          layout="fill"
+          objectFit="cover"
+          src={user.data?.bannerImage || "/images/fallback.svg"}
+        />
       </div>
 
       <div className="container mx-auto ">
         <div className="flex p-6 min-h-[160px] rounded-xl bg-white mb-10 relative -mt-10">
           <div className="relative -mt-20 p-1 bg-white rounded-lg">
             <Image
-              src={user.data?.image || ""}
+              src={user.data?.image || "/images/fallback.svg"}
               width="150"
               height="150"
               className="rounded-lg"
               alt=""
+              objectFit="cover"
             />
           </div>
 
@@ -123,7 +105,7 @@ const User = () => {
               {user.data?.bio || "no bio"}
             </p>
           </div>
-          {userId === me.data?.id ? (
+          {userId === currentUser?.id ? (
             <button
               onClick={handleOpenSettingsModal}
               className="bg-slate-800 ml-auto text-white self-start py-2 px-4 rounded-lg cursor-pointer hover:bg-slate-700 transition-colors"
@@ -134,18 +116,9 @@ const User = () => {
             <ButtonFollow userId={userId} />
           )}
         </div>
-
-        <div className="space-y-5 mb-10">
-          {userPosts.isSuccess &&
-            userPosts.data.map((post) => (
-              <PostCard
-                key={post.id}
-                post={post}
-                handleToggleLike={handleToggleLike}
-              />
-            ))}
-        </div>
+        <PostList userId={userId} />
       </div>
+
       {isFollowersModalOpen && (
         <FollowersList
           selectedFollowType={selectedFollowType}
@@ -159,5 +132,25 @@ const User = () => {
     </div>
   );
 };
+
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  const session = await unstable_getServerSession(
+    context.req,
+    context.res,
+    authOptions
+  );
+
+  if (!session) {
+    return {
+      redirect: {
+        destination: "/api/auth/signin",
+        permanent: false,
+      },
+    };
+  }
+  return {
+    props: { session },
+  };
+}
 
 export default User;

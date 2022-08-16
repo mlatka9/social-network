@@ -34,6 +34,66 @@ export const postRouter = createProtectedRouter()
       };
     },
   })
+  .query("getInfiniteFeed", {
+    input: z.object({
+      limit: z.number().min(1).max(100).nullish(),
+      cursor: z.string().nullish(),
+    }),
+    async resolve({ ctx, input }) {
+      const { cursor } = input;
+      const limit = input.limit ?? 10;
+
+      const posts = await prisma.post.findMany({
+        take: limit + 1,
+        where: {
+          user: {
+            followedBy: {
+              some: {
+                id: ctx.session.user.id,
+              },
+            },
+          },
+        },
+        include: {
+          user: true,
+          images: true,
+          likes: true,
+          bookmarkedBy: true,
+          _count: true,
+        },
+        cursor: cursor ? { id: cursor } : undefined,
+        orderBy: {
+          createdAt: "desc",
+        },
+      });
+
+      const populatedPosts = posts.map((post) => {
+        const { _count, likes, bookmarkedBy, ...postData } = post;
+        return {
+          ...postData,
+          likesCount: _count.likes,
+          commentsCount: _count.comments,
+          likedByMe: likes.some(
+            (postLike) => postLike.userId === ctx.session.user.id
+          ),
+          bookmarkedByMe: bookmarkedBy.some(
+            (bookmark) => bookmark.userId === ctx.session.user.id
+          ),
+        };
+      });
+
+      let nextCursor: typeof cursor | undefined = undefined;
+
+      if (posts.length > limit) {
+        const nextItem = posts.pop();
+        nextCursor = nextItem!.id;
+      }
+      return {
+        posts: populatedPosts,
+        nextCursor,
+      };
+    },
+  })
   .query("getAll", {
     input: z
       .object({
@@ -69,36 +129,6 @@ export const postRouter = createProtectedRouter()
       });
     },
   })
-  // .query("getAllByUserId", {
-  //   input: z.object({
-  //     userId: string(),
-  //   }),
-  //   async resolve({ ctx, input }) {
-  //     const posts = await prisma.post.findMany({
-  //       where: {
-  //         userId: input.userId,
-  //       },
-  //       include: {
-  //         user: true,
-  //         images: true,
-  //         likes: true,
-  //         _count: true,
-  //       },
-  //     });
-
-  //     return posts.map((post) => {
-  //       const { _count, likes, ...postData } = post;
-  //       return {
-  //         ...postData,
-  //         likesCount: _count.likes,
-  //         commentsCount: _count.comments,
-  //         likedByMe: likes.some(
-  //           (postLike) => postLike.userId === ctx.session.user.id
-  //         ),
-  //       };
-  //     });
-  //   },
-  // })
   .mutation("addPost", {
     input: z.object({
       content: z.string(),

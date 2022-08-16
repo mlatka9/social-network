@@ -2,7 +2,8 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearch"]
 }
 
 datasource db {
@@ -47,7 +48,7 @@ model User {
   email         String?       @unique
   emailVerified DateTime?
   image         String?
-  bannerImage String?
+  bannerImage   String?
   accounts      Account[]
   sessions      Session[]
   followedBy    User[]        @relation("UserFollows")
@@ -57,6 +58,7 @@ model User {
   comments      Comment[]
   likedPosts    PostLike[]
   likedComments CommentLike[]
+  bookmarks     Bookmark[]
 }
 
 model VerificationToken {
@@ -68,16 +70,17 @@ model VerificationToken {
 }
 
 model Post {
-  id        String     @id @default(cuid())
-  content   String
-  user      User       @relation(name: "createdPosts", fields: [userId], references: [id], onDelete: Cascade)
-  userId    String
-  comments  Comment[]
-  likes     PostLike[]
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
-  images    Image[]    @relation(name: "addedImages")
-  isDeleted Boolean @default(false)
+  id           String     @id @default(cuid())
+  content      String
+  user         User       @relation(name: "createdPosts", fields: [userId], references: [id], onDelete: Cascade)
+  userId       String
+  comments     Comment[]
+  likes        PostLike[]
+  bookmarkedBy Bookmark[]
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  images       Image[]    @relation(name: "addedImages")
+  isDeleted    Boolean    @default(false)
 }
 
 model Image {
@@ -101,7 +104,7 @@ model Comment {
   parent    Comment?      @relation("ParentChild", fields: [parentId], references: [id], onDelete: Cascade)
   children  Comment[]     @relation("ParentChild")
   parentId  String?
-  isDeleted Boolean @default(false)
+  isDeleted Boolean       @default(false)
 }
 
 model PostLike {
@@ -120,4 +123,13 @@ model CommentLike {
   comment   Comment @relation(fields: [commentId], references: [id], onDelete: Cascade)
 
   @@id([userId, commentId])
+}
+
+model Bookmark {
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  postId String
+  post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@id([userId, postId])
 }
