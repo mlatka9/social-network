@@ -4,6 +4,7 @@ import Link from "next/link";
 import clsx from "clsx";
 import { trpc } from "src/utils/trpc";
 import UserProfilePicture from "./user-profile-image";
+import React from "react";
 
 const postWithUserAndImages = Prisma.validator<Prisma.PostArgs>()({
   include: { images: true, user: true },
@@ -20,20 +21,35 @@ interface PostCardProps {
     likesCount: number;
     bookmarkedByMe: boolean;
   };
-  handleToggleLike: (postId: string) => void;
 }
 
-const PostCard = ({ post, handleToggleLike }: PostCardProps) => {
+const PostCard = ({ post }: PostCardProps) => {
   const utils = trpc.useContext();
 
   const mutation = trpc.useMutation("bookmarks.add", {
     onSuccess() {
+      utils.invalidateQueries(["post.getInfiniteFeed"]);
+      utils.invalidateQueries(["post.getAll"]);
+      utils.invalidateQueries(["post.getById"]);
       utils.invalidateQueries(["bookmarks.getAll"]);
     },
   });
 
   const handleToggleBookmark = async () => {
     mutation.mutate({ postId: post.id });
+  };
+
+  const mutationToggleLike = trpc.useMutation("post.toggleLike", {
+    onSuccess() {
+      utils.invalidateQueries(["post.getInfiniteFeed"]);
+      utils.invalidateQueries(["post.getAll"]);
+      utils.invalidateQueries(["post.getById"]);
+      utils.invalidateQueries(["bookmarks.getAll"]);
+    },
+  });
+
+  const handleToggleLike = async (postId: string) => {
+    mutationToggleLike.mutate({ postId: postId });
   };
 
   return (
@@ -108,4 +124,4 @@ const PostCard = ({ post, handleToggleLike }: PostCardProps) => {
   );
 };
 
-export default PostCard;
+export default React.memo(PostCard);

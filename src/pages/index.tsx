@@ -8,51 +8,17 @@ import PostCard from "../components/post-card";
 import PostInput from "@/components/post-input";
 import React from "react";
 import { useInView } from "react-intersection-observer";
+import { useGetInfiniteFeed } from "src/hooks/query";
 
 const Home: NextPage = () => {
   const { ref, inView } = useInView();
-  const utils = trpc.useContext();
-
-  const { data, fetchNextPage, isSuccess } = trpc.useInfiniteQuery(
-    [
-      "post.getInfiniteFeed",
-      {
-        limit: 5,
-      },
-    ],
-    {
-      getNextPageParam: (lastPage) => lastPage.nextCursor,
-    }
-  );
-
-  console.log("pages", data?.pages);
-
-  const mutationToggleLike = trpc.useMutation("post.toggleLike", {
-    onSuccess() {
-      utils.invalidateQueries(["post.getAll"]);
-      //   if (!posts) return;
-      //   utils.setQueryData(["post.getAll"], (posts) => {
-      //     if (!posts) return [];
-      //     return posts.map((post) =>
-      //       post.id === input.updatedPost?.id
-      //         ? { ...post, ...input.updatedPost }
-      //         : post
-      //     );
-      //   });
-    },
-  });
-
-  const handleToggleLike = async (postId: string) => {
-    mutationToggleLike.mutate({ postId: postId });
-  };
+  const { data, fetchNextPage, isSuccess } = useGetInfiniteFeed();
 
   React.useEffect(() => {
     if (inView) {
       fetchNextPage();
     }
   }, [inView, fetchNextPage]);
-
-  // console.log(posts.data);
 
   return (
     <>
@@ -70,11 +36,7 @@ const Home: NextPage = () => {
             data.pages.map((page) => (
               <React.Fragment key={page.nextCursor}>
                 {page.posts.map((post) => (
-                  <PostCard
-                    key={post.id}
-                    post={post}
-                    handleToggleLike={handleToggleLike}
-                  />
+                  <PostCard key={post.id} post={post} />
                 ))}
               </React.Fragment>
             ))}

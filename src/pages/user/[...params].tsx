@@ -1,8 +1,7 @@
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import { trpc } from "../../utils/trpc";
+import { useState } from "react";
+import { trpc } from "src/utils/trpc";
 import Image from "next/image";
-import PostCard from "../../components/post-card";
 import FollowersList from "@/components/followers-list";
 import ButtonFollow from "@/components/button-follow";
 import { FollowsListType } from "@/components/followers-list";
@@ -10,45 +9,37 @@ import ProfileSettings from "@/components/profile-settings";
 import { unstable_getServerSession } from "next-auth/next";
 import { authOptions } from "src/pages/api/auth/[...nextauth]";
 import { useSession } from "next-auth/react";
-import type { GetServerSidePropsContext, NextPage } from "next";
+import type { GetServerSidePropsContext } from "next";
 import PostList from "@/components/post-list";
+import ModalWrapper from "@/components/modal-wrapper";
+import { router } from "@trpc/server";
+import Link from "next/link";
 
 const User = () => {
-  const utils = trpc.useContext();
+  console.log("render");
   const { data: session } = useSession();
-  const { query, isReady, push } = useRouter();
-  const [isFollowersModalOpen, setIsFollowersModalOpen] = useState(false);
-  const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
-  const [selectedFollowType, setSelectedFollowType] =
-    useState<FollowsListType>("following");
+  const { query, asPath, push } = useRouter();
 
-  const closeFollowersModal = () => {
-    setIsFollowersModalOpen(false);
-  };
-
-  const closeSettingsModal = () => {
-    setIsSettingsModalOpen(false);
-  };
-
-  const handleOpenFollowersModal = (type: FollowsListType) => {
-    setIsFollowersModalOpen(true);
-    setSelectedFollowType(type);
-  };
-
-  const handleOpenSettingsModal = () => {
-    setIsSettingsModalOpen(true);
-  };
+  const userId = query.params?.[0];
+  const section = query.params?.[1];
 
   const currentUser = session?.user;
 
-  const userId = query.userId?.[0] || "";
-
-  const user = trpc.useQuery(["user.getById", { userId }], {
+  const user = trpc.useQuery(["user.getById", { userId: userId || "" }], {
     enabled: !!userId,
     retry: false,
   });
 
-  if (!user.data) return <div>Loading</div>;
+  const closeModal = () => {
+    console.log(asPath);
+    push(`/user/${userId}`);
+  };
+
+  if (!userId) return <div>no user id</div>;
+
+  if (user.error) return <div>Cant find user</div>;
+
+  if (user.status === "loading") return <div>Loading</div>;
 
   return (
     <div>
@@ -80,24 +71,26 @@ const User = () => {
                 {user.data?.name}
               </h1>
               <div className="text-xs  text-neutral-500 tracking-wide font-medium flex ml-7 space-x-4">
-                <p
-                  onClick={() => handleOpenFollowersModal("following")}
-                  className="cursor-pointer"
-                >
-                  <span className="text-neutral-800 font-semibold mr-1 font-poppins">
-                    {user.data?.followingCount}
-                  </span>
-                  Following
-                </p>
-                <p
-                  onClick={() => handleOpenFollowersModal("followers")}
-                  className="cursor-pointer"
-                >
-                  <span className="text-neutral-800 font-semibold mr-1 font-poppins">
-                    {user.data?.followedByCount}
-                  </span>
-                  Followers
-                </p>
+                <Link href={`${asPath}/following`}>
+                  <a>
+                    <p className="cursor-pointer">
+                      <span className="text-neutral-800 font-semibold mr-1 font-poppins">
+                        {user.data?.followingCount}
+                      </span>
+                      Following
+                    </p>
+                  </a>
+                </Link>
+                <Link href={`${asPath}/followers`}>
+                  <a>
+                    <p onClick={() => {}} className="cursor-pointer">
+                      <span className="text-neutral-800 font-semibold mr-1 font-poppins">
+                        {user.data?.followedByCount}
+                      </span>
+                      Followers
+                    </p>
+                  </a>
+                </Link>
               </div>
             </div>
 
@@ -106,12 +99,16 @@ const User = () => {
             </p>
           </div>
           {userId === currentUser?.id ? (
-            <button
-              onClick={handleOpenSettingsModal}
-              className="bg-slate-800 ml-auto text-white self-start py-2 px-4 rounded-lg cursor-pointer hover:bg-slate-700 transition-colors"
-            >
-              Settings
-            </button>
+            <Link href={`${asPath}/settings`}>
+              <a className="ml-auto">
+                <div
+                  onClick={() => {}}
+                  className="bg-slate-800 text-white self-start py-2 px-4 rounded-lg cursor-pointer hover:bg-slate-700 transition-colors"
+                >
+                  Settings
+                </div>
+              </a>
+            </Link>
           ) : (
             <ButtonFollow userId={userId} />
           )}
@@ -119,15 +116,15 @@ const User = () => {
         <PostList userId={userId} />
       </div>
 
-      {isFollowersModalOpen && (
-        <FollowersList
-          selectedFollowType={selectedFollowType}
-          closeFollowersModal={closeFollowersModal}
-          userId={userId}
-        />
+      {(section === "followers" || section === "following") && (
+        <ModalWrapper title="Followers" handleCloseModal={closeModal}>
+          <FollowersList userId={userId} />
+        </ModalWrapper>
       )}
-      {isSettingsModalOpen && (
-        <ProfileSettings handleCloseSettigns={closeSettingsModal} />
+      {section === "settings" && (
+        <ModalWrapper title="Settings" handleCloseModal={closeModal}>
+          <ProfileSettings handleCloseSettigns={closeModal} />
+        </ModalWrapper>
       )}
     </div>
   );
@@ -148,6 +145,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       },
     };
   }
+
   return {
     props: { session },
   };

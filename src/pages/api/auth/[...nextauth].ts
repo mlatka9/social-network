@@ -17,6 +17,14 @@ export const authOptions: NextAuthOptions = {
       return session;
     },
   },
+  events: {
+    createUser(message) {
+      console.log(
+        "CREATED USER =>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",
+        message
+      );
+    },
+  },
   // Configure one or more authentication providers
   adapter: PrismaAdapter(prisma),
   providers: [

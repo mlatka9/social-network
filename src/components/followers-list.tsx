@@ -3,57 +3,54 @@ import { trpc } from "src/utils/trpc";
 import ButtonFollow from "./button-follow";
 import UserProfilePicture from "./user-profile-image";
 import clsx from "clsx";
-import ModalWrapper from "@/components/modal-wrapper";
+import { useRouter } from "next/router";
+import Link from "next/link";
 
 interface FollowersListProps {
   userId: string;
-  closeFollowersModal: () => void;
-  selectedFollowType: FollowsListType;
 }
 
 export type FollowsListType = "followers" | "following";
 
-const FollowersList = ({
-  userId,
-  closeFollowersModal,
-  selectedFollowType,
-}: FollowersListProps) => {
-  const [selectedFollowListType, setSelectedFollowListType] =
-    useState<FollowsListType>(selectedFollowType);
+const FollowersList = ({ userId }: FollowersListProps) => {
+  const { query } = useRouter();
+
+  const followType = query.params?.[1] as FollowsListType;
+
   const follows = trpc.useQuery(["user.getFollows", { userId: userId }]);
 
-  const me = trpc.useQuery(["user.me"]);
-
   const selectedListDat =
-    selectedFollowListType === "followers"
+    followType === "followers"
       ? follows.data?.followedBy || []
       : follows.data?.following || [];
 
   return (
-    <ModalWrapper
-      title={me.data?.name || ""}
-      handleCloseModal={closeFollowersModal}
-    >
+    <>
       <div className="flex font-poppins font-semibold pt-10 pb-10 justify-center space-x-10">
         <div>
-          <button onClick={() => setSelectedFollowListType("following")}>
-            Following
-          </button>
+          <Link href={`/user/${userId}/following`}>
+            <a>
+              <div>Following</div>
+            </a>
+          </Link>
+
           <div
             className={clsx([
               "bg-blue-500 w-full h-1 opacity-0 transition-opacity",
-              selectedFollowListType === "following" && "opacity-100",
+              followType === "following" && "opacity-100",
             ])}
           />
         </div>
         <div>
-          <button onClick={() => setSelectedFollowListType("followers")}>
-            Followers
-          </button>
+          <Link href={`/user/${userId}/followers`}>
+            <a>
+              <div>Followers</div>
+            </a>
+          </Link>
           <div
             className={clsx([
               "bg-blue-500 w-full h-1 opacity-0 transition-opacity",
-              selectedFollowListType === "followers" && "opacity-100",
+              followType === "followers" && "opacity-100",
             ])}
           />
         </div>
@@ -85,7 +82,7 @@ const FollowersList = ({
           <div>empty</div>
         )}
       </div>
-    </ModalWrapper>
+    </>
   );
 };
 

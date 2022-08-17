@@ -2,6 +2,34 @@ import { createProtectedRouter } from "./protected-router";
 import { string, z } from "zod";
 import { resolve } from "path";
 import { prisma } from "../db/client";
+import { Prisma } from "@prisma/client";
+
+const postWithUserAndImages = Prisma.validator<Prisma.PostArgs>()({
+  include: {
+    images: true,
+    user: true,
+    _count: true,
+    likes: true,
+    bookmarkedBy: true,
+  },
+});
+
+type PostWithUserAndImages = Prisma.PostGetPayload<
+  typeof postWithUserAndImages
+>;
+
+type PostCardProps = PostWithUserAndImages;
+
+const populatePost = (post: PostCardProps, userId: string) => {
+  const { _count, likes, bookmarkedBy, ...postData } = post;
+  return {
+    ...postData,
+    likesCount: _count.likes,
+    commentsCount: _count.comments,
+    likedByMe: likes.some((postLike) => postLike.userId === userId),
+    bookmarkedByMe: bookmarkedBy.some((bookmark) => bookmark.userId === userId),
+  };
+};
 
 // Example router with queries that can only be hit if the user requesting is signed in
 export const postRouter = createProtectedRouter()
@@ -19,19 +47,11 @@ export const postRouter = createProtectedRouter()
           likes: true,
           images: true,
           _count: true,
+          bookmarkedBy: true,
         },
       });
 
-      const { _count, likes, ...postData } = post;
-
-      return {
-        ...postData,
-        likesCount: _count.likes,
-        commentsCount: _count.comments,
-        likedByMe: likes.some(
-          (postLike) => postLike.userId === ctx.session.user.id
-        ),
-      };
+      return populatePost(post, ctx.session.user.id);
     },
   })
   .query("getInfiniteFeed", {
@@ -67,25 +87,14 @@ export const postRouter = createProtectedRouter()
         },
       });
 
-      const populatedPosts = posts.map((post) => {
-        const { _count, likes, bookmarkedBy, ...postData } = post;
-        return {
-          ...postData,
-          likesCount: _count.likes,
-          commentsCount: _count.comments,
-          likedByMe: likes.some(
-            (postLike) => postLike.userId === ctx.session.user.id
-          ),
-          bookmarkedByMe: bookmarkedBy.some(
-            (bookmark) => bookmark.userId === ctx.session.user.id
-          ),
-        };
-      });
+      const populatedPosts = posts.map((post) =>
+        populatePost(post, ctx.session.user.id)
+      );
 
       let nextCursor: typeof cursor | undefined = undefined;
 
-      if (posts.length > limit) {
-        const nextItem = posts.pop();
+      if (populatedPosts.length > limit) {
+        const nextItem = populatedPosts.pop();
         nextCursor = nextItem!.id;
       }
       return {
@@ -113,20 +122,11 @@ export const postRouter = createProtectedRouter()
           images: true,
           likes: true,
           _count: true,
+          bookmarkedBy: true,
         },
       });
 
-      return posts.map((post) => {
-        const { _count, likes, ...postData } = post;
-        return {
-          ...postData,
-          likesCount: _count.likes,
-          commentsCount: _count.comments,
-          likedByMe: likes.some(
-            (postLike) => postLike.userId === ctx.session.user.id
-          ),
-        };
-      });
+      return posts.map((post) => populatePost(post, ctx.session.user.id));
     },
   })
   .mutation("addPost", {
@@ -219,39 +219,3 @@ export const postRouter = createProtectedRouter()
       };
     },
   });
-
-// .mutation("likeComment", {
-//   input: z.object({
-//     commentId: z.string(),
-//   }),
-//   async resolve({ input, ctx }) {
-//     const data = {
-//       userId: ctx.session.user.id,
-//       commentId: input.commentId,
-//     };
-//     const like = await prisma.commentLike.findFirst({ where: data });
-
-//     if (like) {
-//       await prisma.commentLike.delete({
-//         where: {
-//           userId_commentId: data,
-//         },
-//       });
-//     } else {
-//       await prisma.commentLike.create({
-//         data,
-//       });
-//     }
-//     const updatedComment = await prisma.comment.findFirstOrThrow({where: {
-//       id: input.commentId,
-//     }, include: {
-//       user: true
-//     }})
-
-//     return ({
-//       ...updatedComment,
-//       likedByMe: like !== null,
-//       likeCount: await prisma.commentLike.count(),
-//     });
-//   },
-// });

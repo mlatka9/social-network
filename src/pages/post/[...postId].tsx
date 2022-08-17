@@ -47,8 +47,6 @@ const Post = () => {
 
   const utils = trpc.useContext();
 
-  const me = trpc.useQuery(["user.me"]);
-
   const mutation = trpc.useMutation(["comment.add"], {
     onSuccess() {
       utils.invalidateQueries([
@@ -56,30 +54,7 @@ const Post = () => {
         { postId: postId[0] || "" },
       ]);
     },
-    // onSuccess(input) {
-    //   const comments = utils.getQueryData([
-    //     "comment.getAllByPostId",
-    //     { postId: postId[0] || "" },
-    //   ]);
-    //   if (!comments) return;
-    //   utils.setQueryData(
-    //     ["comment.getAllByPostId", { postId: postId[0] || "" }],
-    //     [...comments, input]
-    //   );
-
-    //   utils.invalidateQueries(["post.getById", { postId: postId[0] || "" }]);
-    // },
   });
-
-  const mutationToggleLike = trpc.useMutation("post.toggleLike", {
-    onSuccess() {
-      utils.invalidateQueries(["post.getById", { postId: postId[0] || "" }]);
-    },
-  });
-
-  const handleToggleLike = async (postId: string) => {
-    mutationToggleLike.mutate({ postId: postId });
-  };
 
   const handleAddComment = (message: string) => {
     if (!postId[0]) return;
@@ -108,7 +83,7 @@ const Post = () => {
   if (post.isSuccess) {
     return (
       <main className="container mx-auto flex flex-col items-center justify-center min-h-screen p-4">
-        <PostCard handleToggleLike={handleToggleLike} post={post.data} />
+        <PostCard post={post.data} />
         <div className="mb-20" />
         <MessageInput onMessageSubmit={handleAddComment} />
         {postComments.isSuccess && (

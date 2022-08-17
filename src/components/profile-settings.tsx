@@ -105,7 +105,7 @@ const ProfileSettings = ({ handleCloseSettigns }: ProfileSettingsProps) => {
   };
 
   return (
-    <ModalWrapper title="Settings" handleCloseModal={handleCloseSettigns}>
+    <>
       <div
         className="w-full bg-orange-300 h-[150px] relative cursor-pointer group"
         {...getRootbannerProps()}
@@ -172,7 +172,7 @@ const ProfileSettings = ({ handleCloseSettigns }: ProfileSettingsProps) => {
           className="bg-blue-500 rounded px-6 py-2 ml-auto self-start text-white cursor-pointer"
         />
       </form>
-    </ModalWrapper>
+    </>
   );
 };
 
