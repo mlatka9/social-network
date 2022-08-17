@@ -30,7 +30,7 @@ const ModalWrapper: React.FC<ModalWrapperProps> = ({
             />
           </button>
         </div>
-        <hr className="mt-3" />
+        <hr className="mt-3 mb-10" />
         {children}
       </div>
       <div

@@ -4,9 +4,9 @@ import { UseFormSetValue } from "react-hook-form";
 
 const useSettingsDropZone = (
   setFormValue: UseFormSetValue<IFormInput>,
-  formFieldName: "image" | "bannerImage"
+  formFieldName: "images" | "bannerImages"
 ) => {
-  const { getRootProps, getInputProps, acceptedFiles, open } = useDropzone({
+  return useDropzone({
     noClick: true,
     multiple: false,
     accept: {
@@ -18,8 +18,6 @@ const useSettingsDropZone = (
       }
     },
   });
-
-  return { getRootProps, getInputProps, open, acceptedFiles };
 };
 
 export default useSettingsDropZone;

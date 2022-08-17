@@ -153,16 +153,12 @@ export const userRouter = createProtectedRouter()
   })
   .mutation("update", {
     input: z.object({
-      userId: z.string(),
       name: z.string(),
       bio: z.string(),
       image: z.string().optional(),
       bannerImage: z.string().optional(),
     }),
     async resolve({ ctx, input }) {
-      if (input.userId !== ctx.session.user.id) {
-        throw new Error("You don't have permission to edit this user");
-      }
       await prisma.user.update({
         where: {
           id: ctx.session.user.id,

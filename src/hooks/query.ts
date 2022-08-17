@@ -1,6 +1,7 @@
 import { trpc } from "../utils/trpc";
+import { useSession } from "next-auth/react";
 
-export const useGetInfiniteFeed = () => {
+export const useInfiniteFeedQuery = () => {
   return trpc.useInfiniteQuery(
     [
       "post.getInfiniteFeed",
@@ -12,4 +13,47 @@ export const useGetInfiniteFeed = () => {
       getNextPageParam: (lastPage) => lastPage.nextCursor,
     }
   );
+};
+
+export const useUserQuery = (userId: string) => {
+  return trpc.useQuery([
+    "user.getById",
+    {
+      userId,
+    },
+  ]);
+};
+
+export const useCurrentUserQuery = () => {
+  const { data } = useSession();
+  const currentUserId = data?.user?.id;
+  return trpc.useQuery(
+    [
+      "user.getById",
+      {
+        userId: currentUserId || "",
+      },
+    ],
+    {
+      enabled: !!currentUserId,
+    }
+  );
+};
+
+export const usePost = (postId: string) => {
+  return trpc.useQuery([
+    "post.getById",
+    {
+      postId,
+    },
+  ]);
+};
+
+export const usePostComments = (postId: string) => {
+  return trpc.useQuery([
+    "comment.getAllByPostId",
+    {
+      postId,
+    },
+  ]);
 };

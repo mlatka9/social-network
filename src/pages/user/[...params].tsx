@@ -16,7 +16,7 @@ import { router } from "@trpc/server";
 import Link from "next/link";
 
 const User = () => {
-  console.log("render");
+  // console.log("render");
   const { data: session } = useSession();
   const { query, asPath, push } = useRouter();
 
@@ -31,7 +31,7 @@ const User = () => {
   });
 
   const closeModal = () => {
-    console.log(asPath);
+    // console.log(asPath);
     push(`/user/${userId}`);
   };
 

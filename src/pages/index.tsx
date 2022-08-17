@@ -1,18 +1,16 @@
 import type { GetServerSidePropsContext, NextPage } from "next";
 import Head from "next/head";
-import { trpc } from "../utils/trpc";
 import { unstable_getServerSession } from "next-auth/next";
 import { authOptions } from "./api/auth/[...nextauth]";
-import { useSession } from "next-auth/react";
 import PostCard from "../components/post-card";
 import PostInput from "@/components/post-input";
 import React from "react";
 import { useInView } from "react-intersection-observer";
-import { useGetInfiniteFeed } from "src/hooks/query";
+import { useInfiniteFeedQuery } from "src/hooks/query";
 
 const Home: NextPage = () => {
   const { ref, inView } = useInView();
-  const { data, fetchNextPage, isSuccess } = useGetInfiniteFeed();
+  const { data, fetchNextPage, isSuccess } = useInfiniteFeedQuery();
 
   React.useEffect(() => {
     if (inView) {

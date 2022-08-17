@@ -26,7 +26,7 @@ const FollowersList = ({ userId }: FollowersListProps) => {
 
   return (
     <>
-      <div className="flex font-poppins font-semibold pt-10 pb-10 justify-center space-x-10">
+      <div className="flex font-poppins font-semibold pb-10 justify-center space-x-10">
         <div>
           <Link href={`/user/${userId}/following`}>
             <a>

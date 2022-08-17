@@ -18,7 +18,7 @@ const UserSearch = () => {
   };
 
   return (
-    <div className="relative bg-white z-[200]">
+    <div className="relative bg-white z-[200] ring">
       <input value={searchPhrase} onChange={handleOnChange} />
       <div className="absolute top-full bg-white p-1 w-full">
         {data?.map((user) => (
