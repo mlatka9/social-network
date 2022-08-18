@@ -35,7 +35,6 @@ const CommentsList = ({
 }: CommentsListProps) => {
   const commentsByParentId = groupCommentsByParentId(comments);
   const commentsWithCurrentDepth = commentsByParentId.get(parentId);
-  //   console.log(commentsWithCurrentDepth);
 
   if (!commentsWithCurrentDepth) return <></>;
 

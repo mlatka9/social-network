@@ -1,37 +1,46 @@
 import { useSession } from "next-auth/react";
 import Image from "next/image";
-import { signIn, signOut } from "next-auth/react";
 import UserSearch from "./user-search";
 import Link from "next/link";
-import UserProfilePicture from "./user-profile-image";
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import DropdownMenu from "./dropdown-menu";
 import { useRouter } from "next/router";
+import React from "react";
+import { useOnClickOutside } from "usehooks-ts";
 
 const Header = () => {
-  const { data, status } = useSession();
-  const [isDropdownShow, setIsDropdownShown] = useState(false);
   const router = useRouter();
+  const { data } = useSession();
 
-  const toggleDropdown = () => {
-    setIsDropdownShown(!isDropdownShow);
-  };
+  const [isDropdownShow, setIsDropdownShown] = useState(false);
+
+  const ref = useRef(null);
 
   const hideDropdown = useCallback(() => {
     setIsDropdownShown(false);
   }, []);
 
   useEffect(() => {
-    console.log(router.asPath);
     hideDropdown();
-  }, [router.asPath]);
+  }, [router.asPath, hideDropdown]);
+
+  const openDropDown = () => {
+    if (isDropdownShow) return;
+    setIsDropdownShown(true);
+  };
+
+  const toggleDropdownShow = () => {
+    setIsDropdownShown(!isDropdownShow);
+  };
+
+  useOnClickOutside(ref, () => hideDropdown());
 
   const user = data?.user;
 
   if (!user) return <div>Loading</div>;
 
   return (
-    <div className="flex items-center justify-between bg-white py-3 px-5 sticky top-0 z-[50] shadow-md">
+    <div className="flex items-center justify-between bg-white py-3 px-5 sticky top-0 z-[10] shadow-md">
       <Link href="/" passHref>
         <a>
           <p className="text-blue-900 font-poppins font-semibold text-2xl mr-10">
@@ -41,19 +50,22 @@ const Header = () => {
       </Link>
 
       <UserSearch />
-      <button
-        className="w-10 h-10 rounded-full relative overflow-hidden"
-        onClick={toggleDropdown}
-      >
-        <Image
-          layout="fill"
-          src={user?.image || "/images/fallback.svg"}
-          alt=""
-        />
-      </button>
-      {isDropdownShow && (
-        <DropdownMenu hideDropdown={hideDropdown} userId={user.id} />
-      )}
+      <div ref={ref} onClick={toggleDropdownShow}>
+        <button
+          className="w-10 h-10 rounded-full relative overflow-hidden"
+          onClick={openDropDown}
+        >
+          <Image
+            layout="fill"
+            src={user?.image || "/images/fallback.svg"}
+            alt=""
+          />
+        </button>
+
+        {isDropdownShow && (
+          <DropdownMenu hideDropdown={hideDropdown} userId={user.id} />
+        )}
+      </div>
     </div>
   );
 };

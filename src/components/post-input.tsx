@@ -49,8 +49,6 @@ const PostInput = () => {
     );
   };
 
-  // console.log("acceptedFiles", selectedImages);
-
   const me = trpc.useQuery(["user.me"]);
 
   const handleFormSubmit = async (e: FormEvent) => {

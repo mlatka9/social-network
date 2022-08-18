@@ -2,7 +2,7 @@ import { useForm } from "react-hook-form";
 import { uploadImage } from "src/utils/cloudinary";
 import Image from "next/image";
 import { useState, useEffect, useMemo } from "react";
-import useSettingsDropZone from "src/hooks/useSettingsDropzone";
+import useSettingsDropZone from "src/hooks/use-settings-dropzone";
 import { useCurrentUserQuery } from "src/hooks/query";
 import { useProfileMutation } from "src/hooks/mutation";
 import clsx from "clsx";

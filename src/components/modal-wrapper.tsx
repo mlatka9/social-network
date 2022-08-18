@@ -1,5 +1,7 @@
 import React from "react";
 import Image from "next/image";
+import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 
 interface ModalWrapperProps {
   title: string;
@@ -7,14 +9,24 @@ interface ModalWrapperProps {
   handleCloseModal: () => void;
 }
 
-const ModalWrapper: React.FC<ModalWrapperProps> = ({
+const ModalWrapper = ({
   children,
   title,
   handleCloseModal,
-}) => {
-  return (
+}: ModalWrapperProps) => {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+
+    return () => setMounted(false);
+  }, []);
+
+  if (!mounted) return null;
+
+  return createPortal(
     <>
-      <div className="fixed p-10 bg-white z-[200] top-0 inset-0 max-w-2xl max-h-[80vh] m-auto rounded-lg">
+      <div className="fixed p-10 bg-white z-[20] top-0 inset-0 max-w-2xl max-h-[80vh] m-auto rounded-lg">
         <div className="flex justify-between items-center">
           <div className="font-poppins font-semibold ">{title}</div>
           <button
@@ -34,10 +46,11 @@ const ModalWrapper: React.FC<ModalWrapperProps> = ({
         {children}
       </div>
       <div
-        className="bg-neutral-800 opacity-80 fixed inset-0"
+        className="bg-neutral-800 opacity-80 fixed inset-0 z-10"
         onClick={handleCloseModal}
       />
-    </>
+    </>,
+    document.querySelector("#modal") as HTMLElement
   );
 };
 

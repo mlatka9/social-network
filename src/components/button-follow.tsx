@@ -6,9 +6,6 @@ interface ButtonFollowProps {
 
 const ButtonFollow = ({ userId }: ButtonFollowProps) => {
   const utils = trpc.useContext();
-
-  // console.log("userId", userId);
-
   const user = trpc.useQuery(["user.getById", { userId }], {
     retry: false,
   });
@@ -24,8 +21,6 @@ const ButtonFollow = ({ userId }: ButtonFollowProps) => {
   const handleToggleFollow = () => {
     mutationFollowUser.mutate({ userId });
   };
-
-  // console.log("moje id", me.data?.id, "jego id", userId);
 
   if (me.data?.id === userId) return <>To ja</>;
 

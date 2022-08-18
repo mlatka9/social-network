@@ -57,3 +57,9 @@ export const usePostComments = (postId: string) => {
     },
   ]);
 };
+
+export const useSearchUserQuery = (searchPhrase: string) => {
+  return trpc.useQuery(["user.getBySearchPhrase", { searchPhrase }], {
+    keepPreviousData: true,
+  });
+};

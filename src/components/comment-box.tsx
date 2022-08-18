@@ -33,17 +33,6 @@ const CommentBox = ({ comment }: CommentBoxProps) => {
         "comment.getAllByPostId",
         { postId: comment.postId },
       ]);
-      // console.log("input.id", input);
-      // const comments = utils.getQueryData([
-      //   "comment.getAllByPostId",
-      //   { postId: comment.postId },
-      // ]);
-      // if (!comments) return;
-      // utils.setQueryData(
-      //   ["comment.getAllByPostId", { postId: comment.postId }],
-      //   () =>
-      //     comments.map((comment) => (comment.id === input.id ? input : comment))
-      // );
     },
   });
 

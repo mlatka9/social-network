@@ -2,6 +2,8 @@ import Link from "next/link";
 import { signOut } from "next-auth/react";
 import { useRouter } from "next/router";
 import Image from "next/image";
+import { useRef } from "react";
+import { useOnClickOutside } from "usehooks-ts";
 
 interface DropdownMenu {
   hideDropdown: () => void;
@@ -9,15 +11,13 @@ interface DropdownMenu {
 }
 
 const DropdownMenu = ({ hideDropdown, userId }: DropdownMenu) => {
-  const router = useRouter();
-
   return (
     <>
       <nav className="z-[100] bg-white absolute top-[calc(100%_+_10px)] right-5 p-3 rounded-xl min-w-[200px] shadow-2xl select-none">
         <ul>
-          <Link href={`/user/${userId}`}>
-            <a>
-              <li className="hover:bg-slate-100 px-3 py-2 rounded-lg flex items-center">
+          <li className="hover:bg-slate-100 rounded-lg flex items-center">
+            <Link href={`/user/${userId}`}>
+              <a className="px-3 py-2 w-full rounded-lg">
                 <Image
                   src="/icons/profile.png"
                   width="20"
@@ -26,12 +26,13 @@ const DropdownMenu = ({ hideDropdown, userId }: DropdownMenu) => {
                   layout="fixed"
                 />
                 <span className="ml-2">Profile</span>
-              </li>
-            </a>
-          </Link>
-          <Link href="/bookmarks">
-            <a>
-              <li className="hover:bg-slate-100 px-3 py-2 rounded-lg flex items-center">
+              </a>
+            </Link>
+          </li>
+
+          <li className="hover:bg-slate-100  rounded-lg flex items-center w-full   ">
+            <Link href="/bookmarks">
+              <a className="px-3 py-2 w-full rounded-lg">
                 <Image
                   src="/icons/bookmark.png"
                   width="20"
@@ -39,13 +40,13 @@ const DropdownMenu = ({ hideDropdown, userId }: DropdownMenu) => {
                   alt=""
                 />
                 <span className="ml-2">Bookmarks</span>
-              </li>
-            </a>
-          </Link>
-          <li className="hover:bg-slate-100  rounded-lg ">
+              </a>
+            </Link>
+          </li>
+          <li className="hover:bg-slate-100 rounded-lg ">
             <button
               onClick={() => signOut()}
-              className="flex items-center px-3 py-2 w-full"
+              className="flex items-center px-3 py-2 w-full rounded-lg"
             >
               <Image src="/icons/log-out.png" width="20" height="20" alt="" />
               <span className="ml-2">Log Out</span>
@@ -53,7 +54,7 @@ const DropdownMenu = ({ hideDropdown, userId }: DropdownMenu) => {
           </li>
         </ul>
       </nav>
-      <div className="fixed inset-0 z-[50]" onClick={hideDropdown} />
+      {/* <div className="fixed inset-0 z-[50]" onClick={hideDropdown} /> */}
     </>
   );
 };
