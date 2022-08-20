@@ -7,6 +7,11 @@ import { Prisma } from "@prisma/client";
 const postWithUserAndImages = Prisma.validator<Prisma.PostArgs>()({
   include: {
     images: true,
+    tags: {
+      include: {
+        tag: true,
+      },
+    },
     user: true,
     _count: true,
     likes: true,
@@ -21,9 +26,10 @@ type PostWithUserAndImages = Prisma.PostGetPayload<
 type PostCardProps = PostWithUserAndImages;
 
 const populatePost = (post: PostCardProps, userId: string) => {
-  const { _count, likes, bookmarkedBy, ...postData } = post;
+  const { _count, likes, bookmarkedBy, tags, ...postData } = post;
   return {
     ...postData,
+    tags: post.tags.map((tag) => tag.tag),
     likesCount: _count.likes,
     commentsCount: _count.comments,
     likedByMe: likes.some((postLike) => postLike.userId === userId),
@@ -46,6 +52,11 @@ export const postRouter = createProtectedRouter()
           user: true,
           likes: true,
           images: true,
+          tags: {
+            include: {
+              tag: true,
+            },
+          },
           _count: true,
           bookmarkedBy: true,
         },
@@ -78,6 +89,11 @@ export const postRouter = createProtectedRouter()
           user: true,
           images: true,
           likes: true,
+          tags: {
+            include: {
+              tag: true,
+            },
+          },
           bookmarkedBy: true,
           _count: true,
         },
@@ -120,6 +136,11 @@ export const postRouter = createProtectedRouter()
         include: {
           user: true,
           images: true,
+          tags: {
+            include: {
+              tag: true,
+            },
+          },
           likes: true,
           _count: true,
           bookmarkedBy: true,
@@ -140,8 +161,21 @@ export const postRouter = createProtectedRouter()
           })
         )
         .nullable(),
+      tags: z
+        .array(
+          z.object({
+            name: z.string(),
+            status: z.enum(["new", "created"]),
+            color: z.string(),
+          })
+        )
+        .nullable(),
     }),
     async resolve({ input, ctx }) {
+      if (input.content.trim().length === 0) {
+        throw new Error("Post must have content text");
+      }
+
       const post = await prisma.post.create({
         data: {
           content: input.content,
@@ -159,15 +193,34 @@ export const postRouter = createProtectedRouter()
         });
       }
 
-      return await prisma.post.findFirst({
-        where: {
-          id: post.id,
-        },
-        include: {
-          images: true,
-          user: true,
-        },
-      });
+      const getRandomColor = () => {
+        return "#" + (((1 << 24) * Math.random()) | 0).toString(16);
+      };
+
+      if (input.tags) {
+        const newTags = input.tags.filter((tag) => tag.status === "new");
+
+        await prisma.tag.createMany({
+          data: newTags.map((tag) => ({
+            name: tag.name,
+            color: getRandomColor(),
+          })),
+        });
+
+        const tags = await prisma.tag.findMany({
+          where: {
+            name: {
+              in: input.tags.map((tag) => tag.name),
+            },
+          },
+        });
+
+        console.log("TAGGGSSSS", tags);
+
+        await prisma.postTag.createMany({
+          data: tags.map((tag) => ({ tagId: tag.id, postId: post.id })),
+        });
+      }
     },
   })
   .mutation("toggleLike", {

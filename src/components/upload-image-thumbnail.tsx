@@ -14,9 +14,21 @@ const UploadImageThumbnail = ({
 }: UploadImageThumbnail) => {
   const imageSrc = useMemo(() => URL.createObjectURL(image), [image]);
   return (
-    <div className="ml-5">
-      <button onClick={() => removeFile(image.name)}>X</button>
-      <div className="w-32 h-20 relative ">
+    <div className="relative">
+      <button
+        onClick={() => removeFile(image.name)}
+        className="absolute top-2 left-2 bg-neutral-800/80  z-[5] w-6 h-6 rounded-full flex justify-center items-center"
+      >
+        <Image
+          src="/icons/close-white.png"
+          width="20"
+          height="20"
+          alt=""
+          layout="fixed"
+          className="flex"
+        />
+      </button>
+      <div className="w-full h-48 relative ">
         <Image
           src={imageSrc}
           layout="fill"

@@ -1,4 +1,4 @@
-import { Prisma } from "@prisma/client";
+import { Prisma, Tag } from "@prisma/client";
 import Image from "next/image";
 import Link from "next/link";
 import clsx from "clsx";
@@ -16,6 +16,7 @@ type PostWithUserAndImages = Prisma.PostGetPayload<
 
 interface PostCardProps {
   post: PostWithUserAndImages & {
+    tags: Tag[];
     likedByMe: boolean;
     commentsCount: number;
     likesCount: number;
@@ -65,6 +66,17 @@ const PostCard = ({ post }: PostCardProps) => {
             {post.createdAt.toDateString()}
           </p>
         </div>
+      </div>
+      <div className="flex mt-3">
+        {post.tags.map((tag) => (
+          <div
+            className="bg-orange-600 text-white rounded-md p-1 mr-2 flex items-center"
+            style={{ backgroundColor: tag.color }}
+            key={tag.id}
+          >
+            <span className="text-sm">#{tag.name}</span>
+          </div>
+        ))}
       </div>
       <div className="py-5">
         <Link key={post.id} href={`/post/${post.id}`} passHref>

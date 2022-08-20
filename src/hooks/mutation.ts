@@ -1,5 +1,5 @@
 import { trpc } from "../utils/trpc";
-import { useSession } from "next-auth/react";
+import type { LocalTagType } from "@/components/post-input";
 
 interface UseUserProfileMutationType {
   name: string;
@@ -35,4 +35,22 @@ export const useAddCommentMutation = (postId: string) => {
   return (args: Omit<inferMutationInput<"comment.add">, "postId">) => {
     mutation.mutate({ postId, ...args });
   };
+};
+
+export const useAddPostMutation = () => {
+  const utils = trpc.useContext();
+  const mutation = trpc.useMutation("post.addPost", {
+    onSuccess() {
+      utils.invalidateQueries("post.getAll");
+    },
+  });
+
+  return (postContent: string, imageUrls: string[], tags: LocalTagType[]) =>
+    mutation.mutate({
+      tags: tags,
+      content: postContent,
+      images: imageUrls.length
+        ? imageUrls.map((url) => ({ imageAlt: "alt", imageUrl: url }))
+        : null,
+    });
 };

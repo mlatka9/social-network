@@ -1,27 +1,36 @@
 import { FormEvent, useState } from "react";
 import { trpc } from "../utils/trpc";
-import Image from "next/image";
+
 import UserProfilePicture from "./user-profile-image";
 import { uploadImage } from "src/utils/cloudinary";
-import UploadImageThumbnail from "./upload-image-thumbnail";
 import { useDropzone } from "react-dropzone";
+import { useAddPostMutation } from "src/hooks/mutation";
+import PostTagInput from "./post-tag-input";
+import PostFileInput from "./post-file-input";
+import { useSession } from "next-auth/react";
+
+import type { Tag } from "@prisma/client";
+
+export type LocalTagType = Tag & { status: "created" | "new" };
 
 const PostInput = () => {
+  const { data: session } = useSession();
+
   const [postContent, setPostContent] = useState("");
+  const [tags, setTags] = useState<LocalTagType[]>([]);
+  const [selectedImages, setSelectedImages] = useState<File[]>([]);
   const [imagesUploadProgress, setImagesUploadProgress] = useState<number[]>(
     []
   );
-  const [selectedImages, setSelectedImages] = useState<File[]>([]);
 
-  const utils = trpc.useContext();
+  const me = session?.user;
+  const addPost = useAddPostMutation();
 
-  const mutation = trpc.useMutation("post.addPost", {
-    onSuccess() {
-      utils.invalidateQueries("post.getAll");
-    },
-  });
-
-  const { getRootProps, getInputProps, open } = useDropzone({
+  const {
+    getRootProps,
+    getInputProps,
+    open: openFilePicker,
+  } = useDropzone({
     noClick: true,
     accept: {
       "image/*": [".png", ".gif", ".jpeg", ".jpg"],
@@ -43,13 +52,11 @@ const PostInput = () => {
     },
   });
 
-  const removeFile = (fileName: string) => {
+  const removeImage = (fileName: string) => {
     setSelectedImages(
       selectedImages.filter((image) => image.name !== fileName)
     );
   };
-
-  const me = trpc.useQuery(["user.me"]);
 
   const handleFormSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -64,16 +71,11 @@ const PostInput = () => {
       )
     );
 
-    mutation.mutate({
-      content: postContent,
-      images: imageUrls.length
-        ? imageUrls.map((url) => ({ imageAlt: "alt", imageUrl: url }))
-        : null,
-    });
-
+    addPost(postContent, imageUrls, tags);
     setPostContent("");
     setSelectedImages([]);
     setImagesUploadProgress([]);
+    setTags([]);
   };
 
   return (
@@ -85,8 +87,8 @@ const PostInput = () => {
       <div className="flex mb-5">
         <div className="w-10 h-10 shrink-0">
           <UserProfilePicture
-            imageUrl={me.data?.image || "/icons/hart.png"}
-            userID={me.data?.id || ""}
+            imageUrl={me?.image || "/icons/hart.png"}
+            userID={me?.id || ""}
           />
         </div>
         <div
@@ -97,26 +99,18 @@ const PostInput = () => {
           <textarea
             value={postContent}
             onChange={({ target }) => setPostContent(target.value)}
-            className="bg-blue-50 w-full rounded-lg placeholder:text-sm pl-2 min-h-[100px] max-h-[200px] block"
+            className="bg-blue-50 w-full rounded-lg placeholder:text-sm pl-2 min-h-[100px] max-h-[200px] block mb-3"
+          />
+          <PostTagInput setTags={setTags} tags={tags} />
+          <PostFileInput
+            imagesUploadProgress={imagesUploadProgress}
+            openFilePicker={openFilePicker}
+            removeImage={removeImage}
+            selectedImages={selectedImages}
           />
         </div>
       </div>
       <div className="flex items-center ml-[50px]">
-        <div className="cursor-pointer self-start" onClick={open}>
-          <Image src="/icons/photo.png" width="20" height="20" alt="" />
-        </div>
-        {selectedImages.length > 0 &&
-          selectedImages.map((image, index) => {
-            return (
-              <UploadImageThumbnail
-                key={image.name}
-                image={image}
-                imageUploadProgress={imagesUploadProgress[index] || 0}
-                removeFile={removeFile}
-              />
-            );
-          })}
-
         <button
           type="submit"
           className="bg-blue-500 rounded px-6 py-2 ml-auto self-start text-white"

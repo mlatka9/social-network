@@ -16,7 +16,6 @@ import { router } from "@trpc/server";
 import Link from "next/link";
 
 const User = () => {
-  // console.log("render");
   const { data: session } = useSession();
   const { query, asPath, push } = useRouter();
 
@@ -31,7 +30,6 @@ const User = () => {
   });
 
   const closeModal = () => {
-    // console.log(asPath);
     push(`/user/${userId}`);
   };
 
@@ -123,7 +121,7 @@ const User = () => {
       )}
       {section === "settings" && (
         <ModalWrapper title="Settings" handleCloseModal={closeModal}>
-          <ProfileSettings handleCloseSettigns={closeModal} />
+          <ProfileSettings />
         </ModalWrapper>
       )}
     </div>

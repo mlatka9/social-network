@@ -1,5 +1,6 @@
 import { trpc } from "../utils/trpc";
 import { useSession } from "next-auth/react";
+import type { LocalTagType } from "@/components/post-input";
 
 export const useInfiniteFeedQuery = () => {
   return trpc.useInfiniteQuery(
@@ -61,5 +62,23 @@ export const usePostComments = (postId: string) => {
 export const useSearchUserQuery = (searchPhrase: string) => {
   return trpc.useQuery(["user.getBySearchPhrase", { searchPhrase }], {
     keepPreviousData: true,
+    enabled: !!searchPhrase,
   });
+};
+
+export const useSearchTagQuery = (searchPhrase: string) => {
+  const data = trpc.useQuery(["tags.getBySearchPhrase", { searchPhrase }], {
+    keepPreviousData: true,
+  });
+  const tags = data.data;
+  if (!tags) {
+    return data;
+  }
+
+  const foramttedTags = tags.map((tag) => ({
+    ...tag,
+    status: "created",
+  })) as LocalTagType[];
+
+  return { ...data, data: foramttedTags };
 };

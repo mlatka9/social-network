@@ -8,8 +8,8 @@ interface UserProfileImage {
 
 const UserProfilePicture = ({ userID, imageUrl }: UserProfileImage) => {
   return (
-    <Link href={`/user/${userID}`} passHref>
-      <a>
+    <Link href={`/user/${userID}`}>
+      <a className="block h-10">
         <Image
           src={imageUrl}
           width="40"

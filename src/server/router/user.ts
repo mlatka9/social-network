@@ -129,8 +129,6 @@ export const userRouter = createProtectedRouter()
       const isUserFollowed =
         user?.following.some((user) => user.id === input.userId) || false;
 
-      // console.log("isUserFollowed", isUserFollowed);
-
       await prisma.user.update({
         where: {
           id: ctx.session.user.id,
