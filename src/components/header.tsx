@@ -62,9 +62,7 @@ const Header = () => {
           />
         </button>
 
-        {isDropdownShow && (
-          <DropdownMenu hideDropdown={hideDropdown} userId={user.id} />
-        )}
+        {isDropdownShow && <DropdownMenu userId={user.id} />}
       </div>
     </div>
   );

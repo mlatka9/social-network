@@ -1,3 +1,4 @@
+import { useRouter } from "next/router";
 import { useState, useRef, useEffect } from "react";
 import { useOnClickOutside } from "usehooks-ts";
 
@@ -10,28 +11,29 @@ function useSuggestionList<T>({
   data = [],
   onSelect,
 }: UseSuggestionListProps<T>) {
-  //   const router = useRouter();
+  const router = useRouter();
   const [selectedItemIndex, setSelectedItem] = useState<number | undefined>(
     undefined
   );
+
+  const [isSuggestionShow, setIsSuggestionShow] = useState(false);
+  const containerRef = useRef<HTMLInputElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     setSelectedItem(undefined);
   }, [data.length]);
 
-  const [isSuggestionShow, setIsSuggestionShow] = useState(false);
-  const ref = useRef<HTMLInputElement>(null);
-
-  //   useEffect(() => {
-  //     setIsSuggestionShow(false);
-  //   }, [router.asPath]);
+  useEffect(() => {
+    setIsSuggestionShow(false);
+  }, [router.asPath]);
 
   const handleClickOutside = () => {
     setSelectedItem(undefined);
     setIsSuggestionShow(false);
   };
 
-  useOnClickOutside(ref, handleClickOutside);
+  useOnClickOutside(containerRef, handleClickOutside);
 
   const setNextItem = () => {
     if (!data?.length) return;
@@ -67,7 +69,8 @@ function useSuggestionList<T>({
         const selectedItem = data[selectedItemIndex];
         if (selectedItem) {
           onSelect(selectedItem);
-          //   setIsSuggestionShow(false); //idk
+          setIsSuggestionShow(false);
+          inputRef.current?.blur();
         }
       }
     }
@@ -85,16 +88,14 @@ function useSuggestionList<T>({
 
   const suggestionData = isSuggestionShow ? (data.length ? data : []) : [];
 
-  console.log(selectedItemIndex);
-
   return {
     selectedItemIndex,
     suggestionData,
     wrapperProps: {
-      ref,
+      ref: containerRef,
       onKeyDown: handleKeyDown,
     },
-    inputProps: { onFocus: onInputFocus },
+    inputProps: { onFocus: onInputFocus, ref: inputRef },
   };
 }
 

@@ -1,6 +1,5 @@
 import { trpc } from "../utils/trpc";
 import { useSession } from "next-auth/react";
-import type { LocalTagType } from "@/components/post-input";
 
 export const useInfiniteFeedQuery = () => {
   return trpc.useInfiniteQuery(
@@ -14,6 +13,51 @@ export const useInfiniteFeedQuery = () => {
       getNextPageParam: (lastPage) => lastPage.nextCursor,
     }
   );
+};
+
+export const useUserPostsQuery = (useId: string) => {
+  return trpc.useInfiniteQuery(
+    [
+      "post.getAll",
+      {
+        limit: 5,
+        userId: useId,
+      },
+    ],
+    {
+      getNextPageParam: (lastPage) => lastPage.nextCursor,
+    }
+  );
+};
+
+export const useUserBookmarkedPostsQuery = () => {
+  return trpc.useInfiniteQuery(
+    [
+      "bookmarks.getAll",
+      {
+        limit: 5,
+      },
+    ],
+    {
+      getNextPageParam: (lastPage) => lastPage.nextCursor,
+    }
+  );
+};
+
+export const usePostsWithTagQuery = (tag: string) => {
+  const res = trpc.useInfiniteQuery(
+    [
+      "post.getAll",
+      {
+        limit: 5,
+        tagName: tag,
+      },
+    ],
+    {
+      getNextPageParam: (lastPage) => lastPage.nextCursor,
+    }
+  );
+  return res;
 };
 
 export const useUserQuery = (userId: string) => {
@@ -67,18 +111,11 @@ export const useSearchUserQuery = (searchPhrase: string) => {
 };
 
 export const useSearchTagQuery = (searchPhrase: string) => {
-  const data = trpc.useQuery(["tags.getBySearchPhrase", { searchPhrase }], {
+  return trpc.useQuery(["tags.getBySearchPhrase", { searchPhrase }], {
     keepPreviousData: true,
   });
-  const tags = data.data;
-  if (!tags) {
-    return data;
-  }
+};
 
-  const foramttedTags = tags.map((tag) => ({
-    ...tag,
-    status: "created",
-  })) as LocalTagType[];
-
-  return { ...data, data: foramttedTags };
+export const useTrendingTagsQuery = () => {
+  return trpc.useQuery(["tags.trending"]);
 };

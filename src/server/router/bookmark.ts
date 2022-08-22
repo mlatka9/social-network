@@ -2,13 +2,20 @@ import { createProtectedRouter } from "./protected-router";
 import { string, z } from "zod";
 import { resolve } from "path";
 import { prisma } from "../db/client";
-import { createNextApiHandler } from "@trpc/server/adapters/next";
+import { populatePost } from "./utils";
 
-// Example router with queries that can only be hit if the user requesting is signed in
 export const bookmarkRouter = createProtectedRouter()
   .query("getAll", {
-    async resolve({ ctx }) {
-      const bookmarks = await prisma.post.findMany({
+    input: z.object({
+      limit: z.number().min(1).max(100).nullish(),
+      cursor: z.string().nullish(),
+    }),
+    async resolve({ ctx, input }) {
+      const { cursor } = input;
+      const limit = input.limit ?? 10;
+
+      const posts = await prisma.post.findMany({
+        take: limit + 1,
         where: {
           bookmarkedBy: {
             some: {
@@ -20,27 +27,34 @@ export const bookmarkRouter = createProtectedRouter()
           user: true,
           images: true,
           likes: true,
+          tags: {
+            include: {
+              tag: true,
+            },
+          },
           bookmarkedBy: true,
           _count: true,
         },
+        cursor: cursor ? { id: cursor } : undefined,
         orderBy: {
           createdAt: "desc",
         },
       });
-      return bookmarks.map((bookmark) => {
-        const { _count, likes, bookmarkedBy, ...bookmarkData } = bookmark;
-        return {
-          ...bookmarkData,
-          likesCount: _count.likes,
-          commentsCount: _count.comments,
-          likedByMe: likes.some(
-            (postLike) => postLike.userId === ctx.session.user.id
-          ),
-          bookmarkedByMe: bookmarkedBy.some(
-            (bookmark) => bookmark.userId === ctx.session.user.id
-          ),
-        };
-      });
+
+      const populatedPosts = posts.map((post) =>
+        populatePost(post, ctx.session.user.id)
+      );
+
+      let nextCursor: typeof cursor | undefined = undefined;
+
+      if (populatedPosts.length > limit) {
+        const nextItem = populatedPosts.pop();
+        nextCursor = nextItem!.id;
+      }
+      return {
+        posts: populatedPosts,
+        nextCursor,
+      };
     },
   })
   .mutation("add", {

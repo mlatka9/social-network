@@ -1,3 +1,4 @@
+import clsx from "clsx";
 import Image from "next/image";
 import UploadImageThumbnail from "./upload-image-thumbnail";
 
@@ -29,10 +30,13 @@ const PostFileInput = ({
           className="block"
         />
       </button>
-      <div className="grid grid-cols-2 gap-3">
+      <div className={clsx(["grid grid-cols-2 gap-3 auto-rows-[200px]"])}>
         {selectedImages.length > 0 &&
           selectedImages.map((image, index) => (
             <UploadImageThumbnail
+              className={clsx(
+                selectedImages.length === 3 && index === 0 && "row-span-2"
+              )}
               key={image.name}
               image={image}
               imageUploadProgress={imagesUploadProgress[index] || 0}

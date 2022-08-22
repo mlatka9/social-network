@@ -7,6 +7,7 @@ import { useDebounce } from "usehooks-ts";
 import SearchCard from "@/components/search-card";
 import Image from "next/image";
 import useSuggestionList from "src/hooks/use-suggestion-popup";
+import { User } from "@prisma/client";
 
 const UserSearch = () => {
   const router = useRouter();
@@ -14,14 +15,18 @@ const UserSearch = () => {
 
   const [searchPhrase, setSearchPhrase] = useState("");
 
-  const onSelect = (selectedItem: any) => {
-    const userId = selectedItem.id;
+  const debouncedSearchPhrase = useDebounce(searchPhrase, 300);
+  const { data } = useSearchUserQuery(debouncedSearchPhrase);
+
+  useEffect(() => {
+    setSearchPhrase("");
+  }, [router.asPath]);
+
+  const onSelect = (user: User) => {
+    const userId = user.id;
     if (userId === undefined) return;
     router.push(`/user/${userId}`);
   };
-
-  const debouncedSearchPhrase = useDebounce(searchPhrase, 300);
-  const { data } = useSearchUserQuery(debouncedSearchPhrase);
 
   const { suggestionData, selectedItemIndex, wrapperProps, inputProps } =
     useSuggestionList({
@@ -35,10 +40,6 @@ const UserSearch = () => {
       utils.invalidateQueries(["user.getBySearchPhrase", { searchPhrase }]);
     }
   };
-
-  useEffect(() => {
-    setSearchPhrase("");
-  }, [router.asPath]);
 
   return (
     <div className="relative z-[200]" {...wrapperProps}>

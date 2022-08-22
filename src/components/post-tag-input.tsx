@@ -2,13 +2,13 @@ import useSuggestionList from "src/hooks/use-suggestion-popup";
 import clsx from "clsx";
 import { ChangeEvent, useState } from "react";
 import { useSearchTagQuery } from "src/hooks/query";
-import type { LocalTagType } from "@/components/post-input";
 import Image from "next/image";
 import { v4 as uuidv4 } from "uuid";
+import { Tag } from "@prisma/client";
 
 interface PostTagInputProps {
-  tags: LocalTagType[];
-  setTags: (tag: LocalTagType[]) => void;
+  tags: Tag[];
+  setTags: (tag: Tag[]) => void;
 }
 
 const PostTagInput = ({ setTags, tags }: PostTagInputProps) => {
@@ -16,7 +16,7 @@ const PostTagInput = ({ setTags, tags }: PostTagInputProps) => {
 
   const { data: hintTags } = useSearchTagQuery(tagInputValue);
 
-  const addTag = (tag: LocalTagType) => {
+  const addTag = (tag: Tag) => {
     const tagName = tag.name;
     const formattedTagName = tagName.trim().toLowerCase();
     if (
@@ -38,10 +38,8 @@ const PostTagInput = ({ setTags, tags }: PostTagInputProps) => {
     }
     if (e.key === " ") {
       addTag({
-        id: uuidv4(),
         name: tagInputValue,
         color: "#c1d0e3",
-        status: "new",
       });
     }
     if (e.key === "Enter") {

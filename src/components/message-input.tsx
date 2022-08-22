@@ -2,11 +2,14 @@ import { useState } from "react";
 import { trpc } from "src/utils/trpc";
 import Image from "next/image";
 import UserProfilePicture from "./user-profile-image";
+import { useCurrentUserQuery } from "src/hooks/query";
+import { useSession } from "next-auth/react";
 
 interface MessageInputProps {
   onMessageSubmit: (message: string) => void;
 }
 const MessageInput = ({ onMessageSubmit }: MessageInputProps) => {
+  const { data } = useSession();
   const [commentMessageValue, setCommentMessageValue] = useState("");
 
   const handleOnSubmit = (e: React.FormEvent) => {
@@ -15,17 +18,18 @@ const MessageInput = ({ onMessageSubmit }: MessageInputProps) => {
     setCommentMessageValue("");
   };
 
-  const me = trpc.useQuery(["user.me"]);
+  const me = data?.user;
+  if (!me) return <div>Loading</div>;
 
   return (
     <form
-      className="w-full flex p-5 bg-white rounded-lg mb-5"
+      className="w-full flex bg-white rounded-lg my-5"
       onSubmit={handleOnSubmit}
     >
       <div className="shrink-0 w-10 h-10 relative mr-3">
         <UserProfilePicture
-          imageUrl={me.data?.image || ""}
-          userID={me.data?.id || ""}
+          imageUrl={me.image || "/images/fallback.svg"}
+          userID={me.id}
         />
       </div>
 

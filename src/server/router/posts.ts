@@ -2,40 +2,7 @@ import { createProtectedRouter } from "./protected-router";
 import { string, z } from "zod";
 import { resolve } from "path";
 import { prisma } from "../db/client";
-import { Prisma } from "@prisma/client";
-
-const postWithUserAndImages = Prisma.validator<Prisma.PostArgs>()({
-  include: {
-    images: true,
-    tags: {
-      include: {
-        tag: true,
-      },
-    },
-    user: true,
-    _count: true,
-    likes: true,
-    bookmarkedBy: true,
-  },
-});
-
-type PostWithUserAndImages = Prisma.PostGetPayload<
-  typeof postWithUserAndImages
->;
-
-type PostCardProps = PostWithUserAndImages;
-
-const populatePost = (post: PostCardProps, userId: string) => {
-  const { _count, likes, bookmarkedBy, tags, ...postData } = post;
-  return {
-    ...postData,
-    tags: post.tags.map((tag) => tag.tag),
-    likesCount: _count.likes,
-    commentsCount: _count.comments,
-    likedByMe: likes.some((postLike) => postLike.userId === userId),
-    bookmarkedByMe: bookmarkedBy.some((bookmark) => bookmark.userId === userId),
-  };
-};
+import { populatePost } from "./utils";
 
 // Example router with queries that can only be hit if the user requesting is signed in
 export const postRouter = createProtectedRouter()
@@ -120,34 +87,62 @@ export const postRouter = createProtectedRouter()
     },
   })
   .query("getAll", {
-    input: z
-      .object({
-        userId: string().optional(),
-      })
-      .optional(),
+    input: z.object({
+      limit: z.number().min(1).max(100).nullish(),
+      cursor: z.string().nullish(),
+      userId: string().optional(),
+      tagName: string().optional(),
+    }),
     async resolve({ ctx, input }) {
+      const { cursor } = input;
+      const limit = input.limit ?? 10;
+
       const posts = await prisma.post.findMany({
-        orderBy: {
-          createdAt: "desc",
-        },
+        take: limit + 1,
         where: {
-          userId: input?.userId || undefined,
+          user: {
+            id: input.userId,
+          },
+          tags: input.tagName
+            ? {
+                some: {
+                  tagName: input.tagName,
+                },
+              }
+            : undefined,
         },
         include: {
           user: true,
           images: true,
+          likes: true,
           tags: {
             include: {
               tag: true,
             },
           },
-          likes: true,
-          _count: true,
           bookmarkedBy: true,
+          _count: true,
+        },
+        cursor: cursor ? { id: cursor } : undefined,
+        orderBy: {
+          createdAt: "desc",
         },
       });
 
-      return posts.map((post) => populatePost(post, ctx.session.user.id));
+      const populatedPosts = posts.map((post) =>
+        populatePost(post, ctx.session.user.id)
+      );
+
+      let nextCursor: typeof cursor | undefined = undefined;
+
+      if (populatedPosts.length > limit) {
+        const nextItem = populatedPosts.pop();
+        nextCursor = nextItem!.id;
+      }
+      return {
+        posts: populatedPosts,
+        nextCursor,
+      };
     },
   })
   .mutation("addPost", {
@@ -165,7 +160,7 @@ export const postRouter = createProtectedRouter()
         .array(
           z.object({
             name: z.string(),
-            status: z.enum(["new", "created"]),
+
             color: z.string(),
           })
         )
@@ -198,13 +193,23 @@ export const postRouter = createProtectedRouter()
       };
 
       if (input.tags) {
-        const newTags = input.tags.filter((tag) => tag.status === "new");
+        const tagsAlreadyInDB = await prisma.tag.findMany({
+          where: {
+            name: {
+              in: input.tags.map((tag) => tag.name),
+            },
+          },
+        });
+
+        const tagsNameAlreadyInDB = tagsAlreadyInDB.map((tag) => tag.name);
 
         await prisma.tag.createMany({
-          data: newTags.map((tag) => ({
-            name: tag.name,
-            color: getRandomColor(),
-          })),
+          data: input.tags
+            .filter((tag) => !tagsNameAlreadyInDB.includes(tag.name))
+            .map((tag) => ({
+              name: tag.name,
+              color: getRandomColor(),
+            })),
         });
 
         const tags = await prisma.tag.findMany({
@@ -215,10 +220,8 @@ export const postRouter = createProtectedRouter()
           },
         });
 
-        console.log("TAGGGSSSS", tags);
-
         await prisma.postTag.createMany({
-          data: tags.map((tag) => ({ tagId: tag.id, postId: post.id })),
+          data: tags.map((tag) => ({ tagName: tag.name, postId: post.id })),
         });
       }
     },

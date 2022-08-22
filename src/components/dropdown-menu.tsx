@@ -6,11 +6,10 @@ import { useRef } from "react";
 import { useOnClickOutside } from "usehooks-ts";
 
 interface DropdownMenu {
-  hideDropdown: () => void;
   userId: string;
 }
 
-const DropdownMenu = ({ hideDropdown, userId }: DropdownMenu) => {
+const DropdownMenu = ({ userId }: DropdownMenu) => {
   return (
     <>
       <nav className="z-[100] bg-white absolute top-[calc(100%_+_10px)] right-5 p-3 rounded-xl min-w-[200px] shadow-2xl select-none">

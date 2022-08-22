@@ -4,9 +4,15 @@ import { unstable_getServerSession } from "next-auth/next";
 import { authOptions } from "./api/auth/[...nextauth]";
 import PostCard from "../components/post-card";
 import PostInput from "@/components/post-input";
-import React from "react";
+import React, { ReactElement, useState } from "react";
 import { useInView } from "react-intersection-observer";
 import { useInfiniteFeedQuery } from "src/hooks/query";
+import TrendingTagsList from "@/components/trending-tags-list";
+import { Fragment } from "react";
+import Layout from "@/components/layout";
+import ModalWrapper from "@/components/modal-wrapper";
+import PostDetails from "@/components/post-details";
+import { useRouter } from "next/router";
 
 const Home: NextPage = () => {
   const { ref, inView } = useInView();
@@ -26,21 +32,21 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className="container mx-auto min-h-screen p-4">
+      <Layout>
         <PostInput />
-        <div className="mb-20" />
+        <div className="mb-5" />
         <div className="space-y-5">
           {isSuccess &&
             data.pages.map((page) => (
-              <React.Fragment key={page.nextCursor}>
+              <Fragment key={page.nextCursor || null}>
                 {page.posts.map((post) => (
                   <PostCard key={post.id} post={post} />
                 ))}
-              </React.Fragment>
+              </Fragment>
             ))}
           <div ref={ref} className="w-full h-10 bg-orange-300" />
         </div>
-      </main>
+      </Layout>
     </>
   );
 };

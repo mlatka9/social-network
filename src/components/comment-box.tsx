@@ -84,17 +84,6 @@ const CommentBox = ({ comment }: CommentBoxProps) => {
         { postId: comment.postId },
       ]);
     },
-    // onSuccess(input) {
-    //   const comments = utils.getQueryData([
-    //     "comment.getAllByPostId",
-    //     { postId: comment.postId },
-    //   ]);
-    //   if (!comments) return;
-    //   utils.setQueryData(
-    //     ["comment.getAllByPostId", { postId: comment.postId }],
-    //     [...comments, input]
-    //   );
-    // },
   });
 
   const handleAddCommentReply = (message: string) => {
