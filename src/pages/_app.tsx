@@ -6,11 +6,6 @@ import superjson from "superjson";
 import { SessionProvider } from "next-auth/react";
 import "../styles/globals.css";
 import { ReactQueryDevtools } from "react-query/devtools";
-import Header from "@/components/header";
-
-import type { ReactElement, ReactNode } from "react";
-import type { NextPage } from "next";
-import type { AppProps } from "next/app";
 
 const MyApp: AppType = ({
   Component,

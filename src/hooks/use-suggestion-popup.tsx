@@ -7,10 +7,10 @@ interface UseSuggestionListProps<T> {
   onSelect: (selectedItem: T) => void;
 }
 
-function useSuggestionList<T>({
+const useSuggestionList = <T,>({
   data = [],
   onSelect,
-}: UseSuggestionListProps<T>) {
+}: UseSuggestionListProps<T>) => {
   const router = useRouter();
   const [selectedItemIndex, setSelectedItem] = useState<number | undefined>(
     undefined
@@ -97,6 +97,6 @@ function useSuggestionList<T>({
     },
     inputProps: { onFocus: onInputFocus, ref: inputRef },
   };
-}
+};
 
 export default useSuggestionList;

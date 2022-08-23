@@ -18,11 +18,19 @@ export const authOptions: NextAuthOptions = {
     },
   },
   events: {
-    createUser(message) {
-      console.log(
-        "CREATED USER =>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",
-        message
-      );
+    async createUser(message) {
+      if (message.user.name) return;
+      await prisma.user.update({
+        where: {
+          id: message.user.id,
+        },
+        data: {
+          name:
+            message.user.email?.split("@")[0] ||
+            `user-${message.user.id.slice(0, 10)}`,
+        },
+      });
+      console.log("CREATED USER", message);
     },
   },
   // Configure one or more authentication providers

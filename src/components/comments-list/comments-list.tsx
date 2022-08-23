@@ -1,12 +1,12 @@
 import clsx from "clsx";
 import React from "react";
-import type { CommentWithCountsType } from "./comment-box";
-import CommentBox from "./comment-box";
+import { CommentDetailsType } from "@/types/index";
+import CommentItem from "./comment-item";
 
 const groupCommentsByParentId = (
-  comments: CommentWithCountsType[]
-): Map<string | null, CommentWithCountsType[]> => {
-  const groups = new Map<string | null, CommentWithCountsType[]>();
+  comments: CommentDetailsType[]
+): Map<string | null, CommentDetailsType[]> => {
+  const groups = new Map<string | null, CommentDetailsType[]>();
 
   comments.forEach((comment) => {
     if (groups.has(comment.parentId)) {
@@ -23,7 +23,7 @@ const groupCommentsByParentId = (
 };
 
 interface CommentsListProps {
-  comments: CommentWithCountsType[];
+  comments: CommentDetailsType[];
   parentId?: string | null;
   depth?: number;
 }
@@ -36,7 +36,7 @@ const CommentsList = ({
   const commentsByParentId = groupCommentsByParentId(comments);
   const commentsWithCurrentDepth = commentsByParentId.get(parentId);
 
-  if (!commentsWithCurrentDepth) return <></>;
+  if (!commentsWithCurrentDepth) return null;
 
   return (
     <div
@@ -47,7 +47,7 @@ const CommentsList = ({
     >
       {commentsWithCurrentDepth.map((comment) => (
         <div key={comment.id}>
-          <CommentBox comment={comment} />
+          <CommentItem comment={comment} />
           <CommentsList
             comments={comments}
             parentId={comment.id}

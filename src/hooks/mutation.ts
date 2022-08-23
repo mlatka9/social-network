@@ -1,34 +1,35 @@
 import { trpc } from "../utils/trpc";
-import type { LocalTagType } from "@/components/post-input";
+import { inferMutationInput } from "src/utils/trpc";
+import { Tag } from "@prisma/client";
+import { reloadSession } from "src/utils/auth";
 
-interface UseUserProfileMutationType {
-  name: string;
-  bio: string;
-  image?: string;
-  bannerImage?: string;
-}
+const invalidateAll = (utils: any) => {
+  utils.invalidateQueries(["post.getInfiniteFeed"]); //personalizowany feed
+  utils.invalidateQueries(["post.getAll"]); //infinity query, tagi i na profilu
+  utils.invalidateQueries(["post.getById"]); //podstrona z danym postem
+  utils.invalidateQueries(["bookmarks.getAll"]); //bookmarki
+};
 
 export const useProfileMutation = () => {
   const utils = trpc.useContext();
   const mutation = trpc.useMutation(["user.update"], {
     onSuccess() {
-      utils.invalidateQueries(["post.getInfiniteFeed"]);
-      utils.invalidateQueries(["post.getAll"]);
-      utils.invalidateQueries(["post.getById"]);
-      utils.invalidateQueries(["bookmarks.getAll"]);
+      invalidateAll(utils);
+      utils.invalidateQueries(["user.getById"]);
+      reloadSession();
     },
   });
 
   return mutation.mutate;
 };
 
-import { inferMutationInput } from "src/utils/trpc";
-
 export const useAddCommentMutation = (postId: string) => {
   const utils = trpc.useContext();
   const mutation = trpc.useMutation(["comment.add"], {
     onSuccess() {
       utils.invalidateQueries(["comment.getAllByPostId", { postId }]);
+      utils.invalidateQueries(["post.getById", { postId }]);
+      invalidateAll(utils);
     },
   });
 
@@ -45,7 +46,7 @@ export const useAddPostMutation = () => {
     },
   });
 
-  return (postContent: string, imageUrls: string[], tags: LocalTagType[]) =>
+  return (postContent: string, imageUrls: string[], tags: Tag[]) =>
     mutation.mutate({
       tags: tags,
       content: postContent,
@@ -53,4 +54,72 @@ export const useAddPostMutation = () => {
         ? imageUrls.map((url) => ({ imageAlt: "alt", imageUrl: url }))
         : null,
     });
+};
+
+export const useToggleCommentLikeMutation = (postId: string) => {
+  const utils = trpc.useContext();
+  const mutation = trpc.useMutation(["comment.toggleLike"], {
+    onSuccess() {
+      utils.invalidateQueries(["comment.getAllByPostId", { postId }]);
+    },
+  });
+  return mutation.mutate;
+};
+
+export const useDeleteCommentMutation = (postId: string) => {
+  const utils = trpc.useContext();
+  const mutation = trpc.useMutation(["comment.delete"], {
+    onSuccess() {
+      utils.invalidateQueries(["comment.getAllByPostId", { postId }]);
+    },
+  });
+  return mutation.mutate;
+};
+
+export const useUpdateCommentMutation = (postId: string) => {
+  const utils = trpc.useContext();
+  const mutation = trpc.useMutation(["comment.update"], {
+    onSuccess() {
+      utils.invalidateQueries(["comment.getAllByPostId", { postId }]);
+    },
+  });
+  return mutation.mutate;
+};
+
+export const useToggleFollowUserMutation = (userId: string, myId: string) => {
+  const utils = trpc.useContext();
+  const mutation = trpc.useMutation("user.followUser", {
+    onSuccess() {
+      utils.invalidateQueries(["user.getById", { userId }]);
+      utils.invalidateQueries(["user.getById", { userId: myId }]);
+      utils.invalidateQueries(["post.getInfiniteFeed"]);
+      // utils.invalidateQueries(["user.getFollows", { userId }]);
+      invalidateAll(utils);
+    },
+  });
+  return () => mutation.mutate({ userId });
+};
+
+export const useToggleBookmarkMutation = () => {
+  const utils = trpc.useContext();
+
+  const mutation = trpc.useMutation("bookmarks.add", {
+    onSuccess() {
+      invalidateAll(utils);
+    },
+  });
+
+  return mutation.mutate;
+};
+
+export const useTogglePostLikeMutation = () => {
+  const utils = trpc.useContext();
+
+  const mutation = trpc.useMutation("post.toggleLike", {
+    onSuccess() {
+      invalidateAll(utils);
+    },
+  });
+
+  return mutation.mutate;
 };

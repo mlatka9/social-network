@@ -2,11 +2,9 @@ import type { GetServerSidePropsContext } from "next";
 import Head from "next/head";
 import { unstable_getServerSession } from "next-auth/next";
 import { useRouter } from "next/router";
-
 import { authOptions } from "src/pages/api/auth/[...nextauth]";
-
-import Layout from "@/components/layout";
-import PostDetails from "@/components/post-details";
+import Layout from "@/components/common/layout";
+import PostDetails from "@/components/post/post-details";
 
 const PostPage = () => {
   const { query } = useRouter();
@@ -21,7 +19,9 @@ const PostPage = () => {
 
   return (
     <Layout>
-      <PostDetails postId={postId} />
+      <div className="p-5 bg-white rounded-lg">
+        <PostDetails postId={postId} />
+      </div>
     </Layout>
   );
 };

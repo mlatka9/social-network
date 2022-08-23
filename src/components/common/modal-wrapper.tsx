@@ -19,25 +19,24 @@ const ModalWrapper = ({
   isBig,
 }: ModalWrapperProps) => {
   useLockBodyScroll();
-  const [mounted, setMounted] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
-    setMounted(true);
-
-    return () => setMounted(false);
+    setIsMounted(true);
+    return () => setIsMounted(false);
   }, []);
 
-  if (!mounted) return null;
+  if (!isMounted) return null;
 
   return createPortal(
     <>
       <div
         className={clsx(
           [
-            "fixed p-10 bg-white z-[20]  inset-0 max-w-2xl max-h-[80vh] m-auto rounded-lg",
+            "fixed p-10 bg-white z-[20] inset-0 max-w-2xl max-h-[80vh] m-auto rounded-lg",
           ],
           isBig &&
-            "max-w-[unset] max-h-[unset] mx-10 mt-10 rounded-2lg inset-0 rounded-b-none"
+            "max-w-[900px] mx-auto mt-10 rounded-2lg inset-0 rounded-b-none max-h-[1000px] overflow-y-scroll"
         )}
       >
         <div className="flex justify-between items-center">

@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import Image from "next/image";
-import UploadImageThumbnail from "./upload-image-thumbnail";
+import UploadImageThumbnail from "../common/upload-image-thumbnail";
 
 interface PostFileInputProps {
   selectedImages: File[];

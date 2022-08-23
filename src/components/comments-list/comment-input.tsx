@@ -1,14 +1,12 @@
 import { useState } from "react";
-import { trpc } from "src/utils/trpc";
-import Image from "next/image";
-import UserProfilePicture from "./user-profile-image";
-import { useCurrentUserQuery } from "src/hooks/query";
+import UserProfilePicture from "../common/user-profile-image";
 import { useSession } from "next-auth/react";
 
-interface MessageInputProps {
+interface CommentInputProps {
   onMessageSubmit: (message: string) => void;
 }
-const MessageInput = ({ onMessageSubmit }: MessageInputProps) => {
+
+const CommentInput = ({ onMessageSubmit }: CommentInputProps) => {
   const { data } = useSession();
   const [commentMessageValue, setCommentMessageValue] = useState("");
 
@@ -18,19 +16,15 @@ const MessageInput = ({ onMessageSubmit }: MessageInputProps) => {
     setCommentMessageValue("");
   };
 
-  const me = data?.user;
-  if (!me) return <div>Loading</div>;
+  const me = data?.user!;
 
   return (
     <form
-      className="w-full flex bg-white rounded-lg my-5"
+      className="w-full flex bg-white rounded-lg my-5 "
       onSubmit={handleOnSubmit}
     >
       <div className="shrink-0 w-10 h-10 relative mr-3">
-        <UserProfilePicture
-          imageUrl={me.image || "/images/fallback.svg"}
-          userID={me.id}
-        />
+        <UserProfilePicture imageUrl={me.image} userID={me.id} />
       </div>
 
       <input
@@ -43,4 +37,4 @@ const MessageInput = ({ onMessageSubmit }: MessageInputProps) => {
   );
 };
 
-export default MessageInput;
+export default CommentInput;

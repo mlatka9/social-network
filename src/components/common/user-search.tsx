@@ -4,7 +4,7 @@ import { useSearchUserQuery } from "src/hooks/query";
 import { useRouter } from "next/router";
 import { useDebounce } from "usehooks-ts";
 
-import SearchCard from "@/components/search-card";
+import SearchCard from "@/components/common/search-card";
 import Image from "next/image";
 import useSuggestionList from "src/hooks/use-suggestion-popup";
 import { User } from "@prisma/client";

@@ -1,7 +1,6 @@
 import { createProtectedRouter } from "./protected-router";
 import { prisma } from "../db/client";
 import { z } from "zod";
-import { resolve } from "path";
 
 // Example router with queries that can only be hit if the user requesting is signed in
 export const tagRouter = createProtectedRouter()

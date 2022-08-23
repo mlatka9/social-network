@@ -1,17 +1,10 @@
 import type { GetServerSidePropsContext } from "next";
-import Head from "next/head";
 import { unstable_getServerSession } from "next-auth/next";
 import { useRouter } from "next/router";
-import CommentsList from "../../components/comments-list";
-import PostCard from "@/components/post-card";
-import MessageInput from "@/components/message-input";
 import { authOptions } from "src/pages/api/auth/[...nextauth]";
 import { usePostsWithTagQuery } from "src/hooks/query";
-import { useAddCommentMutation } from "src/hooks/mutation";
-import { useEffect } from "react";
-import { useInView } from "react-intersection-observer";
-import { Fragment } from "react";
-import Layout from "@/components/layout";
+import Layout from "@/components/common/layout";
+import PostList from "@/components/post/post-list";
 
 const TagPage = () => {
   const { query } = useRouter();
@@ -19,13 +12,7 @@ const TagPage = () => {
   const tagName = query.tagName as string;
   const { data, fetchNextPage, isSuccess } = usePostsWithTagQuery(tagName);
 
-  const { ref, inView } = useInView();
-
-  useEffect(() => {
-    if (inView) {
-      fetchNextPage();
-    }
-  }, [inView, fetchNextPage]);
+  if (!isSuccess) return <div>Loading...</div>;
 
   return (
     <Layout>
@@ -33,17 +20,7 @@ const TagPage = () => {
         <p className="font-bold text-neutral-800 text-2xl">#{tagName}</p>
         <p className="text-neutral-600 font-normal">discover</p>
       </h1>
-      <div className="space-y-5">
-        {isSuccess &&
-          data.pages.map((page) => (
-            <Fragment key={page.nextCursor || ""}>
-              {page.posts.map((post) => (
-                <PostCard key={post.id} post={post} />
-              ))}
-            </Fragment>
-          ))}
-      </div>
-      <div ref={ref} className="w-full h-10 bg-orange-300" />
+      <PostList data={data} fetchNextPage={fetchNextPage} />
     </Layout>
   );
 };

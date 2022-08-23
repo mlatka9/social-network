@@ -61,12 +61,17 @@ export const usePostsWithTagQuery = (tag: string) => {
 };
 
 export const useUserQuery = (userId: string) => {
-  return trpc.useQuery([
-    "user.getById",
+  return trpc.useQuery(
+    [
+      "user.getById",
+      {
+        userId,
+      },
+    ],
     {
-      userId,
-    },
-  ]);
+      retry: false,
+    }
+  );
 };
 
 export const useCurrentUserQuery = () => {
@@ -76,7 +81,7 @@ export const useCurrentUserQuery = () => {
     [
       "user.getById",
       {
-        userId: currentUserId || "",
+        userId: currentUserId!,
       },
     ],
     {
@@ -85,7 +90,7 @@ export const useCurrentUserQuery = () => {
   );
 };
 
-export const usePost = (postId: string) => {
+export const usePostQuery = (postId: string) => {
   return trpc.useQuery([
     "post.getById",
     {
@@ -94,7 +99,7 @@ export const usePost = (postId: string) => {
   ]);
 };
 
-export const usePostComments = (postId: string) => {
+export const usePostCommentsQuery = (postId: string) => {
   return trpc.useQuery([
     "comment.getAllByPostId",
     {
@@ -118,4 +123,8 @@ export const useSearchTagQuery = (searchPhrase: string) => {
 
 export const useTrendingTagsQuery = () => {
   return trpc.useQuery(["tags.trending"]);
+};
+
+export const useFollowsQuery = (userId: string) => {
+  return trpc.useQuery(["user.getFollows", { userId }]);
 };

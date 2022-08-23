@@ -1,5 +1,5 @@
 import { useDropzone } from "react-dropzone";
-import type { IFormInput } from "@/components/profile-settings";
+import type { IFormInput } from "@/components/common/profile-settings";
 import { UseFormSetValue } from "react-hook-form";
 
 const useSettingsDropZone = (

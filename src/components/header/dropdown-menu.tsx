@@ -1,9 +1,6 @@
 import Link from "next/link";
 import { signOut } from "next-auth/react";
-import { useRouter } from "next/router";
 import Image from "next/image";
-import { useRef } from "react";
-import { useOnClickOutside } from "usehooks-ts";
 
 interface DropdownMenu {
   userId: string;
@@ -53,7 +50,6 @@ const DropdownMenu = ({ userId }: DropdownMenu) => {
           </li>
         </ul>
       </nav>
-      {/* <div className="fixed inset-0 z-[50]" onClick={hideDropdown} /> */}
     </>
   );
 };

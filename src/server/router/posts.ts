@@ -1,6 +1,5 @@
 import { createProtectedRouter } from "./protected-router";
 import { string, z } from "zod";
-import { resolve } from "path";
 import { prisma } from "../db/client";
 import { populatePost } from "./utils";
 

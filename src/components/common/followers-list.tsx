@@ -1,28 +1,22 @@
-import { useState } from "react";
-import { trpc } from "src/utils/trpc";
 import ButtonFollow from "./button-follow";
 import UserProfilePicture from "./user-profile-image";
 import clsx from "clsx";
 import { useRouter } from "next/router";
 import Link from "next/link";
-
-interface FollowersListProps {
-  userId: string;
-}
+import { useFollowsQuery } from "src/hooks/query";
 
 export type FollowsListType = "followers" | "following";
 
-const FollowersList = ({ userId }: FollowersListProps) => {
+const FollowersList = () => {
   const { query } = useRouter();
 
+  const userId = query.params?.[0]!;
   const followType = query.params?.[1] as FollowsListType;
 
-  const follows = trpc.useQuery(["user.getFollows", { userId: userId }]);
+  const { data } = useFollowsQuery(userId);
 
   const selectedListDat =
-    followType === "followers"
-      ? follows.data?.followedBy || []
-      : follows.data?.following || [];
+    (followType === "followers" ? data?.followedBy : data?.following) || [];
 
   return (
     <>

@@ -3,20 +3,21 @@ import Image from "next/image";
 
 interface UserProfileImage {
   userID: string;
-  imageUrl: string;
+  imageUrl?: string | null;
 }
 
 const UserProfilePicture = ({ userID, imageUrl }: UserProfileImage) => {
   return (
     <Link href={`/user/${userID}`}>
-      <a className="block h-10">
+      <a className="h-10">
         <Image
-          src={imageUrl}
+          src={imageUrl || "/images/fallback.svg"}
           width="40"
           height="40"
           layout="fixed"
           alt=""
           className="rounded-lg"
+          objectFit="cover"
         />
       </a>
     </Link>

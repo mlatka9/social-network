@@ -1,6 +1,5 @@
 import { createProtectedRouter } from "./protected-router";
 import { z } from "zod";
-import { resolve } from "path";
 import { prisma } from "../db/client";
 
 // Example router with queries that can only be hit if the user requesting is signed in
