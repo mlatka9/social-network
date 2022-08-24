@@ -1,67 +1,106 @@
 import clsx from "clsx";
 import Image from "next/image";
-import { trpc } from "src/utils/trpc";
 import { PostDetailsType } from "@/types/index";
 import {
   useToggleBookmarkMutation,
   useTogglePostLikeMutation,
 } from "src/hooks/mutation";
+import React, { useState } from "react";
+import ModalWrapper from "../common/modal-wrapper";
+import PostInput from "../post-input/post-input";
 
 interface PostCardFooterProps {
   post: PostDetailsType;
 }
 
 const PostCardFooter = ({ post }: PostCardFooterProps) => {
+  const [isSharing, setIsSharing] = useState(false);
+
+  const closeSharingModal = () => {
+    setIsSharing(false);
+  };
+
+  const toggleIsSharing = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setIsSharing(!isSharing);
+  };
+
   const toggleBookmark = useToggleBookmarkMutation();
   const togglePostLike = useTogglePostLikeMutation();
 
-  const handleToggleBookmark = async () => {
+  const handleToggleBookmark = (e: React.MouseEvent) => {
+    e.stopPropagation();
     toggleBookmark({ postId: post.id });
   };
 
-  const handleToggleLike = async (postId: string) => {
-    togglePostLike({ postId: postId });
+  const handleToggleLike = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    togglePostLike({ postId: post.id });
   };
 
   useTogglePostLikeMutation();
 
   return (
-    <div className="flex items-center">
-      <div
-        className={clsx([
-          "flex items-center cursor-pointer w-fit",
-          post.likedByMe && "text-red-500",
-        ])}
-        onClick={() => handleToggleLike(post.id)}
-      >
-        <Image
-          src="/icons/hart.png"
-          width="20"
-          height="20"
-          layout="fixed"
-          alt=""
-        />
-        <p className="ml-2">{post.likesCount}</p>
+    <>
+      <div className="flex items-center mt-5">
+        <div
+          className={clsx([
+            "flex items-center cursor-pointer w-fit hover:opacity-80 transition-opacity",
+            post.likedByMe && "text-red-500",
+          ])}
+          onClick={handleToggleLike}
+        >
+          <Image
+            src="/icons/hart.png"
+            width="20"
+            height="20"
+            layout="fixed"
+            alt=""
+            unoptimized
+          />
+          <p className="ml-2">{post.likesCount}</p>
+        </div>
+        <div
+          className="flex items-center cursor-pointer w-fit opacity-80 ml-5 hover:opacity-50 transition-opacity"
+          onClick={toggleIsSharing}
+        >
+          <Image
+            src="/icons/replay.png"
+            width="20"
+            height="20"
+            layout="fixed"
+            alt=""
+            unoptimized
+          />
+          <p className="ml-2">{post.sharesCount}</p>
+        </div>
+        <div
+          className="flex items-center cursor-pointer w-fit opacity-80 ml-5 hover:opacity-50 transition-opacity"
+          onClick={handleToggleBookmark}
+        >
+          <Image
+            src={
+              post.bookmarkedByMe
+                ? "/icons/bookmark-filled.png"
+                : "/icons/bookmark-empty.png"
+            }
+            width="20"
+            height="20"
+            layout="fixed"
+            alt=""
+            unoptimized
+          />
+        </div>
+        <div className="font-medium text-xs text-gray-400 ml-auto w-fit hover:underline">
+          <p>{post.commentsCount} Comments</p>
+        </div>
       </div>
-      <div
-        className={clsx([
-          "flex items-center cursor-pointer w-fit opacity-50 ml-5",
-          post.bookmarkedByMe && "opacity-100 bg-red-500",
-        ])}
-        onClick={handleToggleBookmark}
-      >
-        <Image
-          src="/icons/bookmark.png"
-          width="20"
-          height="20"
-          layout="fixed"
-          alt=""
-        />
-      </div>
-      <div className="font-medium text-xs text-gray-400 ml-auto w-fit">
-        <p>{post.commentsCount} Comments</p>
-      </div>
-    </div>
+      {isSharing && (
+        <ModalWrapper handleCloseModal={closeSharingModal} title="Share">
+          <PostInput sharedPost={post} submitCallback={closeSharingModal} />
+        </ModalWrapper>
+      )}
+    </>
   );
 };
 

@@ -9,7 +9,7 @@ interface UserProfileImage {
 const UserProfilePicture = ({ userID, imageUrl }: UserProfileImage) => {
   return (
     <Link href={`/user/${userID}`}>
-      <a className="h-10">
+      <a className="h-10" onClick={(e) => e.stopPropagation()}>
         <Image
           src={imageUrl || "/images/fallback.svg"}
           width="40"

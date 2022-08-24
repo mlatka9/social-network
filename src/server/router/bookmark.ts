@@ -2,6 +2,7 @@ import { createProtectedRouter } from "./protected-router";
 import { z } from "zod";
 import { prisma } from "../db/client";
 import { populatePost } from "./utils";
+import { postDetailsInclude } from "./types";
 
 export const bookmarkRouter = createProtectedRouter()
   .query("getAll", {
@@ -22,18 +23,7 @@ export const bookmarkRouter = createProtectedRouter()
             },
           },
         },
-        include: {
-          user: true,
-          images: true,
-          likes: true,
-          tags: {
-            include: {
-              tag: true,
-            },
-          },
-          bookmarkedBy: true,
-          _count: true,
-        },
+        include: postDetailsInclude,
         cursor: cursor ? { id: cursor } : undefined,
         orderBy: {
           createdAt: "desc",

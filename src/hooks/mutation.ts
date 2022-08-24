@@ -38,21 +38,29 @@ export const useAddCommentMutation = (postId: string) => {
   };
 };
 
-export const useAddPostMutation = () => {
+export const useAddPostMutation = (onSuccessCb: () => void) => {
   const utils = trpc.useContext();
   const mutation = trpc.useMutation("post.addPost", {
     onSuccess() {
-      utils.invalidateQueries("post.getAll");
+      onSuccessCb();
+      invalidateAll(utils);
+      // utils.invalidateQueries("post.getAll");
     },
   });
 
-  return (postContent: string, imageUrls: string[], tags: Tag[]) =>
+  return (
+    postContent: string,
+    imageUrls: string[],
+    tags: Tag[],
+    shareParentId?: string
+  ) =>
     mutation.mutate({
       tags: tags,
       content: postContent,
       images: imageUrls.length
         ? imageUrls.map((url) => ({ imageAlt: "alt", imageUrl: url }))
         : null,
+      shareParentId: shareParentId,
     });
 };
 
@@ -93,8 +101,6 @@ export const useToggleFollowUserMutation = (userId: string, myId: string) => {
       utils.invalidateQueries(["user.getById", { userId }]);
       utils.invalidateQueries(["user.getById", { userId: myId }]);
       utils.invalidateQueries(["post.getInfiniteFeed"]);
-      // utils.invalidateQueries(["user.getFollows", { userId }]);
-      invalidateAll(utils);
     },
   });
   return () => mutation.mutate({ userId });

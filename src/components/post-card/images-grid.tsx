@@ -6,33 +6,73 @@ interface ImagesGridProps {
   images: ImageType[];
 }
 
+const getImageWidthRatio = (imageNumber: number, imageIndex: number) => {
+  if (imageNumber === 1) {
+    return 100;
+  }
+  if (imageNumber === 2) {
+    return 100;
+  }
+  if (imageNumber === 3) {
+    if (imageIndex === 0) {
+      return 50;
+    }
+    return 50;
+  }
+  return 100;
+};
+
+const getImageHeightRatio = (imageNumber: number, imageIndex: number) => {
+  if (imageNumber === 1) {
+    return 50;
+  }
+  if (imageNumber === 2) {
+    return 80;
+  }
+  if (imageNumber === 3) {
+    if (imageIndex === 0) {
+      return 70;
+    }
+    return 34;
+  }
+  return 100;
+};
+
 const ImagesGrid = ({ images }: ImagesGridProps) => {
   return (
     <div
       className={clsx([
-        "grid  gap-3 auto-rows-[400px] mb-5",
-        images.length > 1 && "grid-cols-2",
-        images.length > 2 && "auto-rows-[250px]",
+        "grid gap-2 grid-cols-fill",
+        images.length > 1 && "",
+        images.length > 2 && "",
       ])}
     >
       {images.length > 0 &&
-        images.map((image, index) => (
-          <div
-            key={image.id}
-            className={clsx(
-              "w-full h-full relative mb-3",
-              images.length === 3 && index === 0 && "row-span-2"
-            )}
-          >
-            <Image
-              layout="fill"
-              src={image.url}
-              objectFit="cover"
-              className="rounded-lg"
-              alt=""
-            />
-          </div>
-        ))}
+        images.map((image, index) => {
+          const widthRatio = getImageWidthRatio(images.length, index);
+          const heightRatio = getImageHeightRatio(images.length, index);
+          return (
+            <div
+              key={image.id}
+              className={clsx(
+                "relative",
+                images.length === 3 && index === 0 && "row-span-2",
+                images.length === 3 && index === 2 && "self-end"
+              )}
+            >
+              <Image
+                layout="responsive"
+                width={widthRatio}
+                height={heightRatio}
+                src={image.url}
+                objectFit="cover"
+                className="rounded-lg"
+                alt=""
+                sizes="700px"
+              />
+            </div>
+          );
+        })}
     </div>
   );
 };

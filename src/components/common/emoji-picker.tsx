@@ -1,4 +1,5 @@
 import data from "@emoji-mart/data";
+// @ts-ignore
 import Picker from "@emoji-mart/react";
 import Image from "next/image";
 import { useRef, useState } from "react";

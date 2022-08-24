@@ -10,7 +10,8 @@ const TagPage = () => {
   const { query } = useRouter();
 
   const tagName = query.tagName as string;
-  const { data, fetchNextPage, isSuccess } = usePostsWithTagQuery(tagName);
+  const { data, fetchNextPage, isSuccess, hasNextPage } =
+    usePostsWithTagQuery(tagName);
 
   if (!isSuccess) return <div>Loading...</div>;
 
@@ -20,7 +21,11 @@ const TagPage = () => {
         <p className="font-bold text-neutral-800 text-2xl">#{tagName}</p>
         <p className="text-neutral-600 font-normal">discover</p>
       </h1>
-      <PostList data={data} fetchNextPage={fetchNextPage} />
+      <PostList
+        data={data}
+        fetchNextPage={fetchNextPage}
+        hasNextPage={hasNextPage}
+      />
     </Layout>
   );
 };

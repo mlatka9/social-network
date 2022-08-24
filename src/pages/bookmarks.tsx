@@ -6,7 +6,8 @@ import { authOptions } from "./api/auth/[...nextauth]";
 import PostList from "@/components/post/post-list";
 
 const Bookmarks = () => {
-  const { data, isSuccess, fetchNextPage } = useUserBookmarkedPostsQuery();
+  const { data, isSuccess, fetchNextPage, hasNextPage } =
+    useUserBookmarkedPostsQuery();
 
   if (!isSuccess) {
     return <div>Loading...</div>;
@@ -18,7 +19,11 @@ const Bookmarks = () => {
         <p className="font-bold text-neutral-800 text-2xl">Bookmarks</p>
         <p className="text-neutral-600 font-normal">discover</p>
       </h1>
-      <PostList data={data} fetchNextPage={fetchNextPage} />
+      <PostList
+        data={data}
+        fetchNextPage={fetchNextPage}
+        hasNextPage={hasNextPage}
+      />
     </Layout>
   );
 };

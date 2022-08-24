@@ -7,15 +7,17 @@ interface TagsListProps {
 
 const TagsList = ({ tags }: TagsListProps) => {
   return (
-    <div className="flex mt-3 mb-5">
+    <div className="flex mt-3 mb-5 space-x-2">
       {tags.map((tag) => (
         <Link key={tag.name} href={`/tag/${tag.name}`}>
-          <div
-            className="bg-orange-600 text-white rounded-md p-1 mr-2 flex items-center cursor-pointer"
-            style={{ backgroundColor: tag.color }}
-          >
-            <span className="text-sm">#{tag.name}</span>
-          </div>
+          <a onClick={(e) => e.stopPropagation()}>
+            <div
+              className="bg-orange-600 text-white rounded-md p-1  flex items-center cursor-pointer"
+              style={{ backgroundColor: tag.color }}
+            >
+              <span className="text-sm">#{tag.name}</span>
+            </div>
+          </a>
         </Link>
       ))}
     </div>

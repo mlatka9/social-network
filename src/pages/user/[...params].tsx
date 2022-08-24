@@ -18,10 +18,10 @@ const User = () => {
   const userId = query.params?.[0]!;
   const section = query.params?.[1];
 
-  const { data, fetchNextPage } = useUserPostsQuery(userId);
+  const { data, fetchNextPage, hasNextPage } = useUserPostsQuery(userId);
 
   const closeModal = () => {
-    push(`/user/${userId}`);
+    push(`/user/${userId}`, undefined, { shallow: true });
   };
 
   if (!userId) return <div>no user id</div>;
@@ -29,12 +29,17 @@ const User = () => {
   return (
     <Layout>
       <UserProfileHero />
-      <PostList data={data} fetchNextPage={fetchNextPage} />
+      <PostList
+        data={data}
+        fetchNextPage={fetchNextPage}
+        hasNextPage={hasNextPage}
+      />
       {(section === "followers" || section === "following") && (
         <ModalWrapper title="Followers" handleCloseModal={closeModal}>
           <FollowersList />
         </ModalWrapper>
       )}
+
       {section === "settings" && (
         <ModalWrapper title="Settings" handleCloseModal={closeModal}>
           <ProfileSettings />

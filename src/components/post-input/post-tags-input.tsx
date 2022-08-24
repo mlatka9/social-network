@@ -34,9 +34,10 @@ const PostTagsInput = ({ setTags, tags }: PostTagsInputProps) => {
   const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     switch (e.key) {
       case "ArrowUp":
-      case "ArrowUp":
+      case "ArrowDown":
       case "Enter":
         e.preventDefault();
+        break;
       case " ":
         addTag({
           name: tagInputValue,

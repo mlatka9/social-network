@@ -1,5 +1,6 @@
 import UserProfilePicture from "@/components/common/user-profile-image";
 import clsx from "clsx";
+import Link from "next/link";
 
 interface AuthorProps {
   authorId: string;
@@ -19,7 +20,11 @@ const Author = ({
     <div className="flex">
       <UserProfilePicture imageUrl={authorImage} userID={authorId} />
       <div className={clsx(["ml-4"])}>
-        <p className="font-medium mr-2">{authorName}</p>
+        <Link href={`/user/${authorId}`}>
+          <a className="h-10" onClick={(e) => e.stopPropagation()}>
+            <p className="font-medium mr-2 hover:underline">{authorName}</p>
+          </a>
+        </Link>
         <p className="font-medium text-xs text-gray-400">
           {postCreatedAt.toDateString()}
         </p>

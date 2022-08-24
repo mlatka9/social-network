@@ -6,6 +6,9 @@ module.exports = {
       fontFamily: {
         poppins: ["Poppins", "sans-serif"],
       },
+      gridTemplateColumns: {
+        fill: "repeat(auto-fit, minmax(300px, 1fr))",
+      },
     },
   },
   plugins: [],

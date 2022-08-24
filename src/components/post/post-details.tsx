@@ -6,6 +6,8 @@ import Author from "../post-card/author";
 import TagsList from "../post-card/tags-list";
 import ImagesGrid from "../post-card/images-grid";
 import PostCardFooter from "../post-card/post-card-footer";
+import PostThumbnail from "./post-thumbnail";
+import router from "next/router";
 
 interface PostDetailsProps {
   postId: string;
@@ -22,6 +24,16 @@ const PostDetails = ({ postId }: PostDetailsProps) => {
       message: message,
       parentId: null,
     });
+  };
+
+  const { data: sharedPost, isSuccess: isSharedPostSuccess } = usePostQuery(
+    post?.shareParentId || undefined
+  );
+
+  const goToSharedPost = (e: React.MouseEvent<HTMLElement>) => {
+    if (!post) return;
+    e.stopPropagation();
+    router.push(`/post/${post.shareParentId}`);
   };
 
   if (isError) {
@@ -45,6 +57,13 @@ const PostDetails = ({ postId }: PostDetailsProps) => {
           <TagsList tags={post.tags} />
           <p className="mb-3">{post.content}</p>
           <ImagesGrid images={post.images} />
+          {isSharedPostSuccess && (
+            <>
+              <div className="mt-3 bg-pink-500" />
+              <PostThumbnail sharedPost={sharedPost} onClick={goToSharedPost} />
+            </>
+          )}
+
           <PostCardFooter post={post} />
         </div>
 

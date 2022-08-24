@@ -82,6 +82,10 @@ model Post {
   images       Image[]    @relation(name: "addedImages")
   isDeleted    Boolean    @default(false)
   tags         PostTag[]
+
+  shareParentId String?
+  shareParent   Post?   @relation("Share", fields: [shareParentId], references: [id])
+  shares        Post[]  @relation("Share")
 }
 
 model Image {
@@ -144,10 +148,10 @@ model Tag {
 
 model PostTag {
 
-  tagName  String
-  tag    Tag    @relation(fields: [tagName], references: [name], onDelete: Cascade)
-  postId String
-  post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
+  tagName String
+  tag     Tag    @relation(fields: [tagName], references: [name], onDelete: Cascade)
+  postId  String
+  post    Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
 
   @@id([postId, tagName])
 }

@@ -1,18 +1,21 @@
 import { Prisma } from "@prisma/client";
 
-const postWithUserAndImages = Prisma.validator<Prisma.PostArgs>()({
-  include: {
-    images: true,
-    tags: {
-      include: {
-        tag: true,
-      },
+export const postDetailsInclude = {
+  images: true,
+  tags: {
+    include: {
+      tag: true,
     },
-    user: true,
-    _count: true,
-    likes: true,
-    bookmarkedBy: true,
   },
+  user: true,
+  _count: true,
+  likes: true,
+  bookmarkedBy: true,
+  shareParent: true,
+};
+
+const postWithUserAndImages = Prisma.validator<Prisma.PostArgs>()({
+  include: postDetailsInclude,
 });
 
 type PostWithUserAndImages = Prisma.PostGetPayload<

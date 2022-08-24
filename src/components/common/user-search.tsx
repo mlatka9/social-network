@@ -14,8 +14,8 @@ const UserSearch = () => {
   const utils = trpc.useContext();
 
   const [searchPhrase, setSearchPhrase] = useState("");
-
   const debouncedSearchPhrase = useDebounce(searchPhrase, 300);
+
   const { data } = useSearchUserQuery(debouncedSearchPhrase);
 
   useEffect(() => {

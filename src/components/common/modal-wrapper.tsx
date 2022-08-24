@@ -18,7 +18,6 @@ const ModalWrapper = ({
   handleCloseModal,
   isBig,
 }: ModalWrapperProps) => {
-  useLockBodyScroll();
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
@@ -26,20 +25,31 @@ const ModalWrapper = ({
     return () => setIsMounted(false);
   }, []);
 
+  useLockBodyScroll();
+
   if (!isMounted) return null;
 
   return createPortal(
-    <>
+    <div className="z-1">
       <div
+        className="bg-neutral-800 opacity-80 fixed inset-0 z-10"
+        onClick={(e) => {
+          e.stopPropagation();
+          handleCloseModal();
+        }}
+      />
+      <div
+        onClick={(e) => e.stopPropagation()}
         className={clsx(
           [
-            "fixed p-10 bg-white z-[20] inset-0 max-w-2xl max-h-[80vh] m-auto rounded-lg",
+            "fixed p-10 bg-white z-[10] inset-0  m-auto rounded-lg overflow-y-scroll",
           ],
+          !isBig && "h-fit max-w-2xl max-h-[90vh]",
           isBig &&
-            "max-w-[900px] mx-auto mt-10 rounded-2lg inset-0 rounded-b-none max-h-[1000px] overflow-y-scroll"
+            "max-w-[900px] mx-auto mt-10 inset-0 rounded-b-none max-h-[1000px]"
         )}
       >
-        <div className="flex justify-between items-center">
+        <div className="flex justify-between items-center ">
           <div className="font-poppins font-semibold ">{title}</div>
           <button
             className="cursor-pointer flex justify-center items-center"
@@ -57,11 +67,7 @@ const ModalWrapper = ({
         <hr className="mt-3 mb-10" />
         <div className="">{children}</div>
       </div>
-      <div
-        className="bg-neutral-800 opacity-80 fixed inset-0 z-10"
-        onClick={handleCloseModal}
-      />
-    </>,
+    </div>,
     document.querySelector("#modal") as HTMLElement
   );
 };

@@ -17,12 +17,9 @@ const UserProfileButton = ({ userId }: UserProfileButtonProps) => {
 
   return (
     <>
-      <Link href={`${asPath}/settings`}>
+      <Link href={`${asPath}/settings`} shallow={true}>
         <a className="ml-auto">
-          <div
-            onClick={() => {}}
-            className="bg-slate-800 text-white self-start py-2 px-4 rounded-lg cursor-pointer hover:bg-slate-700 transition-colors"
-          >
+          <div className="bg-slate-800 text-white self-start py-2 px-4 rounded-lg cursor-pointer hover:bg-slate-700 transition-colors">
             Settings
           </div>
         </a>

@@ -1,7 +1,7 @@
 import { Prisma, Tag, User, Comment } from "@prisma/client";
 
 const postWithUserAndImages = Prisma.validator<Prisma.PostArgs>()({
-  include: { images: true, user: true },
+  include: { images: true, user: true, shareParent: true },
 });
 
 type PostWithUserAndImages = Prisma.PostGetPayload<
@@ -13,6 +13,7 @@ export interface PostDetailsType extends PostWithUserAndImages {
   likedByMe: boolean;
   commentsCount: number;
   likesCount: number;
+  sharesCount: number;
   bookmarkedByMe: boolean;
 }
 

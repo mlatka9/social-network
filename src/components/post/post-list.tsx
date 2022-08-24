@@ -11,19 +11,21 @@ interface PostInfinityData {
 
 interface PostListProps {
   data: InfiniteData<PostInfinityData> | undefined;
+  hasNextPage: boolean | undefined;
   fetchNextPage: () => void;
 }
 
-const PostList = ({ data, fetchNextPage }: PostListProps) => {
+const PostList = ({ data, fetchNextPage, hasNextPage }: PostListProps) => {
   const { ref, inView } = useInView({
-    rootMargin: "300px",
+    // rootMargin: "300px",
   });
 
   useEffect(() => {
-    if (inView) {
+    if (inView && hasNextPage) {
+      console.log("fetchuje next page");
       fetchNextPage();
     }
-  }, [inView, fetchNextPage]);
+  }, [inView, fetchNextPage, hasNextPage]);
 
   if (!data) return <div>Loading posts...</div>;
 

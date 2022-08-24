@@ -2,6 +2,7 @@ import { createProtectedRouter } from "./protected-router";
 import { string, z } from "zod";
 import { prisma } from "../db/client";
 import { populatePost } from "./utils";
+import { postDetailsInclude } from "./types";
 
 // Example router with queries that can only be hit if the user requesting is signed in
 export const postRouter = createProtectedRouter()
@@ -14,18 +15,7 @@ export const postRouter = createProtectedRouter()
         where: {
           id: input.postId,
         },
-        include: {
-          user: true,
-          likes: true,
-          images: true,
-          tags: {
-            include: {
-              tag: true,
-            },
-          },
-          _count: true,
-          bookmarkedBy: true,
-        },
+        include: postDetailsInclude,
       });
 
       return populatePost(post, ctx.session.user.id);
@@ -51,18 +41,7 @@ export const postRouter = createProtectedRouter()
             },
           },
         },
-        include: {
-          user: true,
-          images: true,
-          likes: true,
-          tags: {
-            include: {
-              tag: true,
-            },
-          },
-          bookmarkedBy: true,
-          _count: true,
-        },
+        include: postDetailsInclude,
         cursor: cursor ? { id: cursor } : undefined,
         orderBy: {
           createdAt: "desc",
@@ -110,18 +89,7 @@ export const postRouter = createProtectedRouter()
               }
             : undefined,
         },
-        include: {
-          user: true,
-          images: true,
-          likes: true,
-          tags: {
-            include: {
-              tag: true,
-            },
-          },
-          bookmarkedBy: true,
-          _count: true,
-        },
+        include: postDetailsInclude,
         cursor: cursor ? { id: cursor } : undefined,
         orderBy: {
           createdAt: "desc",
@@ -164,16 +132,20 @@ export const postRouter = createProtectedRouter()
           })
         )
         .nullable(),
+      shareParentId: z.string().optional(),
     }),
     async resolve({ input, ctx }) {
       if (input.content.trim().length === 0) {
         throw new Error("Post must have content text");
       }
 
+      console.log(input.shareParentId);
+
       const post = await prisma.post.create({
         data: {
           content: input.content,
           userId: ctx.session.user.id,
+          shareParentId: input.shareParentId,
         },
       });
 

@@ -30,7 +30,7 @@ const DropdownMenu = ({ userId }: DropdownMenu) => {
             <Link href="/bookmarks">
               <a className="px-3 py-2 w-full rounded-lg">
                 <Image
-                  src="/icons/bookmark.png"
+                  src="/icons/bookmark-empty.png"
                   width="20"
                   height="20"
                   alt=""

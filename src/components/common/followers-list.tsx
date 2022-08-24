@@ -22,7 +22,7 @@ const FollowersList = () => {
     <>
       <div className="flex font-poppins font-semibold pb-10 justify-center space-x-10">
         <div>
-          <Link href={`/user/${userId}/following`}>
+          <Link href={`/user/${userId}/following`} shallow={true}>
             <a>
               <div>Following</div>
             </a>
@@ -36,7 +36,7 @@ const FollowersList = () => {
           />
         </div>
         <div>
-          <Link href={`/user/${userId}/followers`}>
+          <Link href={`/user/${userId}/followers`} shallow={true}>
             <a>
               <div>Followers</div>
             </a>
@@ -50,31 +50,27 @@ const FollowersList = () => {
         </div>
       </div>
       <div>
-        {selectedListDat?.length > 0 ? (
-          selectedListDat?.map((user) => (
-            <div key={user.id}>
-              <div className="flex mb-3">
-                <UserProfilePicture
-                  imageUrl={user.image || ""}
-                  userID={user.id}
-                />
-                <div className="ml-3">
-                  <p className=" font-poppins font-medium">{user.name}</p>
-                  <p className=" text-neutral-500 text-xs font-medium">
-                    {user.followers} followers
-                  </p>
-                </div>
-
-                <ButtonFollow userId={user.id} />
+        {selectedListDat?.map((user) => (
+          <div key={user.id} className="mb-5">
+            <div className="flex mb-3">
+              <UserProfilePicture
+                imageUrl={user.image || ""}
+                userID={user.id}
+              />
+              <div className="ml-3">
+                <p className=" font-poppins font-medium">{user.name}</p>
+                <p className=" text-neutral-500 text-xs font-medium">
+                  {user.followers} followers
+                </p>
               </div>
-              <p className="text-sm text-neutral-600">
-                {user.bio || "no bio no bio no bio no bio"}
-              </p>
+
+              <ButtonFollow userId={user.id} />
             </div>
-          ))
-        ) : (
-          <div>empty</div>
-        )}
+            <p className="text-sm text-neutral-600">
+              {user.bio || "no bio no bio no bio no bio"}
+            </p>
+          </div>
+        ))}
       </div>
     </>
   );

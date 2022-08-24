@@ -90,13 +90,18 @@ export const useCurrentUserQuery = () => {
   );
 };
 
-export const usePostQuery = (postId: string) => {
-  return trpc.useQuery([
-    "post.getById",
+export const usePostQuery = (postId?: string) => {
+  return trpc.useQuery(
+    [
+      "post.getById",
+      {
+        postId: postId!,
+      },
+    ],
     {
-      postId,
-    },
-  ]);
+      enabled: !!postId,
+    }
+  );
 };
 
 export const usePostCommentsQuery = (postId: string) => {
@@ -111,7 +116,7 @@ export const usePostCommentsQuery = (postId: string) => {
 export const useSearchUserQuery = (searchPhrase: string) => {
   return trpc.useQuery(["user.getBySearchPhrase", { searchPhrase }], {
     keepPreviousData: true,
-    enabled: !!searchPhrase,
+    // enabled: !!searchPhrase,
   });
 };
 

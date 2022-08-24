@@ -6,13 +6,24 @@ import { useAddPostMutation } from "src/hooks/mutation";
 import PostTagPicker from "./post-tags-picker";
 import PostFileInput from "./post-file-input";
 import { useSession } from "next-auth/react";
-import type { Tag } from "@prisma/client";
+import type { Post, Tag } from "@prisma/client";
 import clsx from "clsx";
 import EmojiPicker from "../common/emoji-picker";
 import Button from "../common/button";
 import TextHeader from "../common/text-header";
+import PostThumbnail from "../post/post-thumbnail";
+import { PostDetailsType } from "@/types/index";
+import { useRouter } from "next/router";
 
-const PostInput = () => {
+interface PostInputProps {
+  sharedPost?: PostDetailsType;
+  submitCallback?: () => void;
+}
+
+const PostInput = ({
+  sharedPost,
+  submitCallback = () => {},
+}: PostInputProps) => {
   const { data: session } = useSession();
   const me = session?.user!;
 
@@ -23,7 +34,7 @@ const PostInput = () => {
     []
   );
 
-  const addPost = useAddPostMutation();
+  const addPost = useAddPostMutation(submitCallback);
 
   const {
     getRootProps,
@@ -76,7 +87,7 @@ const PostInput = () => {
       )
     );
 
-    addPost(postContent, imageUrls, selectedTags);
+    addPost(postContent, imageUrls, selectedTags, sharedPost?.id);
     setPostContent("");
     setSelectedImages([]);
     setImagesUploadProgress([]);
@@ -84,9 +95,9 @@ const PostInput = () => {
   };
 
   return (
-    <form onSubmit={handleFormSubmit} className="px-5 py-3 bg-white rounded-xl">
-      <TextHeader>Post something</TextHeader>
-      <hr className="my-2" />
+    <form onSubmit={handleFormSubmit} className=" ">
+      {/* <TextHeader>Post something</TextHeader>
+      <hr className="my-2" /> */}
       <div className="flex mb-5">
         <UserProfilePicture imageUrl={me.image} userID={me.id} />
         <div
@@ -103,6 +114,7 @@ const PostInput = () => {
             className="bg-blue-50 w-full rounded-lg placeholder:text-sm pl-2 min-h-[100px] max-h-[200px] block mb-3"
           />
           <PostTagPicker setTags={setSelectedTags} tags={selectedTags} />
+          {sharedPost && <PostThumbnail sharedPost={sharedPost} isSmall />}
           <EmojiPicker appendEmoji={appendEmoji} />
           <PostFileInput
             imagesUploadProgress={imagesUploadProgress}
