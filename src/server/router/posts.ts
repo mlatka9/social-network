@@ -3,6 +3,8 @@ import { string, z } from "zod";
 import { prisma } from "../db/client";
 import { populatePost } from "./utils";
 import { postDetailsInclude } from "./types";
+import { trpc } from "src/utils/trpc";
+import { TRPCError } from "@trpc/server";
 
 // Example router with queries that can only be hit if the user requesting is signed in
 export const postRouter = createProtectedRouter()
@@ -17,6 +19,13 @@ export const postRouter = createProtectedRouter()
         },
         include: postDetailsInclude,
       });
+
+      if (post.isDeleted) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Post was deleted",
+        });
+      }
 
       return populatePost(post, ctx.session.user.id);
     },
@@ -40,6 +49,7 @@ export const postRouter = createProtectedRouter()
               },
             },
           },
+          isDeleted: false,
         },
         include: postDetailsInclude,
         cursor: cursor ? { id: cursor } : undefined,
@@ -88,6 +98,7 @@ export const postRouter = createProtectedRouter()
                 },
               }
             : undefined,
+          isDeleted: false,
         },
         include: postDetailsInclude,
         cursor: cursor ? { id: cursor } : undefined,
@@ -138,8 +149,6 @@ export const postRouter = createProtectedRouter()
       if (input.content.trim().length === 0) {
         throw new Error("Post must have content text");
       }
-
-      console.log(input.shareParentId);
 
       const post = await prisma.post.create({
         data: {
@@ -244,5 +253,30 @@ export const postRouter = createProtectedRouter()
           likedByMe: like === null,
         },
       };
+    },
+  })
+  .mutation("remove", {
+    input: z.object({
+      postId: z.string(),
+    }),
+    async resolve({ ctx, input }) {
+      const isCurretUserPostAuthor = await prisma.post.count({
+        where: {
+          id: input.postId,
+          userId: ctx.session.user.id,
+        },
+      });
+      if (!isCurretUserPostAuthor) {
+        throw Error("You are not the owner of the post");
+      }
+
+      await prisma.post.update({
+        where: {
+          id: input.postId,
+        },
+        data: {
+          isDeleted: true,
+        },
+      });
     },
   });

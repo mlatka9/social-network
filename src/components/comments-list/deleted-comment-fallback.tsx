@@ -13,7 +13,6 @@ const DeletedCommenFallback = () => {
         />
         <p className="font-medium ml-4">removed</p>
       </div>
-      <div className="text-neutral-400 ml-14 bg-slate-50 h-12 p-1 rounded-md  mt-2"></div>
     </div>
   );
 };

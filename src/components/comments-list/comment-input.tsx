@@ -19,17 +19,14 @@ const CommentInput = ({ onMessageSubmit }: CommentInputProps) => {
   const me = data?.user!;
 
   return (
-    <form
-      className="w-full flex bg-white rounded-lg my-5 "
-      onSubmit={handleOnSubmit}
-    >
+    <form className="w-full flex  rounded-lg my-5 " onSubmit={handleOnSubmit}>
       <div className="shrink-0 w-10 h-10 relative mr-3">
         <UserProfilePicture imageUrl={me.image} userID={me.id} />
       </div>
 
       <input
         placeholder="Add your comment"
-        className="bg-blue-50 w-full rounded-lg placeholder:text-sm pl-2"
+        className="bg-blue-50 w-full rounded-lg placeholder:text-sm pl-2 dark:bg-slate-700"
         value={commentMessageValue}
         onChange={({ target }) => setCommentMessageValue(target.value)}
       />

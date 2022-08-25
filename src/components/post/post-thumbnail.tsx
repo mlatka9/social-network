@@ -1,28 +1,41 @@
-import { PostDetailsType } from "@/types/index";
-import { Post } from "@prisma/client";
+import { PostDetailsType, SharedPostType } from "@/types/index";
 import clsx from "clsx";
 import Image from "next/image";
-import Link from "next/link";
-import { useRouter } from "next/router";
+import router from "next/router";
 import React from "react";
+import { usePostQuery } from "src/hooks/query";
 
 interface PostThumbnailProps {
-  sharedPost: PostDetailsType;
-  onClick?: React.MouseEventHandler<HTMLElement>;
+  sharedPost: SharedPostType;
+  disableLink?: boolean;
   isSmall?: boolean;
 }
 
 const PostThumbnail = ({
   sharedPost,
+  disableLink,
   isSmall,
-  ...onClick
 }: PostThumbnailProps) => {
+  const goToSharedPost = (e: React.MouseEvent<HTMLElement>) => {
+    if (disableLink) return;
+    e.stopPropagation();
+    router.push(`/post/${sharedPost.id}`);
+  };
+
+  if (sharedPost.isDeleted) {
+    return (
+      <div className="bg-neutral-100 p-1 text-sm text-neutral-700 ring-2 ring-inset ring-blue-400/30 rounded-lg mb-5">
+        post removed
+      </div>
+    );
+  }
+
   const firstImage = sharedPost.images[0]?.url;
 
   return (
     <div
       className="ring-2 ring-inset ring-blue-400/30 rounded-lg mb-5 overflow-hidden"
-      {...onClick}
+      onClick={goToSharedPost}
     >
       <div className="flex items-center p-2">
         <Image

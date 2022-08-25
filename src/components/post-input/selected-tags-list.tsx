@@ -11,7 +11,7 @@ const SelectedTagsList = ({ tags, handleRemoveTag }: SelectedTagsListProps) => {
     <div className="w-fit flex">
       {tags.map((tag) => (
         <div
-          className="bg-orange-600 text-white rounded-md p-1 mr-2 flex items-center"
+          className=" text-white rounded-md p-1 mr-2 flex items-center"
           style={{ backgroundColor: tag.color }}
           key={tag.name}
         >

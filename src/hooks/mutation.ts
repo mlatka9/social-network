@@ -79,6 +79,9 @@ export const useDeleteCommentMutation = (postId: string) => {
   const mutation = trpc.useMutation(["comment.delete"], {
     onSuccess() {
       utils.invalidateQueries(["comment.getAllByPostId", { postId }]);
+      // utils.invalidateQueries(["comment.getAllByPostId"]);
+      utils.invalidateQueries(["post.getById", { postId }]);
+      // invalidateAll(utils);
     },
   });
   return mutation.mutate;
@@ -122,6 +125,17 @@ export const useTogglePostLikeMutation = () => {
   const utils = trpc.useContext();
 
   const mutation = trpc.useMutation("post.toggleLike", {
+    onSuccess() {
+      invalidateAll(utils);
+    },
+  });
+
+  return mutation.mutate;
+};
+
+export const useRemovePostMutation = () => {
+  const utils = trpc.useContext();
+  const mutation = trpc.useMutation("post.remove", {
     onSuccess() {
       invalidateAll(utils);
     },

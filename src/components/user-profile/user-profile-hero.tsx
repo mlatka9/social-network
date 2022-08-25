@@ -26,8 +26,8 @@ const UserProfileHero = ({}: UserProfileHeroProps) => {
         />
       </div>
 
-      <div className="flex p-6 min-h-[160px] rounded-xl bg-white mb-10 relative -mt-10">
-        <div className="relative -mt-20 p-1 bg-white rounded-lg shrink-0">
+      <div className="flex p-6 min-h-[160px] rounded-xl bg-white dark:bg-slate-800 mb-10 relative -mt-10">
+        <div className="relative -mt-20 p-1 bg-white dark:bg-slate-800 rounded-lg shrink-0">
           <Image
             src={user?.image || "/images/fallback.svg"}
             width="150"

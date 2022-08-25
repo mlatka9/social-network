@@ -25,13 +25,13 @@ const CommentContent = ({
           />
           <button
             onClick={handleUpdateComment}
-            className="ml-auto text-sm bg-blue-600 text-white rounded-md px-2 py-1 mt-3 hover:bg-blue-400 transition-colors"
+            className="ml-auto text-sm bg-blue-600 text-white  rounded-md px-2 py-1 mt-3 hover:bg-blue-400 transition-colors"
           >
             Save
           </button>
         </div>
       ) : (
-        <p className="text-neutral-800">{commentMessage}</p>
+        <p className="text-neutral-800 dark:text-white">{commentMessage}</p>
       )}
     </div>
   );

@@ -7,14 +7,13 @@ import TagsList from "../post-card/tags-list";
 import ImagesGrid from "../post-card/images-grid";
 import PostCardFooter from "../post-card/post-card-footer";
 import PostThumbnail from "./post-thumbnail";
-import router from "next/router";
 
 interface PostDetailsProps {
   postId: string;
 }
 
 const PostDetails = ({ postId }: PostDetailsProps) => {
-  const { data: post, isError, isSuccess } = usePostQuery(postId);
+  const { data: post, isError, isSuccess, error } = usePostQuery(postId);
 
   const postComments = usePostCommentsQuery(postId);
   const addComment = useAddCommentMutation(postId);
@@ -26,18 +25,11 @@ const PostDetails = ({ postId }: PostDetailsProps) => {
     });
   };
 
-  const { data: sharedPost, isSuccess: isSharedPostSuccess } = usePostQuery(
-    post?.shareParentId || undefined
-  );
-
-  const goToSharedPost = (e: React.MouseEvent<HTMLElement>) => {
-    if (!post) return;
-    e.stopPropagation();
-    router.push(`/post/${post.shareParentId}`);
-  };
-
   if (isError) {
-    return <div>Error...</div>;
+    if (error.data?.code === "NOT_FOUND") {
+      return <div>Post was deleted</div>;
+    }
+    return <div>Unexpected error...</div>;
   }
 
   if (!isSuccess) {
@@ -46,8 +38,8 @@ const PostDetails = ({ postId }: PostDetailsProps) => {
 
   return (
     <>
-      <div className="bg-white w-full rounded-lg grid gap-x-10 ">
-        <div className="bg-white w-full mb-5  rounded-lg">
+      <div className=" w-full rounded-lg grid gap-x-10 ">
+        <div className="bg-white w-full mb-5  rounded-lg dark:bg-slate-600">
           <Author
             authorId={post.user.id}
             authorImage={post.user.image}
@@ -57,12 +49,7 @@ const PostDetails = ({ postId }: PostDetailsProps) => {
           <TagsList tags={post.tags} />
           <p className="mb-3">{post.content}</p>
           <ImagesGrid images={post.images} />
-          {isSharedPostSuccess && (
-            <>
-              <div className="mt-3 bg-pink-500" />
-              <PostThumbnail sharedPost={sharedPost} onClick={goToSharedPost} />
-            </>
-          )}
+          {post.shareParent && <PostThumbnail sharedPost={post.shareParent} />}
 
           <PostCardFooter post={post} />
         </div>

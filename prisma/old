@@ -1,24 +1,10 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// generator client {
-//   provider        = "prisma-client-js"
-//   previewFeatures = ["fullTextSearch"]
-// }
-
-// datasource db {
-//   provider = "postgresql"
-//   url      = env("DATABASE_URL")
-// }
-
 generator client {
-  provider        = "prisma-client-js"
+  provider = "prisma-client-js"
   previewFeatures = ["referentialIntegrity"]
 }
-
 datasource db {
-  provider             = "mysql"
-  url                  = env("DATABASE_URL")
+  provider = "mysql"
+  url = env("DATABASE_URL")
   referentialIntegrity = "prisma"
 }
 
@@ -30,16 +16,16 @@ model Example {
 model Account {
   id                String  @id @default(cuid())
   userId            String
-  type              String  @db.Text
+  type              String
   provider          String
   providerAccountId String
-  refresh_token     String? @db.Text
-  access_token      String? @db.Text
+  refresh_token     String?
+  access_token      String?
   expires_at        Int?
-  token_type        String? @db.Text
-  scope             String? @db.Text
-  id_token          String? @db.Text
-  session_state     String? @db.Text
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
   user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
@@ -48,18 +34,18 @@ model Account {
 model Session {
   id           String   @id @default(cuid())
   sessionToken String   @unique
-  userId       String   @db.Text
+  userId       String
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model User {
   id            String        @id @default(cuid())
-  name          String?       @db.Text
+  name          String?
   email         String?       @unique
   emailVerified DateTime?
-  image         String?       @db.Text
-  bannerImage   String?       @db.Text
+  image         String?
+  bannerImage   String?
   accounts      Account[]
   sessions      Session[]
   followedBy    User[]        @relation("UserFollows")
@@ -81,42 +67,42 @@ model VerificationToken {
 }
 
 model Post {
-  id            String     @id @default(cuid())
-  content       String     @db.Text
-  user          User       @relation(name: "createdPosts", fields: [userId], references: [id], onDelete: Cascade)
-  userId        String     @db.Text
-  comments      Comment[]
-  likes         PostLike[]
-  bookmarkedBy  Bookmark[]
-  createdAt     DateTime   @default(now())
-  updatedAt     DateTime   @updatedAt
-  images        Image[]    @relation(name: "addedImages")
-  isDeleted     Boolean    @default(false)
-  tags          PostTag[]
-  shareParentId String?    @db.Text
-  shareParent   Post?      @relation("Share", fields: [shareParentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  shares        Post[]     @relation("Share")
+  id           String     @id @default(cuid())
+  content      String
+  user         User       @relation(name: "createdPosts", fields: [userId], references: [id], onDelete: Cascade)
+  userId       String
+  comments     Comment[]
+  likes        PostLike[]
+  bookmarkedBy Bookmark[]
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  images       Image[]    @relation(name: "addedImages")
+  isDeleted    Boolean    @default(false)
+  tags         PostTag[]
+  shareParentId String?
+  shareParent   Post?   @relation("Share", fields: [shareParentId], references: [id])
+  shares        Post[]  @relation("Share")
 }
 
 model Image {
   id     String @id @default(cuid())
-  url    String @db.Text
-  alt    String @db.Text
+  url    String
+  alt    String
   post   Post   @relation(name: "addedImages", fields: [postId], references: [id], onDelete: Cascade)
-  postId String @db.Text
+  postId String
 }
 
 model Comment {
   id        String        @id @default(uuid())
-  message   String        @db.Text
+  message   String
   createdAt DateTime      @default(now())
   updatedAt DateTime      @updatedAt
   user      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId    String        @db.Text
+  userId    String
   post      Post          @relation(fields: [postId], references: [id], onDelete: Cascade)
-  postId    String        @db.Text
+  postId    String
   likes     CommentLike[]
-  parent    Comment?      @relation("ParentChild", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  parent    Comment?      @relation("ParentChild", fields: [parentId], references: [id], onDelete: Cascade)
   children  Comment[]     @relation("ParentChild")
   parentId  String?
   isDeleted Boolean       @default(false)

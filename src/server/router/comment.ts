@@ -23,32 +23,58 @@ export const commentRouter = createProtectedRouter()
           children: {
             select: {
               _count: true,
+              id: true,
+              isDeleted: true,
             },
           },
         },
       });
 
-      return comments
-        .filter((comment) => comment._count.children > 0 || !comment.isDeleted)
-        .map((comment) => {
-          if (comment.isDeleted) {
-            const { message, ...commentData } = comment;
-            return {
-              ...commentData,
-              message: "Comment removed",
-            };
-          } else {
-            return comment;
-          }
-        })
-        .map(({ _count, likes, ...commentData }) => ({
+      const filteredComments = comments
+        // .filter((comment) => comment._count.children > 0 || !comment.isDeleted)
+        .map(({ _count, likes, user, ...commentData }) => ({
           ...commentData,
+          user: {
+            id: user.id,
+            name: user.name,
+            image: user.image,
+          },
           likeCount: _count.likes,
           repliesCount: _count.children,
           likedByMe: likes.some(
             (postLike) => postLike.userId === ctx.session.user.id
           ),
         }));
+
+      const commentsMap = new Map(
+        filteredComments.map((object) => {
+          return [object.id, object];
+        })
+      );
+
+      const getRepliesCount = (com: string) => {
+        const currentComment = commentsMap.get(com)!;
+        const childrenList = currentComment.children;
+        const numberOfDeletedChildren = childrenList.reduce(
+          (sum, c) => (c.isDeleted ? sum + 1 : sum),
+          0
+        );
+        let directReplies = childrenList.length - numberOfDeletedChildren;
+        childrenList
+          .map((child) => child.id)
+          .forEach((childId) => {
+            directReplies += getRepliesCount(childId);
+          });
+
+        return directReplies;
+      };
+
+      return filteredComments
+        .map((commentData) => ({
+          ...commentData,
+          repliesCount: getRepliesCount(commentData.id),
+        }))
+        .filter((comment) => comment.children.length || !comment.isDeleted);
     },
   })
   .mutation("add", {

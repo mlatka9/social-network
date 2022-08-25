@@ -17,7 +17,7 @@ const SearchCard = ({ user, isSelected }: SearchCardProps) => {
       <a className="focus:bg-red-300 focus:outline-none block">
         <div
           className={clsx([
-            "flex items-center p-3 hover:bg-slate-100 ",
+            "flex items-center p-3 hover:bg-slate-100 hover:dark:bg-slate-700",
             isSelected && "bg-slate-100",
           ])}
         >

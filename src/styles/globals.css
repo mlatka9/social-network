@@ -7,6 +7,10 @@ html {
   background-color: rgb(241, 241, 241);
 }
 
+body {
+  @apply dark:bg-slate-700 min-h-screen;
+}
+
 *:focus {
   outline: 2px dashed green;
 }

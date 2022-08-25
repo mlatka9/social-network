@@ -9,6 +9,8 @@ import PostList from "@/components/post/post-list";
 import { useRouter } from "next/router";
 import ModalWrapper from "@/components/common/modal-wrapper";
 import PostDetails from "@/components/post/post-details";
+import Header from "@/components/header/header";
+import TextHeader from "@/components/common/text-header";
 
 const Home: NextPage = () => {
   const router = useRouter();
@@ -27,10 +29,8 @@ const Home: NextPage = () => {
   return (
     <>
       <Layout>
-        <div className="bg-white px-5 py-3 rounded-lg">
-          <h2 className="font-poppins font-semibold text-neutral-700 text-sm pb-3">
-            Trends for you
-          </h2>
+        <div className="bg-white dark:bg-slate-800 px-5 py-3 rounded-lg">
+          <TextHeader className="pb-3">Post something</TextHeader>
           <hr className="mb-3" />
           <PostInput />
         </div>

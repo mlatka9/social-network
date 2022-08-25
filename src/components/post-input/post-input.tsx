@@ -6,14 +6,12 @@ import { useAddPostMutation } from "src/hooks/mutation";
 import PostTagPicker from "./post-tags-picker";
 import PostFileInput from "./post-file-input";
 import { useSession } from "next-auth/react";
-import type { Post, Tag } from "@prisma/client";
+import type { Tag } from "@prisma/client";
 import clsx from "clsx";
 import EmojiPicker from "../common/emoji-picker";
 import Button from "../common/button";
-import TextHeader from "../common/text-header";
 import PostThumbnail from "../post/post-thumbnail";
 import { PostDetailsType } from "@/types/index";
-import { useRouter } from "next/router";
 
 interface PostInputProps {
   sharedPost?: PostDetailsType;
@@ -95,9 +93,7 @@ const PostInput = ({
   };
 
   return (
-    <form onSubmit={handleFormSubmit} className=" ">
-      {/* <TextHeader>Post something</TextHeader>
-      <hr className="my-2" /> */}
+    <form onSubmit={handleFormSubmit} className="">
       <div className="flex mb-5">
         <UserProfilePicture imageUrl={me.image} userID={me.id} />
         <div
@@ -111,10 +107,12 @@ const PostInput = ({
           <textarea
             value={postContent}
             onChange={({ target }) => setPostContent(target.value)}
-            className="bg-blue-50 w-full rounded-lg placeholder:text-sm pl-2 min-h-[100px] max-h-[200px] block mb-3"
+            className="bg-blue-50 w-full rounded-lg placeholder:text-sm pl-2 min-h-[100px] max-h-[200px] block mb-3 dark:bg-slate-600"
           />
           <PostTagPicker setTags={setSelectedTags} tags={selectedTags} />
-          {sharedPost && <PostThumbnail sharedPost={sharedPost} isSmall />}
+          {sharedPost && (
+            <PostThumbnail sharedPost={sharedPost} isSmall disableLink />
+          )}
           <EmojiPicker appendEmoji={appendEmoji} />
           <PostFileInput
             imagesUploadProgress={imagesUploadProgress}

@@ -100,6 +100,7 @@ export const usePostQuery = (postId?: string) => {
     ],
     {
       enabled: !!postId,
+      retry: false,
     }
   );
 };

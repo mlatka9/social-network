@@ -2,6 +2,7 @@ import clsx from "clsx";
 import React from "react";
 import { CommentDetailsType } from "@/types/index";
 import CommentItem from "./comment-item";
+import { channel } from "diagnostics_channel";
 
 const groupCommentsByParentId = (
   comments: CommentDetailsType[]
@@ -18,8 +19,18 @@ const groupCommentsByParentId = (
       groups.set(comment.parentId, [comment]);
     }
   });
-
   return groups;
+
+  // const getRepliesCount = (commentId: string | null) => {
+  //   const comment = groups.get(commentId);
+
+  //   if (comment?.length === 0) return 1;
+  //   let repliesCountTemp = 0;
+  //   comment?.forEach((comment) => {
+  //     repliesCountTemp += getRepliesCount(comment.id);
+  //   });
+  //   return repliesCountTemp;
+  // };
 };
 
 interface CommentsListProps {

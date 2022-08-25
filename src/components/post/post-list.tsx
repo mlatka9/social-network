@@ -22,7 +22,6 @@ const PostList = ({ data, fetchNextPage, hasNextPage }: PostListProps) => {
 
   useEffect(() => {
     if (inView && hasNextPage) {
-      console.log("fetchuje next page");
       fetchNextPage();
     }
   }, [inView, fetchNextPage, hasNextPage]);

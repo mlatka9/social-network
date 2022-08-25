@@ -58,11 +58,11 @@ const UserSearch = () => {
           {...inputProps}
           value={searchPhrase}
           onChange={handleOnChange}
-          className="pl-10 p-3 bg-slate-100 rounded-full focus:outline-blue-500 outline-2"
+          className="pl-10 p-3 bg-slate-100 dark:bg-slate-600 rounded-full focus:outline-blue-500 outline-2"
         />
       </div>
 
-      <div className="absolute top-[calc(100%_+_10px)] bg-white w-full rounded-lg shadow-lg overflow-hidden">
+      <div className="absolute top-[calc(100%_+_10px)] bg-white  dark:bg-slate-800 w-full rounded-lg shadow-lg overflow-hidden">
         {suggestionData.map((user, index) => (
           <SearchCard
             user={user}

@@ -7,11 +7,27 @@ export const postDetailsInclude = {
       tag: true,
     },
   },
+  comments: {
+    select: {
+      isDeleted: true,
+    },
+  },
   user: true,
   _count: true,
   likes: true,
   bookmarkedBy: true,
-  shareParent: true,
+  shareParent: {
+    include: {
+      images: true,
+      user: {
+        select: {
+          id: true,
+          name: true,
+          image: true,
+        },
+      },
+    },
+  },
 };
 
 const postWithUserAndImages = Prisma.validator<Prisma.PostArgs>()({

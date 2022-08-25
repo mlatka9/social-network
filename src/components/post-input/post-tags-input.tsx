@@ -19,6 +19,7 @@ const PostTagsInput = ({ setTags, tags }: PostTagsInputProps) => {
     const formattedTagName = tagName.trim().toLowerCase();
     const isAlreadyInState = tags.some((tag) => tag.name === formattedTagName);
     if (isAlreadyInState || !formattedTagName) {
+      setTagInputValue("");
       return;
     }
     const newTag = { ...tag, name: formattedTagName };
@@ -60,7 +61,7 @@ const PostTagsInput = ({ setTags, tags }: PostTagsInputProps) => {
   return (
     <div className="relative" {...wrapperProps}>
       <input
-        className="text-md"
+        className="text-md  dark:bg-slate-600 pl-3"
         placeholder={tags.length ? "Add another..." : "Add tag"}
         value={tagInputValue}
         onChange={onChange}

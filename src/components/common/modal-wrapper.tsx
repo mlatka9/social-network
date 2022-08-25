@@ -42,7 +42,7 @@ const ModalWrapper = ({
         onClick={(e) => e.stopPropagation()}
         className={clsx(
           [
-            "fixed p-10 bg-white z-[10] inset-0  m-auto rounded-lg overflow-y-scroll",
+            "fixed p-10 bg-white z-[10] inset-0  m-auto rounded-lg overflow-y-scroll dark:bg-slate-600",
           ],
           !isBig && "h-fit max-w-2xl max-h-[90vh]",
           isBig &&

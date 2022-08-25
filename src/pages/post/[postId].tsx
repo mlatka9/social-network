@@ -19,7 +19,7 @@ const PostPage = () => {
 
   return (
     <Layout>
-      <div className="p-5 bg-white rounded-lg">
+      <div className="p-5 bg-white rounded-lg dark:bg-slate-600">
         <PostDetails postId={postId} />
       </div>
     </Layout>
