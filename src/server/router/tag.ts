@@ -16,7 +16,7 @@ export const tagRouter = createProtectedRouter()
         where: {
           name: {
             contains: input.searchPhrase,
-            mode: "insensitive",
+            // mode: "insensitive",
           },
         },
       });

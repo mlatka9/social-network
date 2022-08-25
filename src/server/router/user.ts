@@ -101,7 +101,7 @@ export const userRouter = createProtectedRouter()
         where: {
           name: {
             contains: input.searchPhrase,
-            mode: "insensitive",
+            // mode: "insensitive",
           },
         },
       });
