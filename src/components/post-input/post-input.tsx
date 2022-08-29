@@ -16,11 +16,13 @@ import { PostDetailsType } from "@/types/index";
 interface PostInputProps {
   sharedPost?: PostDetailsType;
   submitCallback?: () => void;
+  communityId?: string;
 }
 
 const PostInput = ({
   sharedPost,
   submitCallback = () => {},
+  communityId,
 }: PostInputProps) => {
   const { data: session } = useSession();
   const me = session?.user!;
@@ -32,7 +34,7 @@ const PostInput = ({
     []
   );
 
-  const addPost = useAddPostMutation(submitCallback);
+  const addPost = useAddPostMutation(submitCallback, communityId);
 
   const {
     getRootProps,

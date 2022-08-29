@@ -6,6 +6,7 @@ import ThemeSwitch from "../common/theme-switch";
 import ProfileIcon from "@/components/common/icons/profile";
 import BookmarkIcon from "@/components/common/icons/bookmark";
 import LogOutIcon from "@/components/common/icons/log-out";
+import GraphIcon from "../common/icons/graph";
 
 interface DropdownMenu {
   userId: string;
@@ -22,13 +23,6 @@ const DropdownMenu = ({ userId }: DropdownMenu) => {
             <Link href={`/user/${userId}`}>
               <a className="px-3 py-2 w-full rounded-lg flex">
                 <ProfileIcon />
-                {/* <Image
-                  src="/icons/profile.png"
-                  width="20"
-                  height="20"
-                  alt=""
-                  layout="fixed"
-                /> */}
                 <span className="ml-2">Profile</span>
               </a>
             </Link>
@@ -38,13 +32,15 @@ const DropdownMenu = ({ userId }: DropdownMenu) => {
             <Link href="/bookmarks">
               <a className="px-3 py-2 w-full rounded-lg flex">
                 <BookmarkIcon />
-                {/* <Image
-                  src="/icons/bookmark-empty.png"
-                  width="20"
-                  height="20"
-                  alt=""
-                /> */}
                 <span className="ml-2">Bookmarks</span>
+              </a>
+            </Link>
+          </li>
+          <li className="hover:bg-slate-100 dark:hover:bg-primary-dark-150  rounded-lg flex items-center w-full   ">
+            <Link href="/community">
+              <a className="px-3 py-2 w-full rounded-lg flex">
+                <GraphIcon />
+                <span className="ml-2">Communities</span>
               </a>
             </Link>
           </li>
@@ -54,7 +50,6 @@ const DropdownMenu = ({ userId }: DropdownMenu) => {
               className="flex items-center px-3 py-2 w-full rounded-lg"
             >
               <LogOutIcon />
-              {/* <Image src="/icons/log-out.png" width="20" height="20" alt="" /> */}
               <span className="ml-2">Log Out</span>
             </button>
           </li>

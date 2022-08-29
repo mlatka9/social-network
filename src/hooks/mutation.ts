@@ -38,7 +38,10 @@ export const useAddCommentMutation = (postId: string) => {
   };
 };
 
-export const useAddPostMutation = (onSuccessCb: () => void) => {
+export const useAddPostMutation = (
+  onSuccessCb: () => void,
+  communityId?: string
+) => {
   const utils = trpc.useContext();
   const mutation = trpc.useMutation("post.addPost", {
     onSuccess() {
@@ -61,6 +64,7 @@ export const useAddPostMutation = (onSuccessCb: () => void) => {
         ? imageUrls.map((url) => ({ imageAlt: "alt", imageUrl: url }))
         : null,
       shareParentId: shareParentId,
+      communityId: communityId,
     });
 };
 
@@ -138,6 +142,18 @@ export const useRemovePostMutation = () => {
   const mutation = trpc.useMutation("post.remove", {
     onSuccess() {
       invalidateAll(utils);
+    },
+  });
+
+  return mutation.mutate;
+};
+
+export const useAddCommunity = (onSuccessCb: () => void) => {
+  const utils = trpc.useContext();
+  const mutation = trpc.useMutation("community.addCommunity", {
+    onSuccess() {
+      onSuccessCb();
+      // invalidateAll(utils);
     },
   });
 

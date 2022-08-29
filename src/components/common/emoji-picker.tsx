@@ -1,6 +1,7 @@
 import data from "@emoji-mart/data";
 // @ts-ignore
 import Picker from "@emoji-mart/react";
+import { useTheme } from "next-themes";
 import Image from "next/image";
 import { useRef, useState } from "react";
 import { useOnClickOutside } from "usehooks-ts";
@@ -10,6 +11,7 @@ interface EmojiPickerProps {
 }
 
 const EmojiPicker = ({ appendEmoji }: EmojiPickerProps) => {
+  const { resolvedTheme } = useTheme();
   const [isPickerOpen, setIsPickerOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -42,7 +44,11 @@ const EmojiPicker = ({ appendEmoji }: EmojiPickerProps) => {
       </button>
       {isPickerOpen && (
         <div className="absolute top-full z-10 shadow-lg">
-          <Picker data={data} theme="light" onEmojiSelect={handleSelectEmoji} />
+          <Picker
+            data={data}
+            onEmojiSelect={handleSelectEmoji}
+            theme={resolvedTheme}
+          />
         </div>
       )}
     </div>

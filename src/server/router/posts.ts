@@ -78,8 +78,9 @@ export const postRouter = createProtectedRouter()
     input: z.object({
       limit: z.number().min(1).max(100).nullish(),
       cursor: z.string().nullish(),
-      userId: string().optional(),
-      tagName: string().optional(),
+      userId: z.string().optional(),
+      tagName: z.string().optional(),
+      communityId: z.string().optional(),
     }),
     async resolve({ ctx, input }) {
       const { cursor } = input;
@@ -90,6 +91,9 @@ export const postRouter = createProtectedRouter()
         where: {
           user: {
             id: input.userId,
+          },
+          community: {
+            id: input.communityId,
           },
           tags: input.tagName
             ? {
@@ -144,6 +148,7 @@ export const postRouter = createProtectedRouter()
         )
         .nullable(),
       shareParentId: z.string().optional(),
+      communityId: z.string().optional(),
     }),
     async resolve({ input, ctx }) {
       if (input.content.trim().length === 0) {
@@ -155,6 +160,7 @@ export const postRouter = createProtectedRouter()
           content: input.content,
           userId: ctx.session.user.id,
           shareParentId: input.shareParentId,
+          communityId: input.communityId,
         },
       });
 

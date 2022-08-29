@@ -134,3 +134,22 @@ export const useTrendingTagsQuery = () => {
 export const useFollowsQuery = (userId: string) => {
   return trpc.useQuery(["user.getFollows", { userId }]);
 };
+
+export const useCommunitiesQuery = () => {
+  return trpc.useQuery(["community.getAll"]);
+};
+
+export const useCommunityPostsQuery = (communityId: string) => {
+  return trpc.useInfiniteQuery(
+    [
+      "post.getAll",
+      {
+        limit: 5,
+        communityId: communityId,
+      },
+    ],
+    {
+      getNextPageParam: (lastPage) => lastPage.nextCursor,
+    }
+  );
+};

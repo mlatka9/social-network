@@ -6,6 +6,7 @@ export const populatePost = (post: PostCardProps, userId: string) => {
     likes,
     bookmarkedBy,
     tags,
+    community,
     comments,
     user: { bio, email, emailVerified, ...userData },
     ...postData
@@ -16,6 +17,7 @@ export const populatePost = (post: PostCardProps, userId: string) => {
     user: {
       ...userData,
     },
+    communityName: community?.name || null,
     tags: post.tags.map((tag) => tag.tag),
     likesCount: _count.likes,
     commentsCount: comments.filter((comment) => !comment.isDeleted).length,

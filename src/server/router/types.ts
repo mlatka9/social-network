@@ -15,6 +15,11 @@ export const postDetailsInclude = {
   user: true,
   _count: true,
   likes: true,
+  community: {
+    select: {
+      name: true,
+    },
+  },
   bookmarkedBy: true,
   shareParent: {
     include: {
