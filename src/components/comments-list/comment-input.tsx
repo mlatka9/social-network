@@ -26,7 +26,7 @@ const CommentInput = ({ onMessageSubmit }: CommentInputProps) => {
 
       <input
         placeholder="Add your comment"
-        className="bg-blue-50 w-full rounded-lg placeholder:text-sm pl-2 dark:bg-slate-700"
+        className="bg-blue-50 w-full rounded-lg placeholder:text-sm pl-2 dark:bg-primary-dark-200"
         value={commentMessageValue}
         onChange={({ target }) => setCommentMessageValue(target.value)}
       />

@@ -4,11 +4,10 @@
 
 html {
   font-family: "Noto Sans", sans-serif;
-  background-color: rgb(241, 241, 241);
 }
 
 body {
-  @apply dark:bg-slate-700 min-h-screen;
+  @apply dark:bg-primary-dark-300 min-h-screen bg-primary-100;
 }
 
 *:focus {

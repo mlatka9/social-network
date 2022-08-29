@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useTheme } from "next-themes";
+import clsx from "clsx";
 
 const ThemeSwitch = () => {
   const [mounted, setMounted] = useState(false);
@@ -15,15 +16,38 @@ const ThemeSwitch = () => {
   }
 
   return (
-    <select
-      value={theme}
-      onChange={(e) => setTheme(e.target.value)}
-      className="dark:bg-slate-700 p-1"
-    >
-      <option value="system">System</option>
-      <option value="dark">Dark</option>
-      <option value="light">Light</option>
-    </select>
+    <div className="grid grid-cols-3 text-sm">
+      <button
+        className={clsx(
+          "rounded-sm  dark:text-primary-dark-800",
+          theme === "system" &&
+            "bg-slate-200 dark:bg-primary-dark-200  text-neutral-800"
+        )}
+        onClick={() => setTheme("system")}
+      >
+        System
+      </button>
+      <button
+        className={clsx(
+          "rounded-sm  dark:text-primary-dark-800",
+          theme === "dark" &&
+            "bg-slate-200 dark:bg-primary-dark-200 text-neutral-800"
+        )}
+        onClick={() => setTheme("dark")}
+      >
+        Dark
+      </button>
+      <button
+        className={clsx(
+          "rounded-sm  dark:text-primary-dark-800",
+          theme === "light" &&
+            "bg-slate-200 dark:bg-primary-dark-200 text-neutral-800"
+        )}
+        onClick={() => setTheme("light")}
+      >
+        Light
+      </button>
+    </div>
   );
 };
 

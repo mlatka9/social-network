@@ -8,6 +8,7 @@ import SearchCard from "@/components/common/search-card";
 import Image from "next/image";
 import useSuggestionList from "src/hooks/use-suggestion-popup";
 import { User } from "@prisma/client";
+import SearchIcon from "@/components/common/icons/search";
 
 const UserSearch = () => {
   const router = useRouter();
@@ -44,25 +45,26 @@ const UserSearch = () => {
   return (
     <div className="relative z-[200]" {...wrapperProps}>
       <div className="relative">
-        <div className="absolute top-3 left-2 pointer-events-none">
-          <Image
+        <div className="absolute top-[15px] left-3 pointer-events-none">
+          <SearchIcon />
+          {/* <Image
             src="/icons/search.png"
             width="20"
             height="20"
             alt=""
             className="absolute top-10 "
-          />
+          /> */}
         </div>
 
         <input
           {...inputProps}
           value={searchPhrase}
           onChange={handleOnChange}
-          className="pl-10 p-3 bg-slate-100 dark:bg-slate-600 rounded-full focus:outline-blue-500 outline-2"
+          className="pl-10 p-3 bg-primary-100 dark:bg-primary-dark-200 rounded-full focus:outline-blue-500 outline-2"
         />
       </div>
 
-      <div className="absolute top-[calc(100%_+_10px)] bg-white  dark:bg-slate-800 w-full rounded-lg shadow-lg overflow-hidden">
+      <div className="absolute top-[calc(100%_+_10px)] bg-white  dark:bg-primary-dark-100 w-full rounded-lg shadow-lg overflow-hidden">
         {suggestionData.map((user, index) => (
           <SearchCard
             user={user}

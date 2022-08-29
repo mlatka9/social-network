@@ -61,7 +61,7 @@ const PostTagsInput = ({ setTags, tags }: PostTagsInputProps) => {
   return (
     <div className="relative" {...wrapperProps}>
       <input
-        className="text-md  dark:bg-slate-600 pl-3"
+        className="text-md  dark:bg-primary-dark-100 pl-3"
         placeholder={tags.length ? "Add another..." : "Add tag"}
         value={tagInputValue}
         onChange={onChange}
@@ -75,7 +75,7 @@ const PostTagsInput = ({ setTags, tags }: PostTagsInputProps) => {
             onClick={() => addTag(tag)}
             key={tag.name}
             className={clsx([
-              "p-3 bg-white fle flex-col cursor-pointer hover:bg-blue-50",
+              "p-3 bg-white fle flex-col cursor-pointer hover:bg-blue-50 dark:bg-primary-dark-200 hover:dark:bg-primary-dark-300",
               selectedItemIndex === index && "bg-blue-50",
             ])}
           >

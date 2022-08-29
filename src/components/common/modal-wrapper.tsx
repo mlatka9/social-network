@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import clsx from "clsx";
 import { useLockBodyScroll } from "src/hooks/utils";
+import CloseIcon from "@/components/common/icons/close";
 
 interface ModalWrapperProps {
   isBig?: boolean;
@@ -42,7 +43,7 @@ const ModalWrapper = ({
         onClick={(e) => e.stopPropagation()}
         className={clsx(
           [
-            "fixed p-10 bg-white z-[10] inset-0  m-auto rounded-lg overflow-y-scroll dark:bg-slate-600",
+            "fixed p-10 bg-white z-[10] inset-0  m-auto rounded-lg overflow-y-scroll dark:bg-primary-dark-100",
           ],
           !isBig && "h-fit max-w-2xl max-h-[90vh]",
           isBig &&
@@ -55,13 +56,14 @@ const ModalWrapper = ({
             className="cursor-pointer flex justify-center items-center"
             onClick={handleCloseModal}
           >
-            <Image
+            <CloseIcon />
+            {/* <Image
               src="/icons/close.png"
               width="20"
               height="20"
               layout="fixed"
               alt="close modal"
-            />
+            /> */}
           </button>
         </div>
         <hr className="mt-3 mb-10" />

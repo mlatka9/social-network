@@ -6,7 +6,7 @@ import ThemeSwitch from "../common/theme-switch";
 
 const Header = () => {
   return (
-    <div className="dark:bg-slate-800 flex items-center justify-between bg-white py-3 px-5 sticky top-0 z-[10] shadow-md">
+    <div className="dark:bg-primary-dark-100 flex items-center justify-between bg-primary-50 py-3 px-5 sticky top-0 z-[10] shadow-md">
       <Link href="/" passHref>
         <a>
           <p className="text-blue-900 dark:text-white font-poppins font-semibold text-2xl mr-10">
@@ -17,7 +17,6 @@ const Header = () => {
 
       <UserSearch />
       <div className="flex space-x-3">
-        <ThemeSwitch />
         <Menu />
       </div>
     </div>

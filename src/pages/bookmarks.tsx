@@ -16,8 +16,12 @@ const Bookmarks = () => {
   return (
     <Layout>
       <h1 className="font-poppins mb-10 mt-5 ">
-        <p className="font-bold text-neutral-800 text-2xl">Bookmarks</p>
-        <p className="text-neutral-600 font-normal">discover</p>
+        <p className="font-bold text-neutral-800 dark:text-primary-dark-800 text-2xl">
+          Bookmarks
+        </p>
+        <p className="text-neutral-600 dark:text-primary-dark-700 font-normal">
+          discover
+        </p>
       </h1>
       <PostList
         data={data}

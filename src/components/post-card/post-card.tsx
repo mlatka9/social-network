@@ -32,7 +32,7 @@ const PostCard = ({ post }: PostCardProps) => {
 
   return (
     <article
-      className="bg-white dark:bg-slate-800 w-full p-5 shadow-sm rounded-lg cursor-pointer"
+      className="bg-primary-0 dark:bg-primary-dark-100 w-full p-5 shadow-sm rounded-lg cursor-pointer"
       onClick={goToPostDetails}
     >
       <div className="flex">
@@ -57,7 +57,7 @@ const PostCard = ({ post }: PostCardProps) => {
             )}
           </div>
           {height === 600 && (
-            <div className="bg-gradient-to-t from-white dark:from-slate-800 to-white/0 absolute h-5 w-full bottom-0 flex items-center justify-center text-white" />
+            <div className="bg-gradient-to-t from-white  dark:from-primary-dark-100 to-white/0 absolute h-5 w-full bottom-0 flex items-center justify-center text-white" />
           )}
         </div>
 

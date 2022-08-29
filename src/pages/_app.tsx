@@ -14,7 +14,7 @@ const MyApp: AppType = ({
 }) => {
   return (
     <SessionProvider session={session}>
-      <ThemeProvider attribute="class">
+      <ThemeProvider attribute="class" enableSystem={true}>
         <Component {...pageProps} />
       </ThemeProvider>
       <ReactQueryDevtools initialIsOpen={false} />

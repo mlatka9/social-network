@@ -13,7 +13,9 @@ const TextHeader: React.FC<TextHeaderProps> = ({
   return (
     <h2
       className={clsx(
-        ["font-poppins font-semibold text-neutral-700 text-sm dark:text-white"],
+        [
+          "font-poppins font-semibold text-primary-800 text-sm dark:text-primary-dark-800",
+        ],
         className
       )}
       {...props}

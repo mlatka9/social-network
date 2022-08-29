@@ -26,8 +26,8 @@ const UserProfileHero = ({}: UserProfileHeroProps) => {
         />
       </div>
 
-      <div className="flex p-6 min-h-[160px] rounded-xl bg-white dark:bg-slate-800 mb-10 relative -mt-10">
-        <div className="relative -mt-20 p-1 bg-white dark:bg-slate-800 rounded-lg shrink-0">
+      <div className="flex p-6 min-h-[160px] rounded-xl bg-primary-0 dark:bg-primary-dark-100 mb-10 relative -mt-10">
+        <div className="relative -mt-20 p-1 bg-primary-0 dark:bg-primary-dark-100 rounded-lg shrink-0">
           <Image
             src={user?.image || "/images/fallback.svg"}
             width="150"
@@ -47,8 +47,8 @@ const UserProfileHero = ({}: UserProfileHeroProps) => {
             <div className="text-xs  text-neutral-500 tracking-wide font-medium flex ml-7 space-x-4 ">
               <Link href={`${asPath}/following`} shallow={true}>
                 <a>
-                  <p className="cursor-pointer">
-                    <span className="text-neutral-800 font-semibold mr-1 font-poppins">
+                  <p className="cursor-pointer dark:text-primary-dark-700">
+                    <span className="text-neutral-800 dark:text-primary-dark-700 font-semibold mr-1 font-poppins">
                       {user.followingCount}
                     </span>
                     Following
@@ -57,8 +57,8 @@ const UserProfileHero = ({}: UserProfileHeroProps) => {
               </Link>
               <Link href={`${asPath}/followers`} shallow={true}>
                 <a>
-                  <p onClick={() => {}} className="cursor-pointer">
-                    <span className="text-neutral-800 font-semibold mr-1 font-poppins">
+                  <p className="cursor-pointer dark:text-primary-dark-700">
+                    <span className="text-neutral-800 dark:text-primary-dark-700 font-semibold mr-1 font-poppins">
                       {user.followedByCount}
                     </span>
                     Followers
@@ -70,7 +70,7 @@ const UserProfileHero = ({}: UserProfileHeroProps) => {
               <UserProfileButton userId={userId} />
             </div>
           </div>
-          <p className="font-medium text-neutral-600 mt-6 max-w-sm">
+          <p className="font-medium text-neutral-600 dark:text-primary-dark-700 mt-6 max-w-sm">
             {user.bio}
           </p>
         </div>

@@ -37,7 +37,8 @@ const Menu = () => {
   if (!me) return <div>Loading</div>;
 
   return (
-    <div ref={ref} onClick={toggleDropdownShow}>
+    // <div ref={ref} onClick={toggleDropdownShow}>
+    <div ref={ref}>
       <button
         className="w-10 h-10 rounded-full relative overflow-hidden block"
         onClick={openDropDown}

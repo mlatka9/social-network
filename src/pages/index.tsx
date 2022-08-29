@@ -29,7 +29,7 @@ const Home: NextPage = () => {
   return (
     <>
       <Layout>
-        <div className="bg-white dark:bg-slate-800 px-5 py-3 rounded-lg">
+        <div className="bg-primary-0 dark:bg-primary-dark-100 px-5 py-3 rounded-lg">
           <TextHeader className="pb-3">Post something</TextHeader>
           <hr className="mb-3" />
           <PostInput />

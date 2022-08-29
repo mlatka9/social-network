@@ -39,7 +39,7 @@ const PostDetails = ({ postId }: PostDetailsProps) => {
   return (
     <>
       <div className=" w-full rounded-lg grid gap-x-10 ">
-        <div className="bg-white w-full mb-5  rounded-lg dark:bg-slate-600">
+        <div className="bg-white w-full mb-5  rounded-lg dark:bg-primary-dark-100">
           <Author
             authorId={post.user.id}
             authorImage={post.user.image}

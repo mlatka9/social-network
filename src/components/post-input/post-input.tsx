@@ -107,7 +107,7 @@ const PostInput = ({
           <textarea
             value={postContent}
             onChange={({ target }) => setPostContent(target.value)}
-            className="bg-blue-50 w-full rounded-lg placeholder:text-sm pl-2 min-h-[100px] max-h-[200px] block mb-3 dark:bg-slate-600"
+            className="bg-primary-100 w-full rounded-lg placeholder:text-sm pl-2 min-h-[100px] max-h-[200px] block mb-3 dark:bg-primary-dark-200"
           />
           <PostTagPicker setTags={setSelectedTags} tags={selectedTags} />
           {sharedPost && (
