@@ -20,6 +20,16 @@ export const postDetailsInclude = {
       name: true,
     },
   },
+  mentions: {
+    include: {
+      user: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
+    },
+  },
   bookmarkedBy: true,
   shareParent: {
     include: {

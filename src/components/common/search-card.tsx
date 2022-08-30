@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import clsx from "clsx";
-import { SearchEntryType } from "@/types/index";
+import { SearchEntryType } from "@/types/db";
 import { SearchType } from "src/server/router/types";
 
 interface SearchCardProps {

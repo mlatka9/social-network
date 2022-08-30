@@ -39,8 +39,8 @@ export const useAddCommentMutation = (postId: string) => {
 };
 
 export const useAddPostMutation = (
-  onSuccessCb: () => void,
-  communityId?: string
+  onSuccessCb: () => void
+  // communityId?: string
 ) => {
   const utils = trpc.useContext();
   const mutation = trpc.useMutation("post.addPost", {
@@ -51,21 +51,24 @@ export const useAddPostMutation = (
     },
   });
 
-  return (
-    postContent: string,
-    imageUrls: string[],
-    tags: Tag[],
-    shareParentId?: string
-  ) =>
-    mutation.mutate({
-      tags: tags,
-      content: postContent,
-      images: imageUrls.length
-        ? imageUrls.map((url) => ({ imageAlt: "alt", imageUrl: url }))
-        : null,
-      shareParentId: shareParentId,
-      communityId: communityId,
-    });
+  return mutation.mutate;
+  // return (
+  //   postContent: string,
+  //   imageUrls: string[],
+  //   tags: Tag[],
+  //   shareParentId?: string,
+  //   mentions: string[]
+  // ) =>
+  //   mutation.mutate({
+  //     mentions: mentions,
+  //     tags: tags,
+  //     content: postContent,
+  //     images: imageUrls.length
+  //       ? imageUrls.map((url) => ({ imageAlt: "alt", imageUrl: url }))
+  //       : null,
+  //     shareParentId: shareParentId,
+  //     communityId: communityId,
+  //   });
 };
 
 export const useToggleCommentLikeMutation = (postId: string) => {

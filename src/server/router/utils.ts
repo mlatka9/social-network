@@ -8,6 +8,7 @@ export const populatePost = (post: PostCardProps, userId: string) => {
     tags,
     community,
     comments,
+    mentions,
     user: { bio, email, emailVerified, ...userData },
     ...postData
   } = post;
@@ -17,6 +18,7 @@ export const populatePost = (post: PostCardProps, userId: string) => {
     user: {
       ...userData,
     },
+    mentions: mentions.map((mention) => mention.user),
     communityName: community?.name || null,
     tags: post.tags.map((tag) => tag.tag),
     likesCount: _count.likes,

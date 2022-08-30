@@ -114,8 +114,8 @@ export const usePostCommentsQuery = (postId: string) => {
   ]);
 };
 
-export const useSearchUserQuery = (searchPhrase: string) => {
-  return trpc.useQuery(["user.getBySearchPhrase", { searchPhrase }], {
+export const useSearchQuery = (searchPhrase: string) => {
+  return trpc.useQuery(["search.getBySearchPhrase", { searchPhrase }], {
     keepPreviousData: true,
     enabled: !!searchPhrase,
   });
@@ -164,4 +164,11 @@ export const useCommunityMembersQuery = (communityId: string) => {
 
 export const usePopularCommunitiesQuery = () => {
   return trpc.useQuery(["community.popular"]);
+};
+
+export const useSearchUsersQuery = (searchPhrase: string) => {
+  return trpc.useQuery(["user.getBySearchPhrase", { searchPhrase }], {
+    keepPreviousData: true,
+    // enabled: !!searchPhrase,
+  });
 };

@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import React from "react";
-import { CommentDetailsType } from "@/types/index";
+import { CommentDetailsType } from "@/types/db";
 import CommentItem from "./comment-item";
 import { channel } from "diagnostics_channel";
 

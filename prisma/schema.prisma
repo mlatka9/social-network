@@ -71,6 +71,7 @@ model User {
   likedComments CommentLike[]
   bookmarks     Bookmark[]
   communities   UserCommunity[]
+  mentions      Mention[]
 }
 
 model VerificationToken {
@@ -99,6 +100,16 @@ model Post {
   shares        Post[]     @relation("Share")
   community     Community? @relation(fields: [communityId], references: [id], onDelete: Cascade)
   communityId   String?    @db.Text
+  mentions      Mention[]
+}
+
+model Mention {
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  postId String
+  post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@id([userId, postId])
 }
 
 model Image {

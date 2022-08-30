@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import Image from "next/image";
-import { PostDetailsType } from "@/types/index";
+import { PostDetailsType } from "@/types/db";
 import {
   useRemovePostMutation,
   useToggleBookmarkMutation,
@@ -11,8 +11,8 @@ import ModalWrapper from "../common/modal-wrapper";
 import PostInput from "../post-input/post-input";
 import { useSession } from "next-auth/react";
 
-import BookmarkIcon from "@/components/common/icons/bookmark";
-import BookmarkEmptyIcon from "@/components/common/icons/bookmark-empty";
+import BookmarkIcon from "@/components/common/icons/bookmark-empty";
+import BookmarkEmptyIcon from "@/components/common/icons/bookmark";
 import ShareIcon from "@/components/common/icons/share";
 import HeartIcon from "@/components/common/icons/heart";
 import HeartEmptyIcon from "@/components/common/icons/heart-empty";
@@ -56,6 +56,8 @@ const PostCardFooter = ({ post }: PostCardFooterProps) => {
 
   useTogglePostLikeMutation();
 
+  console.log(post.bookmarkedByMe);
+
   return (
     <>
       <div className="flex items-center mt-5">
@@ -80,7 +82,7 @@ const PostCardFooter = ({ post }: PostCardFooterProps) => {
           className="flex items-center cursor-pointer w-fit opacity-80 ml-5 hover:opacity-50 transition-opacity"
           onClick={handleToggleBookmark}
         >
-          {post.bookmarkedByMe ? <BookmarkIcon /> : <BookmarkEmptyIcon />}
+          {post.bookmarkedByMe ? <BookmarkEmptyIcon /> : <BookmarkIcon />}
         </button>
         <div className="font-medium text-xs text-gray-400 ml-auto w-fit hover:underline">
           <p>{post.commentsCount} Comments</p>

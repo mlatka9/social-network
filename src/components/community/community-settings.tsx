@@ -6,7 +6,7 @@ import useSettingsDropZone from "src/hooks/use-settings-dropzone";
 import { useCommunityDetailsQuery, useCurrentUserQuery } from "src/hooks/query";
 import { useCommunityMutation, useProfileMutation } from "src/hooks/mutation";
 import clsx from "clsx";
-import { CommunityDetailsType } from "@/types/index";
+import { CommunityDetailsType } from "@/types/db";
 
 export interface FormInputType {
   name: string;

@@ -1,8 +1,7 @@
-import UserSearch from "../common/user-search";
+import SearchBar from "../common/search-bar";
 import Link from "next/link";
 import React from "react";
 import Menu from "@/components/header/menu";
-import ThemeSwitch from "../common/theme-switch";
 
 const Header = () => {
   return (
@@ -15,7 +14,7 @@ const Header = () => {
         </a>
       </Link>
 
-      <UserSearch />
+      <SearchBar />
       <div className="flex space-x-3">
         <Menu />
       </div>

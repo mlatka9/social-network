@@ -3,11 +3,12 @@ import { useRouter } from "next/router";
 import Author from "./author";
 import TagsList from "./tags-list";
 import ImagesGrid from "./images-grid";
-import { PostDetailsType } from "@/types/index";
+import { PostDetailsType } from "@/types/db";
 import PostCardFooter from "./post-card-footer";
 import PostThumbnail from "../post/post-thumbnail";
 import { useElementSize } from "usehooks-ts";
 import CommunityBadge from "./community-badge";
+import MentionsList from "./mentions-list";
 
 export interface PostCardProps {
   post: PostDetailsType;
@@ -53,6 +54,7 @@ const PostCard = ({ post }: PostCardProps) => {
       </div>
       <div className="ml-14">
         <TagsList tags={post.tags} />
+
         <div className="relative">
           <div className="max-h-[600px] overflow-hidden" ref={postContentRef}>
             <p className="mb-3 whitespace-pre-wrap">{post.content}</p>
@@ -68,7 +70,7 @@ const PostCard = ({ post }: PostCardProps) => {
             <div className="bg-gradient-to-t from-white  dark:from-primary-dark-100 to-white/0 absolute h-5 w-full bottom-0 flex items-center justify-center text-white" />
           )}
         </div>
-
+        <MentionsList mentions={post.mentions} />
         <PostCardFooter post={post} />
       </div>
     </article>

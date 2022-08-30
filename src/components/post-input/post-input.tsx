@@ -11,7 +11,9 @@ import clsx from "clsx";
 import EmojiPicker from "../common/emoji-picker";
 import Button from "../common/button";
 import PostThumbnail from "../post/post-thumbnail";
-import { PostDetailsType } from "@/types/index";
+import { PostDetailsType, SearchUserType } from "@/types/db";
+import PostMentionsInput from "./post-mentions-input";
+import PostmentionsPicker from "./post-mentions-picker";
 
 interface PostInputProps {
   sharedPost?: PostDetailsType;
@@ -29,12 +31,15 @@ const PostInput = ({
 
   const [postContent, setPostContent] = useState("");
   const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
+  const [selectedmentions, setSelectedMentions] = useState<SearchUserType[]>(
+    []
+  );
   const [selectedImages, setSelectedImages] = useState<File[]>([]);
   const [imagesUploadProgress, setImagesUploadProgress] = useState<number[]>(
     []
   );
 
-  const addPost = useAddPostMutation(submitCallback, communityId);
+  const addPost = useAddPostMutation(submitCallback);
 
   const {
     getRootProps,
@@ -87,11 +92,21 @@ const PostInput = ({
       )
     );
 
-    addPost(postContent, imageUrls, selectedTags, sharedPost?.id);
+    addPost({
+      content: postContent,
+      images: imageUrls.length
+        ? imageUrls.map((url) => ({ imageAlt: "alt", imageUrl: url }))
+        : null,
+      tags: selectedTags,
+      mentions: selectedmentions.map((mention) => mention.id),
+      shareParentId: sharedPost?.id,
+      communityId: communityId,
+    });
     setPostContent("");
     setSelectedImages([]);
     setImagesUploadProgress([]);
     setSelectedTags([]);
+    setSelectedMentions([]);
   };
 
   return (
@@ -112,6 +127,10 @@ const PostInput = ({
             className="bg-primary-100 w-full rounded-lg placeholder:text-sm pl-2 min-h-[100px] max-h-[200px] block mb-3 dark:bg-primary-dark-200"
           />
           <PostTagPicker setTags={setSelectedTags} tags={selectedTags} />
+          <PostmentionsPicker
+            mentions={selectedmentions}
+            setMention={setSelectedMentions}
+          />
           {sharedPost && (
             <PostThumbnail sharedPost={sharedPost} isSmall disableLink />
           )}

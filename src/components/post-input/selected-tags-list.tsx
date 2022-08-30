@@ -18,7 +18,7 @@ const SelectedTagsList = ({ tags, handleRemoveTag }: SelectedTagsListProps) => {
           <span>#{tag.name}</span>
           <button
             onClick={() => handleRemoveTag(tag.name)}
-            className="ml-1 justify-center flex items-center p-1"
+            className="ml-1 justify-center flex items-center shrink-0 w-4 h-4"
           >
             <Image src="/icons/close.png" height="16" width="16" alt="" />
           </button>

@@ -1,4 +1,4 @@
-import { PostDetailsType, SharedPostType } from "@/types/index";
+import { PostDetailsType, SharedPostType } from "@/types/db";
 import clsx from "clsx";
 import Image from "next/image";
 import router from "next/router";

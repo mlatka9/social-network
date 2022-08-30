@@ -161,6 +161,7 @@ export const postRouter = createProtectedRouter()
           })
         )
         .nullable(),
+      mentions: z.array(z.string()).nullable(),
       shareParentId: z.string().optional(),
       communityId: z.string().optional(),
     }),
@@ -177,6 +178,15 @@ export const postRouter = createProtectedRouter()
           communityId: input.communityId,
         },
       });
+
+      if (input.mentions) {
+        await prisma.mention.createMany({
+          data: input.mentions?.map((mention) => ({
+            postId: post.id,
+            userId: mention,
+          })),
+        });
+      }
 
       if (input.images) {
         await prisma.image.createMany({

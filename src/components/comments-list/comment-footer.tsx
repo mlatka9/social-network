@@ -4,7 +4,7 @@ import {
   useDeleteCommentMutation,
   useToggleCommentLikeMutation,
 } from "src/hooks/mutation";
-import { CommentDetailsType } from "@/types/index";
+import { CommentDetailsType } from "@/types/db";
 import { useSession } from "next-auth/react";
 
 interface CommentFooterProps {

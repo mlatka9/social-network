@@ -3,7 +3,7 @@ import {
   useAddCommentMutation,
   useUpdateCommentMutation,
 } from "src/hooks/mutation";
-import { CommentDetailsType } from "@/types/index";
+import { CommentDetailsType } from "@/types/db";
 
 interface UseCommenProps {
   comment: CommentDetailsType;

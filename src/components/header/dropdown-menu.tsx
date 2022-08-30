@@ -4,7 +4,7 @@ import Image from "next/image";
 import ThemeSwitch from "../common/theme-switch";
 
 import ProfileIcon from "@/components/common/icons/profile";
-import BookmarkIcon from "@/components/common/icons/bookmark";
+import BookmarkIcon from "@/components/common/icons/bookmark-empty";
 import LogOutIcon from "@/components/common/icons/log-out";
 import GraphIcon from "../common/icons/graph";
 

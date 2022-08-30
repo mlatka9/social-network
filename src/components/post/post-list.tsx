@@ -2,7 +2,7 @@ import PostCard from "@/components/post-card/post-card";
 import { useInView } from "react-intersection-observer";
 import { useEffect, Fragment } from "react";
 import { InfiniteData } from "@tanstack/react-query";
-import { PostDetailsType } from "@/types/index";
+import { PostDetailsType } from "@/types/db";
 
 interface PostInfinityData {
   posts: PostDetailsType[];

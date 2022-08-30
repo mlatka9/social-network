@@ -1,6 +1,6 @@
 import Link from "next/link";
 import UserProfilePicture from "../common/user-profile-image";
-import type { CommunityDetailsType } from "@/types/index";
+import type { CommunityDetailsType } from "@/types/db";
 import Image from "next/image";
 import JoinCommunityButton from "./join-community-button";
 

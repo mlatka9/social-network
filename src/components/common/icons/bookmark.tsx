@@ -4,16 +4,17 @@ import { SVGProps } from "react";
 
 const BookmarkIcon = (props: SVGProps<SVGSVGElement>) => {
   const { resolvedTheme } = useTheme();
+
   return (
     <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 384 512"
       width={20}
       height={20}
       fill={resolvedTheme === "dark" ? "white" : "black"}
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 384 512"
       {...props}
     >
-      <path d="M336 0H48C21.49 0 0 21.49 0 48v431.9c0 24.7 26.79 40.08 48.12 27.64L192 423.6l143.9 83.93c21.3 11.57 48.1-2.93 48.1-27.63V48c0-26.51-21.5-48-48-48zm0 452-144-84-144 84V54c0-3.37 2.63-6 5.1-6h276c4.3 0 6.9 2.63 6.9 6v398z" />
+      <path d="M48 0h288c26.5 0 48 21.49 48 48v439.7c0 13.4-10.9 24.3-24.3 24.3-5 0-9.9-1.5-14-4.4L192 400 38.28 507.6c-4.09 2.9-8.96 4.4-13.95 4.4C10.89 512 0 501.1 0 487.7V48C0 21.49 21.49 0 48 0z" />
     </svg>
   );
 };

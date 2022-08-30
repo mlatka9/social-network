@@ -1,22 +1,21 @@
 import React, { useEffect, useState } from "react";
 import { trpc } from "src/utils/trpc";
-import { useSearchUserQuery } from "src/hooks/query";
+import { useSearchQuery } from "src/hooks/query";
 import { useRouter } from "next/router";
 import { useDebounce } from "usehooks-ts";
 import SearchCard from "@/components/common/search-card";
 import useSuggestionList from "src/hooks/use-suggestion-popup";
 import SearchIcon from "@/components/common/icons/search";
-import type { SearchEntryType } from "@/types/index";
+import type { SearchEntryType } from "@/types/db";
 import { SearchType } from "src/server/router/types";
 
-const UserSearch = () => {
+const SearchBar = () => {
   const router = useRouter();
-  const utils = trpc.useContext();
 
   const [searchPhrase, setSearchPhrase] = useState("");
   const debouncedSearchPhrase = useDebounce(searchPhrase, 300);
 
-  const { data, isSuccess } = useSearchUserQuery(debouncedSearchPhrase);
+  const { data } = useSearchQuery(debouncedSearchPhrase);
 
   useEffect(() => {
     setSearchPhrase("");
@@ -40,9 +39,6 @@ const UserSearch = () => {
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchPhrase(e.target.value);
-    if (e.target.value) {
-      utils.invalidateQueries(["user.getBySearchPhrase", { searchPhrase }]);
-    }
   };
 
   return (
@@ -72,4 +68,4 @@ const UserSearch = () => {
   );
 };
 
-export default UserSearch;
+export default SearchBar;
