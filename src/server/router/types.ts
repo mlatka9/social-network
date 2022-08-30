@@ -35,6 +35,11 @@ export const postDetailsInclude = {
   },
 };
 
+export enum SearchType {
+  COMMUNITY,
+  USER,
+}
+
 const postWithUserAndImages = Prisma.validator<Prisma.PostArgs>()({
   include: postDetailsInclude,
 });

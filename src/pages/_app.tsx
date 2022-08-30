@@ -8,6 +8,10 @@ import "../styles/globals.css";
 import { ReactQueryDevtools } from "react-query/devtools";
 import { ThemeProvider } from "next-themes";
 
+import TimeAgo from "javascript-time-ago";
+import en from "javascript-time-ago/locale/en.json";
+TimeAgo.addDefaultLocale(en);
+
 const MyApp: AppType = ({
   Component,
   pageProps: { session, ...pageProps },

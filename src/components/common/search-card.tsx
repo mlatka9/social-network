@@ -1,19 +1,25 @@
 import Image from "next/image";
 import Link from "next/link";
-import { User } from "@prisma/client";
 import clsx from "clsx";
+import { SearchEntryType } from "@/types/index";
+import { SearchType } from "src/server/router/types";
 
 interface SearchCardProps {
-  user: User;
+  searchEntry: SearchEntryType;
   isSelected: boolean;
 }
 
-const SearchCard = ({ user, isSelected }: SearchCardProps) => {
-  const trimText = (text: string) => {
-    return text.slice(0, 30) + " ...";
-  };
+const SearchCard = ({ searchEntry, isSelected }: SearchCardProps) => {
   return (
-    <Link href={`/user/${user.id}`} key={user.id} passHref>
+    <Link
+      href={
+        searchEntry.type === SearchType.USER
+          ? `/user/${searchEntry.id}`
+          : `/community/${searchEntry.id}`
+      }
+      key={searchEntry.id}
+      passHref
+    >
       <a className="focus:bg-red-300 focus:outline-none block">
         <div
           className={clsx([
@@ -23,7 +29,7 @@ const SearchCard = ({ user, isSelected }: SearchCardProps) => {
         >
           <div className="w-10 h-10 relative mr-2">
             <Image
-              src={user.image || "/images/fallback.svg"}
+              src={searchEntry.image || "/images/fallback.svg"}
               width="40"
               height="40"
               alt=""
@@ -33,9 +39,11 @@ const SearchCard = ({ user, isSelected }: SearchCardProps) => {
           </div>
 
           <div className="">
-            <p className="p-1 block font-medium pb-0">{user.name}</p>
+            <p className="p-1 block font-medium pb-0">{searchEntry.title}</p>
             <p className="p-1 block font-medium text-xs text-gray-400 pt-0">
-              {user.bio && trimText(user.bio)}
+              {searchEntry.type === SearchType.USER
+                ? `${searchEntry.followersCount} followers`
+                : `${searchEntry.followersCount} members`}
             </p>
           </div>
         </div>

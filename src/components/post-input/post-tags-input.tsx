@@ -59,15 +59,20 @@ const PostTagsInput = ({ setTags, tags }: PostTagsInputProps) => {
   };
 
   return (
-    <div className="relative" {...wrapperProps}>
+    <div className="relative w-full" {...wrapperProps}>
       <input
-        className="text-md  dark:bg-primary-dark-100 pl-3"
+        className="text-md  dark:bg-primary-dark-100 w-full"
         placeholder={tags.length ? "Add another..." : "Add tag"}
         value={tagInputValue}
         onChange={onChange}
         onKeyDown={onKeyDown}
         {...inputProps}
       />
+      {tagInputValue && (
+        <div className="absolute right-1 top-1 font-medium text-xs text-gray-400">
+          space to add
+        </div>
+      )}
 
       <div className="absolute top-full left-0 z-[5] w-full rounded-br-md rounded-bl-md overflow-hidden shadow-lg">
         {suggestionData.map((tag, index) => (
@@ -76,7 +81,8 @@ const PostTagsInput = ({ setTags, tags }: PostTagsInputProps) => {
             key={tag.name}
             className={clsx([
               "p-3 bg-white fle flex-col cursor-pointer hover:bg-blue-50 dark:bg-primary-dark-200 hover:dark:bg-primary-dark-300",
-              selectedItemIndex === index && "bg-blue-50",
+              selectedItemIndex === index &&
+                "bg-primary-100 dark:bg-primary-dark-300",
             ])}
           >
             {tag.name}

@@ -7,6 +7,7 @@ import { useState } from "react";
 import ModalWrapper from "@/components/common/modal-wrapper";
 import CommunityCreator from "@/components/community/community-creator";
 import Button from "@/components/common/button";
+import Layout from "@/components/common/layout";
 
 const CommunitiesPage = () => {
   const [isCommunityCreatorOpen, setIsCommunityCreatorOpen] = useState(false);
@@ -20,7 +21,7 @@ const CommunitiesPage = () => {
   };
 
   return (
-    <div className="grid grid-cols-2">
+    <Layout>
       <CommunityList />
       {isCommunityCreatorOpen && (
         <ModalWrapper
@@ -31,7 +32,7 @@ const CommunitiesPage = () => {
         </ModalWrapper>
       )}
       <Button onClick={handleOpenCreator}>Create community</Button>
-    </div>
+    </Layout>
   );
 };
 

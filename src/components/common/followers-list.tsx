@@ -4,6 +4,7 @@ import clsx from "clsx";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { useFollowsQuery } from "src/hooks/query";
+import UserCard from "./user-card";
 
 export type FollowsListType = "followers" | "following";
 
@@ -51,25 +52,14 @@ const FollowersList = () => {
       </div>
       <div>
         {selectedListDat?.map((user) => (
-          <div key={user.id} className="mb-5">
-            <div className="flex mb-3">
-              <UserProfilePicture
-                imageUrl={user.image || ""}
-                userID={user.id}
-              />
-              <div className="ml-3">
-                <p className=" font-poppins font-medium">{user.name}</p>
-                <p className=" text-neutral-500 text-xs font-medium">
-                  {user.followers} followers
-                </p>
-              </div>
-
-              <ButtonFollow userId={user.id} />
-            </div>
-            <p className="text-sm text-neutral-600">
-              {user.bio || "no bio no bio no bio no bio"}
-            </p>
-          </div>
+          <UserCard
+            key={user.id}
+            bio={user.bio}
+            followers={user.followers}
+            id={user.id}
+            image={user.image}
+            name={user.name}
+          />
         ))}
       </div>
     </>

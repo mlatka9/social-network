@@ -117,7 +117,7 @@ export const usePostCommentsQuery = (postId: string) => {
 export const useSearchUserQuery = (searchPhrase: string) => {
   return trpc.useQuery(["user.getBySearchPhrase", { searchPhrase }], {
     keepPreviousData: true,
-    // enabled: !!searchPhrase,
+    enabled: !!searchPhrase,
   });
 };
 
@@ -152,4 +152,16 @@ export const useCommunityPostsQuery = (communityId: string) => {
       getNextPageParam: (lastPage) => lastPage.nextCursor,
     }
   );
+};
+
+export const useCommunityDetailsQuery = (communityId: string) => {
+  return trpc.useQuery(["community.getById", { id: communityId }]);
+};
+
+export const useCommunityMembersQuery = (communityId: string) => {
+  return trpc.useQuery(["community.getMembers", { communityId: communityId }]);
+};
+
+export const usePopularCommunitiesQuery = () => {
+  return trpc.useQuery(["community.popular"]);
 };

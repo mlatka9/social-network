@@ -2,9 +2,11 @@ import { useDropzone } from "react-dropzone";
 import type { IFormInput } from "@/components/common/profile-settings";
 import { UseFormSetValue } from "react-hook-form";
 
+type fieldNameType = "images" | "bannerImages";
+
 const useSettingsDropZone = (
-  setFormValue: UseFormSetValue<IFormInput>,
-  formFieldName: "images" | "bannerImages"
+  setFormValue: (fieldName: fieldNameType, files: File[]) => void,
+  formFieldName: fieldNameType
 ) => {
   return useDropzone({
     noClick: true,

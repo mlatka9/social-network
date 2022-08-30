@@ -6,7 +6,7 @@ const TrendingTagsList = () => {
   const { isSuccess, data } = useTrendingTagsQuery();
 
   return (
-    <aside className=" bg-white rounded-xl sticky h-fit top-[92px] dark:bg-primary-dark-100 overflow-hidden">
+    <aside className=" bg-white rounded-xl dark:bg-primary-dark-100 overflow-hidden">
       <TextHeader className=" py-3 px-5 ">Trends for you</TextHeader>
       <hr className=" px-5 " />
       {isSuccess &&
@@ -17,7 +17,7 @@ const TrendingTagsList = () => {
                 {`#${tagData.tagName}`}
               </p>
               <p className="font-medium text-xs text-gray-400 dark:text-white">
-                {tagData.postsCount}
+                {tagData.postsCount} posts
               </p>
             </div>
           </Link>

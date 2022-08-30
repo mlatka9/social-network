@@ -15,13 +15,13 @@ interface DropdownMenu {
 const DropdownMenu = ({ userId }: DropdownMenu) => {
   return (
     <div>
-      <nav className="z-[100] bg-primary-0 dark:bg-primary-dark-100 absolute top-[calc(100%_+_10px)] right-5 p-3 rounded-xl min-w-[200px] shadow-2xl select-none">
+      <nav className="min-w-[250px] z-[100] bg-primary-0 dark:bg-primary-dark-100 absolute top-[calc(100%_+_10px)] right-5 p-3 rounded-xl shadow-2xl select-none">
         <ThemeSwitch />
         <hr className="my-4" />
         <ul>
           <li className="hover:bg-slate-100  dark:hover:bg-primary-dark-150 rounded-lg flex items-center">
             <Link href={`/user/${userId}`}>
-              <a className="px-3 py-2 w-full rounded-lg flex">
+              <a className="px-3 py-3 w-full rounded-lg flex">
                 <ProfileIcon />
                 <span className="ml-2">Profile</span>
               </a>
@@ -30,7 +30,7 @@ const DropdownMenu = ({ userId }: DropdownMenu) => {
 
           <li className="hover:bg-slate-100 dark:hover:bg-primary-dark-150  rounded-lg flex items-center w-full   ">
             <Link href="/bookmarks">
-              <a className="px-3 py-2 w-full rounded-lg flex">
+              <a className="px-3 py-3 w-full rounded-lg flex">
                 <BookmarkIcon />
                 <span className="ml-2">Bookmarks</span>
               </a>
@@ -38,7 +38,7 @@ const DropdownMenu = ({ userId }: DropdownMenu) => {
           </li>
           <li className="hover:bg-slate-100 dark:hover:bg-primary-dark-150  rounded-lg flex items-center w-full   ">
             <Link href="/community">
-              <a className="px-3 py-2 w-full rounded-lg flex">
+              <a className="px-3 py-3 w-full rounded-lg flex">
                 <GraphIcon />
                 <span className="ml-2">Communities</span>
               </a>
@@ -47,7 +47,7 @@ const DropdownMenu = ({ userId }: DropdownMenu) => {
           <li className="hover:bg-slate-100  dark:hover:bg-primary-dark-150 rounded-lg ">
             <button
               onClick={() => signOut()}
-              className="flex items-center px-3 py-2 w-full rounded-lg"
+              className="flex items-center px-3 py-3 w-full rounded-lg"
             >
               <LogOutIcon />
               <span className="ml-2">Log Out</span>

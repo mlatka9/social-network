@@ -14,16 +14,12 @@ const ButtonFollow = ({ userId }: ButtonFollowProps) => {
 
   const followUser = useToggleFollowUserMutation(userId, me.id);
 
-  const handleToggleFollow = () => {
-    followUser();
-  };
-
   if (me.id === userId) return null;
 
   return (
     <button
       className="bg-blue-500 rounded px-6 py-2 ml-auto self-start text-white"
-      onClick={handleToggleFollow}
+      onClick={followUser}
     >
       {user?.followedByMe ? "Unfollow" : "Follow"}
     </button>

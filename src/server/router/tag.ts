@@ -19,6 +19,7 @@ export const tagRouter = createProtectedRouter()
             // mode: "insensitive",
           },
         },
+        take: 5,
       });
     },
   })
@@ -26,6 +27,11 @@ export const tagRouter = createProtectedRouter()
     async resolve() {
       const data = await prisma.postTag.groupBy({
         by: ["tagName"],
+        where: {
+          post: {
+            isDeleted: false,
+          },
+        },
         _count: {
           postId: true,
         },

@@ -7,6 +7,7 @@ import TagsList from "../post-card/tags-list";
 import ImagesGrid from "../post-card/images-grid";
 import PostCardFooter from "../post-card/post-card-footer";
 import PostThumbnail from "./post-thumbnail";
+import CommunityBadge from "../post-card/community-badge";
 
 interface PostDetailsProps {
   postId: string;
@@ -39,7 +40,13 @@ const PostDetails = ({ postId }: PostDetailsProps) => {
   return (
     <>
       <div className=" w-full rounded-lg grid gap-x-10 ">
-        <div className="bg-white w-full mb-5  rounded-lg dark:bg-primary-dark-100">
+        {post.communityId && post.communityName && (
+          <CommunityBadge
+            communityId={post.communityId}
+            communityName={post.communityName}
+          />
+        )}
+        <div className="bg-white w-full mb-5  rounded-lg dark:bg-primary-dark-100 mt-2">
           <Author
             authorId={post.user.id}
             authorImage={post.user.image}

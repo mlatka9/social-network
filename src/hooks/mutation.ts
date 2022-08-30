@@ -159,3 +159,26 @@ export const useAddCommunity = (onSuccessCb: () => void) => {
 
   return mutation.mutate;
 };
+
+export const useToggleCommunityMembershipMutation = () => {
+  const utils = trpc.useContext();
+  const mutation = trpc.useMutation(["community.toggleMembership"], {
+    onSuccess() {
+      utils.invalidateQueries(["community.getById"]);
+      utils.invalidateQueries(["community.getAll"]);
+    },
+  });
+  return mutation.mutate;
+};
+
+export const useCommunityMutation = () => {
+  const utils = trpc.useContext();
+  const mutation = trpc.useMutation(["community.update"], {
+    onSuccess() {
+      utils.invalidateQueries(["community.getById"]);
+      // reloadSession();
+    },
+  });
+
+  return mutation.mutate;
+};

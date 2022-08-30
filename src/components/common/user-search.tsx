@@ -1,14 +1,13 @@
-import React, { KeyboardEvent, useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import { trpc } from "src/utils/trpc";
 import { useSearchUserQuery } from "src/hooks/query";
 import { useRouter } from "next/router";
 import { useDebounce } from "usehooks-ts";
-
 import SearchCard from "@/components/common/search-card";
-import Image from "next/image";
 import useSuggestionList from "src/hooks/use-suggestion-popup";
-import { User } from "@prisma/client";
 import SearchIcon from "@/components/common/icons/search";
+import type { SearchEntryType } from "@/types/index";
+import { SearchType } from "src/server/router/types";
 
 const UserSearch = () => {
   const router = useRouter();
@@ -17,16 +16,20 @@ const UserSearch = () => {
   const [searchPhrase, setSearchPhrase] = useState("");
   const debouncedSearchPhrase = useDebounce(searchPhrase, 300);
 
-  const { data } = useSearchUserQuery(debouncedSearchPhrase);
+  const { data, isSuccess } = useSearchUserQuery(debouncedSearchPhrase);
 
   useEffect(() => {
     setSearchPhrase("");
   }, [router.asPath]);
 
-  const onSelect = (user: User) => {
-    const userId = user.id;
-    if (userId === undefined) return;
-    router.push(`/user/${userId}`);
+  const onSelect = (searchEntry: SearchEntryType) => {
+    const userId = searchEntry.id;
+    if (searchEntry.type === SearchType.COMMUNITY) {
+      router.push(`/community/${userId}`);
+    }
+    if (searchEntry.type === SearchType.USER) {
+      router.push(`/user/${userId}`);
+    }
   };
 
   const { suggestionData, selectedItemIndex, wrapperProps, inputProps } =
@@ -47,15 +50,7 @@ const UserSearch = () => {
       <div className="relative">
         <div className="absolute top-[15px] left-3 pointer-events-none">
           <SearchIcon />
-          {/* <Image
-            src="/icons/search.png"
-            width="20"
-            height="20"
-            alt=""
-            className="absolute top-10 "
-          /> */}
         </div>
-
         <input
           {...inputProps}
           value={searchPhrase}
@@ -65,10 +60,10 @@ const UserSearch = () => {
       </div>
 
       <div className="absolute top-[calc(100%_+_10px)] bg-white  dark:bg-primary-dark-100 w-full rounded-lg shadow-lg overflow-hidden">
-        {suggestionData.map((user, index) => (
+        {suggestionData.map((searchEntry, index) => (
           <SearchCard
-            user={user}
-            key={user.id}
+            searchEntry={searchEntry}
+            key={searchEntry.id}
             isSelected={selectedItemIndex === index}
           />
         ))}

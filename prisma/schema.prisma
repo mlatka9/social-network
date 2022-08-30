@@ -169,10 +169,13 @@ model PostTag {
 }
 
 model Community {
-  id      String          @id @default(uuid())
-  name    String          @db.VarChar(100)  @unique
-  posts   Post[]
-  members UserCommunity[]
+  id          String          @id @default(uuid())
+  name        String          @unique @db.VarChar(100)
+  image       String          @default("") @db.Text
+  bannerImage String          @default("") @db.Text
+  description String          @default("") @db.Text
+  posts       Post[]
+  members     UserCommunity[]
 }
 
 model UserCommunity {
@@ -182,7 +185,7 @@ model UserCommunity {
   userId String
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  role    Role     @default(USER)
+  role Role @default(USER)
 
   @@id([userId, communityId])
 }

@@ -6,8 +6,8 @@ import ImagesGrid from "./images-grid";
 import { PostDetailsType } from "@/types/index";
 import PostCardFooter from "./post-card-footer";
 import PostThumbnail from "../post/post-thumbnail";
-import { usePostQuery } from "src/hooks/query";
 import { useElementSize } from "usehooks-ts";
+import CommunityBadge from "./community-badge";
 
 export interface PostCardProps {
   post: PostDetailsType;
@@ -35,7 +35,15 @@ const PostCard = ({ post }: PostCardProps) => {
       className="bg-primary-0 dark:bg-primary-dark-100 w-full p-5 shadow-sm rounded-lg cursor-pointer"
       onClick={goToPostDetails}
     >
-      <div className="flex">
+      {post.communityId && post.communityName && (
+        <div className="ml-14">
+          <CommunityBadge
+            communityId={post.communityId}
+            communityName={post.communityName}
+          />
+        </div>
+      )}
+      <div className="flex mt-2">
         <Author
           authorId={post.user.id}
           authorImage={post.user.image}
@@ -47,7 +55,7 @@ const PostCard = ({ post }: PostCardProps) => {
         <TagsList tags={post.tags} />
         <div className="relative">
           <div className="max-h-[600px] overflow-hidden" ref={postContentRef}>
-            <p className="mb-3">{post.content}</p>
+            <p className="mb-3 whitespace-pre-wrap">{post.content}</p>
             <ImagesGrid images={post.images} />
             {post.shareParent && (
               <>

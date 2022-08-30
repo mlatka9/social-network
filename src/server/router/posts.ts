@@ -42,14 +42,28 @@ export const postRouter = createProtectedRouter()
       const posts = await prisma.post.findMany({
         take: limit + 1,
         where: {
-          user: {
-            followedBy: {
-              some: {
-                id: ctx.session.user.id,
+          OR: [
+            {
+              user: {
+                followedBy: {
+                  some: {
+                    id: ctx.session.user.id,
+                  },
+                },
               },
             },
-          },
+            {
+              community: {
+                members: {
+                  some: {
+                    userId: ctx.session.user.id,
+                  },
+                },
+              },
+            },
+          ],
           isDeleted: false,
+          NOT: { userId: ctx.session.user.id },
         },
         include: postDetailsInclude,
         cursor: cursor ? { id: cursor } : undefined,

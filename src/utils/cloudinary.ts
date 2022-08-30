@@ -10,6 +10,7 @@ export const uploadImage = async (
   const formData = new FormData();
   formData.append("file", selectedImage);
   formData.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
+
   const response = await axios.post(CLOUDINARY_UPLOAD_LINK, formData, {
     onUploadProgress: (progressEvent) => {
       const percentageProgress =
