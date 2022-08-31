@@ -1,13 +1,6 @@
 import { useDropzone } from "react-dropzone";
-import type { IFormInput } from "@/components/common/profile-settings";
-import { UseFormSetValue } from "react-hook-form";
 
-type fieldNameType = "images" | "bannerImages";
-
-const useSettingsDropZone = (
-  setFormValue: (fieldName: fieldNameType, files: File[]) => void,
-  formFieldName: fieldNameType
-) => {
+const useSettingsDropZone = (setFormValue: (files: File[]) => void) => {
   return useDropzone({
     noClick: true,
     multiple: false,
@@ -16,7 +9,7 @@ const useSettingsDropZone = (
     },
     onDrop: (files: File[]) => {
       if (files[0]) {
-        setFormValue(formFieldName, files);
+        setFormValue(files);
       }
     },
   });

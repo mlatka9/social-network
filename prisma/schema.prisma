@@ -64,7 +64,7 @@ model User {
   sessions      Session[]
   followedBy    User[]          @relation("UserFollows")
   following     User[]          @relation("UserFollows")
-  bio           String          @default("")
+  bio           String          @default("") @db.Text
   posts         Post[]          @relation(name: "createdPosts")
   comments      Comment[]
   likedPosts    PostLike[]
@@ -187,6 +187,14 @@ model Community {
   description String          @default("") @db.Text
   posts       Post[]
   members     UserCommunity[]
+  categoryId  String
+  category    Category        @relation(fields: [categoryId], references: [id])
+}
+
+model Category {
+  id         String      @id @default(uuid())
+  name       String      @unique
+  comunities Community[]
 }
 
 model UserCommunity {

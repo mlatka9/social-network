@@ -1,18 +1,21 @@
 import { useForm } from "react-hook-form";
 import { uploadImage } from "src/utils/cloudinary";
-import Image from "next/image";
-import { useState, useEffect, useMemo } from "react";
-import useSettingsDropZone from "src/hooks/use-settings-dropzone";
-import { useCommunityDetailsQuery, useCurrentUserQuery } from "src/hooks/query";
-import { useCommunityMutation, useProfileMutation } from "src/hooks/mutation";
-import clsx from "clsx";
+import { useState } from "react";
+import { useCommunityMutation } from "src/hooks/mutation";
 import { CommunityDetailsType } from "@/types/db";
+import FormImages from "../common/form-images";
+import FormTextarea from "../common/form-textarea";
+import FormInput from "../common/form-input";
+import Button from "../common/button";
+import FormSelect from "../common/form-select";
+import { useCategoryQuery } from "src/hooks/query";
 
-export interface FormInputType {
+export interface CommunitySettingsFormType {
   name: string;
   description: string;
   images: File[];
   bannerImages: File[];
+  category: string;
 }
 
 interface CommunitySettingsProps {
@@ -21,53 +24,32 @@ interface CommunitySettingsProps {
 
 const CommunitySettings = ({ communityDetails }: CommunitySettingsProps) => {
   const [isUpdating, setIsUpdating] = useState(false);
-  const { register, handleSubmit, setValue, watch } = useForm<FormInputType>({
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    watch,
+    formState: { errors },
+  } = useForm<CommunitySettingsFormType>({
     defaultValues: {
       description: communityDetails.description,
       name: communityDetails.name,
       bannerImages: [],
       images: [],
+      category: communityDetails.categoryId,
     },
   });
 
-  const {
-    isDragActive: isImageDragged,
-    getInputProps: getInputImageProps,
-    getRootProps: getRootImageProps,
-    open: openImage,
-  } = useSettingsDropZone(setValue, "images");
-
-  const {
-    isDragActive: isBannerDragged,
-    getInputProps: getInputBannerProps,
-    getRootProps: getRootbannerProps,
-    open: openBanner,
-  } = useSettingsDropZone(setValue, "bannerImages");
+  const { data, isSuccess: isCategorySuccess } = useCategoryQuery();
 
   const draftImageFile = watch("images")[0];
   const draftBannerImageFile = watch("bannerImages")[0];
 
-  const draftImage = useMemo(
-    () => (draftImageFile ? URL.createObjectURL(draftImageFile) : null),
-    [draftImageFile]
-  );
-
-  const draftBannerImage = useMemo(
-    () =>
-      draftBannerImageFile ? URL.createObjectURL(draftBannerImageFile) : null,
-    [draftBannerImageFile]
-  );
-
   const updateCommunity = useCommunityMutation();
 
-  // useEffect(() => {
-  //   if (!me) return;
-  //   setValue("name", me.name || "");
-  //   setValue("bio", me.bio);
-  // }, [me, setValue]);
+  const onSubmit = async (data: CommunitySettingsFormType) => {
+    const { name, description, bannerImages, images, category } = data;
 
-  const onSubmit = async (data: FormInputType) => {
-    const { name, description, bannerImages, images } = data;
     const imagesToUpload = [
       { name: "image", file: images[0] },
       { name: "bannerImage", file: bannerImages[0] },
@@ -87,87 +69,80 @@ const CommunitySettings = ({ communityDetails }: CommunitySettingsProps) => {
       description,
       image: imageUrl,
       bannerImage: bannerUrl,
+      category,
     });
     setIsUpdating(false);
   };
 
+  const setImage = (file: File[]) => {
+    setValue("images", file);
+  };
+
+  const setBanner = (file: File[]) => {
+    setValue("bannerImages", file);
+  };
+
+  if (!isCategorySuccess) return <>Loading..</>;
+
   return (
     <>
-      <div
-        className={clsx([
-          "w-full h-[150px] relative cursor-pointer group",
-          isBannerDragged && "outline-blue-500 outline-dashed",
-        ])}
-        {...getRootbannerProps()}
-        onClick={openBanner}
-      >
-        <Image
-          src={
-            draftBannerImage ||
-            communityDetails.bannerImage ||
-            "/images/fallback.svg"
-          }
-          layout="fill"
-          alt=""
-          objectFit="cover"
-        />
-        <input {...getInputBannerProps()} />
-        <div className="absolute inset-0 bg-neutral-800 z-10 opacity-0 group-hover:opacity-70 transition-opacity flex justify-center items-center">
-          <Image
-            src="/icons/camera-white.png"
-            height="30"
-            width="30"
-            alt=""
-            unoptimized
-          />
-        </div>
-      </div>
-      <div
-        className={clsx([
-          "w-32 h-32  rounded-full relative -top-16 left-5 overflow-hidden cursor-pointer group z-[100]",
-          isImageDragged && "outline-blue-500 outline-dashed",
-        ])}
-        {...getRootImageProps()}
-        onClick={openImage}
-      >
-        <Image
-          src={draftImage || communityDetails.image || "/images/fallback.svg"}
-          layout="fill"
-          alt=""
-          objectFit="cover"
-        />
-        <input {...getInputImageProps()} />
-        <div className="absolute inset-0 bg-neutral-800 z-10 opacity-0 group-hover:opacity-70 transition-opacity flex justify-center items-center">
-          <Image
-            src="/icons/camera-white.png"
-            height="30"
-            width="30"
-            alt=""
-            unoptimized
-          />
-        </div>
-      </div>
+      <FormImages
+        bannerImage={communityDetails.bannerImage}
+        image={communityDetails.image}
+        draftBannerImageFile={draftBannerImageFile}
+        draftImageFile={draftImageFile}
+        setBanner={setBanner}
+        setImage={setImage}
+      />
 
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col">
-        <p className="text-neutral-600 text-sm">name</p>
-        <input
-          {...register("name", { required: true, maxLength: 20 })}
-          className="bg-neutral-100 px-2 py-1 mt-1 rounded-md mb-5"
-        />
+        <div className="space-y-6">
+          <FormInput
+            label="name"
+            name="name"
+            error={errors.name}
+            rules={{
+              required: {
+                value: true,
+                message: "Name is required",
+              },
+              minLength: {
+                message: "Name must be at least 3 characters long",
+                value: 3,
+              },
+            }}
+            register={register}
+          />
 
-        <p className="text-neutral-600 text-sm">bio</p>
-        <input
-          {...register("description", { maxLength: 100 })}
-          className="bg-neutral-100 px-2 py-1 mt-1 rounded-md mb-5"
-        />
+          <FormTextarea
+            label="description"
+            name="description"
+            error={errors.description}
+            register={register}
+            rules={{
+              maxLength: {
+                message: "Bio can be up to 300 characters long",
+                value: 300,
+              },
+            }}
+          />
+
+          <FormSelect
+            label="category"
+            error={errors.category}
+            name="category"
+            register={register}
+            options={data}
+            watch={watch}
+          />
+        </div>
+
         <input type="file" {...register("images")} className="hidden" />
         <input type="file" {...register("bannerImages")} className="hidden" />
-        <button
-          type="submit"
-          className="bg-blue-500 rounded px-6 py-2 ml-auto self-start text-white cursor-pointer"
-        >
+
+        <Button className="mt-3">
           {isUpdating ? "Updating..." : "Submit"}
-        </button>
+        </Button>
       </form>
     </>
   );

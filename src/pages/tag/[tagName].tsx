@@ -3,7 +3,7 @@ import { unstable_getServerSession } from "next-auth/next";
 import { useRouter } from "next/router";
 import { authOptions } from "src/pages/api/auth/[...nextauth]";
 import { usePostsWithTagQuery } from "src/hooks/query";
-import Layout from "@/components/common/layout";
+import Layout from "@/components/layouts/main-layout";
 import PostList from "@/components/post/post-list";
 
 const TagPage = () => {

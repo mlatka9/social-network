@@ -5,13 +5,25 @@ import { prisma } from "../db/client";
 // Example router with queries that can only be hit if the user requesting is signed in
 export const communityRouter = createProtectedRouter()
   .query("getAll", {
+    input: z
+      .object({
+        categoryId: z.string().optional(),
+      })
+      .optional(),
     async resolve({ input, ctx }) {
       const communities = await prisma.community.findMany({
+        where: {
+          category: {
+            id: input?.categoryId,
+          },
+        },
         include: {
           _count: true,
+          category: true,
           members: {
             select: {
               userId: true,
+              role: true,
             },
           },
         },
@@ -23,6 +35,9 @@ export const communityRouter = createProtectedRouter()
         joinedByMe: members.some(
           (member) => member.userId === ctx.session.user.id
         ),
+        isOwner:
+          members.find((member) => member.role === "ADMIN")?.userId ===
+          ctx.session.user.id,
       }));
     },
   })
@@ -36,6 +51,7 @@ export const communityRouter = createProtectedRouter()
           id: input.id,
         },
         include: {
+          category: true,
           _count: true,
         },
       });
@@ -51,10 +67,10 @@ export const communityRouter = createProtectedRouter()
 
       const { _count, ...communityData } = community;
       return {
-        memebrsCount: _count.members,
         ...communityData,
+        memebrsCount: _count.members,
         joinedByMe: !!member,
-        isAdmin: member?.role === "ADMIN",
+        isOwner: member?.role === "ADMIN",
       };
     },
   })
@@ -88,11 +104,13 @@ export const communityRouter = createProtectedRouter()
   .mutation("addCommunity", {
     input: z.object({
       name: z.string(),
+      categoryId: z.string(),
     }),
     async resolve({ ctx, input }) {
       return await prisma.community.create({
         data: {
           name: input.name,
+          categoryId: input.categoryId,
           members: {
             create: {
               role: "ADMIN",
@@ -143,6 +161,24 @@ export const communityRouter = createProtectedRouter()
       }));
     },
   })
+  .query("getAllCategories", {
+    async resolve() {
+      const categores = await prisma.category.findMany({
+        include: {
+          _count: {
+            select: {
+              comunities: true,
+            },
+          },
+        },
+      });
+
+      return categores.map(({ _count, ...categoryData }) => ({
+        ...categoryData,
+        communitiesCount: _count.comunities,
+      }));
+    },
+  })
   .mutation("toggleMembership", {
     input: z.object({
       communityId: z.string(),
@@ -183,6 +219,7 @@ export const communityRouter = createProtectedRouter()
       description: z.string(),
       image: z.string().optional(),
       bannerImage: z.string().optional(),
+      category: z.string().optional(),
     }),
     async resolve({ ctx, input }) {
       const user = await prisma.userCommunity.findUnique({
@@ -207,6 +244,7 @@ export const communityRouter = createProtectedRouter()
           description: input.description,
           image: input.image,
           bannerImage: input.bannerImage,
+          categoryId: input.category,
         },
       });
     },

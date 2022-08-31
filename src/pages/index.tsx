@@ -4,7 +4,7 @@ import { authOptions } from "./api/auth/[...nextauth]";
 import PostInput from "@/components/post-input/post-input";
 import React from "react";
 import { useInfiniteFeedQuery } from "src/hooks/query";
-import Layout from "@/components/common/layout";
+import Layout from "@/components/layouts/main-layout";
 import PostList from "@/components/post/post-list";
 import { useRouter } from "next/router";
 import ModalWrapper from "@/components/common/modal-wrapper";

@@ -1,5 +1,5 @@
 import { useUserBookmarkedPostsQuery } from "src/hooks/query";
-import Layout from "@/components/common/layout";
+import Layout from "@/components/layouts/main-layout";
 import { unstable_getServerSession } from "next-auth";
 import { GetServerSidePropsContext } from "next";
 import { authOptions } from "./api/auth/[...nextauth]";

@@ -56,8 +56,6 @@ const PostCardFooter = ({ post }: PostCardFooterProps) => {
 
   useTogglePostLikeMutation();
 
-  console.log(post.bookmarkedByMe);
-
   return (
     <>
       <div className="flex items-center mt-5">

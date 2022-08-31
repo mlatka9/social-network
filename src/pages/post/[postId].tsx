@@ -3,7 +3,7 @@ import Head from "next/head";
 import { unstable_getServerSession } from "next-auth/next";
 import { useRouter } from "next/router";
 import { authOptions } from "src/pages/api/auth/[...nextauth]";
-import Layout from "@/components/common/layout";
+import Layout from "@/components/layouts/main-layout";
 import PostDetails from "@/components/post/post-details";
 
 const PostPage = () => {

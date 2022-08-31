@@ -9,21 +9,22 @@ import ButtonFollow from "../common/button-follow";
 import JoinCommunityButton from "./join-community-button";
 import CommunitySettingsButton from "./community-settings-button";
 import CommunitySettings from "./community-settings";
+import { Community } from "@prisma/client";
+import { CommunityDetailsType } from "@/types/db";
 
-const CommunityProfileHero = () => {
+interface CommunityProfileHeroProps {
+  community: CommunityDetailsType;
+}
+
+const CommunityProfileHero = ({ community }: CommunityProfileHeroProps) => {
   const { query, asPath, push } = useRouter();
 
   const communityId = query.params?.[0] as string;
   const section = query.params?.[1] as string;
 
-  const { data: community, isError } = useCommunityDetailsQuery(communityId);
-
   const closeModal = () => {
     push(`/community/${communityId}`, undefined, { shallow: true });
   };
-
-  if (isError) return <div>Cant find community</div>;
-  if (!community) return <div>Loading...</div>;
 
   return (
     <>
@@ -50,10 +51,13 @@ const CommunityProfileHero = () => {
 
         <div className="ml-6 w-full">
           <div className="flex items-baseline ">
-            <h1 className="font-poppins font-semibold text-2xl">
-              {community.name}
-            </h1>
-            <div className="text-xs  text-neutral-500 tracking-wide font-medium flex ml-7 space-x-4 ">
+            <div>
+              <p>{community.category.name}</p>
+              <h1 className="font-poppins font-semibold text-2xl">
+                {community.name}
+              </h1>
+            </div>
+            <div className="text-xs  text-neutral-500 tracking-wide font-medium flex ml-7 space-x-4 self-end mb-1">
               <Link href={`${asPath}/members`} shallow={true}>
                 <a>
                   <p className="cursor-pointer dark:text-primary-dark-700">
@@ -65,7 +69,7 @@ const CommunityProfileHero = () => {
                 </a>
               </Link>
             </div>
-            {community.isAdmin ? (
+            {community.isOwner ? (
               <CommunitySettingsButton />
             ) : (
               <JoinCommunityButton

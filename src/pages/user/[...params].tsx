@@ -9,7 +9,7 @@ import ModalWrapper from "@/components/common/modal-wrapper";
 
 import { useUserPostsQuery } from "src/hooks/query";
 
-import Layout from "@/components/common/layout";
+import Layout from "@/components/layouts/main-layout";
 import UserProfileHero from "@/components/user-profile/user-profile-hero";
 
 const User = () => {

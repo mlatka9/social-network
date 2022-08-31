@@ -144,7 +144,9 @@ const PostInput = ({
         </div>
       </div>
       <div className="flex items-center ml-[50px]">
-        <Button type="submit">Share</Button>
+        <Button type="submit" disabled={!postContent}>
+          Share
+        </Button>
       </div>
     </form>
   );

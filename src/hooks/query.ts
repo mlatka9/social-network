@@ -74,9 +74,10 @@ export const useUserQuery = (userId: string) => {
   );
 };
 
-export const useCurrentUserQuery = () => {
+export const useCurrentUserProfileQuery = () => {
   const { data } = useSession();
   const currentUserId = data?.user?.id;
+
   return trpc.useQuery(
     [
       "user.getById",
@@ -86,6 +87,7 @@ export const useCurrentUserQuery = () => {
     ],
     {
       enabled: !!currentUserId,
+      staleTime: Infinity,
     }
   );
 };
@@ -135,8 +137,8 @@ export const useFollowsQuery = (userId: string) => {
   return trpc.useQuery(["user.getFollows", { userId }]);
 };
 
-export const useCommunitiesQuery = () => {
-  return trpc.useQuery(["community.getAll"]);
+export const useCommunitiesQuery = (category?: string) => {
+  return trpc.useQuery(["community.getAll", { categoryId: category }]);
 };
 
 export const useCommunityPostsQuery = (communityId: string) => {
@@ -171,4 +173,8 @@ export const useSearchUsersQuery = (searchPhrase: string) => {
     keepPreviousData: true,
     // enabled: !!searchPhrase,
   });
+};
+
+export const useCategoryQuery = () => {
+  return trpc.useQuery(["community.getAllCategories"]);
 };

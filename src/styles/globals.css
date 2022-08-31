@@ -11,7 +11,7 @@ body {
 }
 
 *:focus {
-  outline: 2px dashed green;
+  /* outline: 2px dashed green; */
 }
 
 *:focus-visible {

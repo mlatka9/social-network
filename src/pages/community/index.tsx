@@ -7,31 +7,12 @@ import { useState } from "react";
 import ModalWrapper from "@/components/common/modal-wrapper";
 import CommunityCreator from "@/components/community/community-creator";
 import Button from "@/components/common/button";
-import Layout from "@/components/common/layout";
+import Layout from "@/components/layouts/community-layout";
 
 const CommunitiesPage = () => {
-  const [isCommunityCreatorOpen, setIsCommunityCreatorOpen] = useState(false);
-
-  const handleCloseCreator = () => {
-    setIsCommunityCreatorOpen(false);
-  };
-
-  const handleOpenCreator = () => {
-    setIsCommunityCreatorOpen(true);
-  };
-
   return (
     <Layout>
       <CommunityList />
-      {isCommunityCreatorOpen && (
-        <ModalWrapper
-          handleCloseModal={handleCloseCreator}
-          title="Create community"
-        >
-          <CommunityCreator handleCloseCreator={handleCloseCreator} />
-        </ModalWrapper>
-      )}
-      <Button onClick={handleOpenCreator}>Create community</Button>
     </Layout>
   );
 };

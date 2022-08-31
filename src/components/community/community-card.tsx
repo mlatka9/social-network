@@ -4,15 +4,24 @@ import type { CommunityDetailsType } from "@/types/db";
 import Image from "next/image";
 import JoinCommunityButton from "./join-community-button";
 
-type CommunityCardProps = Omit<CommunityDetailsType, "isAdmin" | "bannerImage">;
+type CommunityCardProps = {
+  image: string;
+  memebrsCount: number;
+  name: string;
+  description: string;
+  categoryName: string;
+  isOwner: boolean;
+  joinedByMe: boolean;
+};
 
 const CommunityCard = ({
   image,
-  id,
   memebrsCount,
   name,
-  joinedByMe,
   description,
+  categoryName,
+  isOwner,
+  joinedByMe,
 }: CommunityCardProps) => {
   return (
     <div className="mb-5 bg-white py-3 px-5 rounded-lg">
@@ -26,15 +35,25 @@ const CommunityCard = ({
           className="rounded-lg"
           objectFit="cover"
         />
-
         <div className="ml-3">
           <p className=" font-poppins font-medium">{name}</p>
           <p className=" text-neutral-500 text-xs font-medium">
             {memebrsCount} Members
           </p>
         </div>
-
-        <JoinCommunityButton joinedByMe={joinedByMe} communityId={id} />
+        <div className="flex items-baseline ml-auto space-x-1">
+          {isOwner && (
+            <div className="text-sm  bg-yellow-200 text-yellow-800 px-1 py-[2px] rounded-md">
+              onwer
+            </div>
+          )}
+          {joinedByMe && (
+            <div className="text-sm  bg-orange-200 text-orange-900 px-1 py-[2px] rounded-md">
+              joined
+            </div>
+          )}
+          <p className="text-sm font-bold">{categoryName}</p>
+        </div>
       </div>
       {description && (
         <p className="text-sm text-neutral-600 mt-3">{description}</p>

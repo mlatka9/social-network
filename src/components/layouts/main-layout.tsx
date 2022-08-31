@@ -1,13 +1,13 @@
 import { ReactNode } from "react";
 import PopularCommunitiesList from "@/components/community/popular-communities-list";
 import Header from "../header/header";
-import TrendingTagsList from "./trending-tags-list";
+import TrendingTagsList from "@/components/common/trending-tags-list";
 
 interface LayoutProps {
   children: ReactNode;
 }
 
-export default function Layout({ children }: LayoutProps) {
+const MainLayout = ({ children }: LayoutProps) => {
   return (
     <>
       <Header />
@@ -20,4 +20,6 @@ export default function Layout({ children }: LayoutProps) {
       </div>
     </>
   );
-}
+};
+
+export default MainLayout;
