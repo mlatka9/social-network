@@ -6,10 +6,12 @@ interface JoinCommunityButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   joinedByMe: boolean;
   communityId: string;
+  isSmall?: boolean;
 }
 const JoinCommunityButton = ({
   communityId,
   joinedByMe,
+  isSmall = false,
   ...buttonProps
 }: JoinCommunityButtonProps) => {
   const toggleMembership = useToggleCommunityMembershipMutation();
@@ -19,7 +21,7 @@ const JoinCommunityButton = ({
     toggleMembership({ communityId });
   };
   return (
-    <Button onClick={handleToggleCommunity} {...buttonProps}>
+    <Button onClick={handleToggleCommunity} {...buttonProps} isSmall={isSmall}>
       {joinedByMe ? "Leave" : "Join"}
     </Button>
   );

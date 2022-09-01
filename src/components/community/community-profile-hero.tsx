@@ -4,7 +4,7 @@ import { useCommunityDetailsQuery, useUserQuery } from "src/hooks/query";
 import { useRouter } from "next/router";
 import { router } from "@trpc/server";
 import ModalWrapper from "../common/modal-wrapper";
-import MemebrsList from "./memebrs-list";
+import Members from "./members-list";
 import ButtonFollow from "../common/button-follow";
 import JoinCommunityButton from "./join-community-button";
 import CommunitySettingsButton from "./community-settings-button";
@@ -86,7 +86,7 @@ const CommunityProfileHero = ({ community }: CommunityProfileHeroProps) => {
                 <a className="hover:underline">
                   <p className="cursor-pointer dark:text-primary-dark-700">
                     <span className="text-neutral-800 dark:text-primary-dark-700 font-semibold mr-1 font-poppins">
-                      {community.memebrsCount}
+                      {community.membersCount}
                     </span>
                     Members
                   </p>
@@ -115,7 +115,7 @@ const CommunityProfileHero = ({ community }: CommunityProfileHeroProps) => {
       </div>
       {section === "members" && (
         <ModalWrapper title="Members" handleCloseModal={closeModal}>
-          <MemebrsList />
+          <Members />
         </ModalWrapper>
       )}
       {section === "settings" && (

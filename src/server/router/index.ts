@@ -11,6 +11,7 @@ import { bookmarkRouter } from "./bookmark";
 import { tagRouter } from "./tag";
 import { communityRouter } from "./community";
 import { searchRouter } from "./search";
+import { exploreRouter } from "./explore";
 
 export const appRouter = createRouter()
   .transformer(superjson)
@@ -22,7 +23,8 @@ export const appRouter = createRouter()
   .merge("bookmarks.", bookmarkRouter)
   .merge("tags.", tagRouter)
   .merge("community.", communityRouter)
-  .merge("search.", searchRouter);
+  .merge("search.", searchRouter)
+  .merge("explore.", exploreRouter);
 
 // export type definition of API
 export type AppRouter = typeof appRouter;

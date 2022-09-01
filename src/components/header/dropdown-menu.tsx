@@ -1,12 +1,12 @@
 import Link from "next/link";
 import { signOut } from "next-auth/react";
-import Image from "next/image";
 import ThemeSwitch from "../common/theme-switch";
 
 import ProfileIcon from "@/components/common/icons/profile";
 import BookmarkIcon from "@/components/common/icons/bookmark-empty";
 import LogOutIcon from "@/components/common/icons/log-out";
 import GraphIcon from "../common/icons/graph";
+import HashIcon from "../common/icons/hash";
 
 interface DropdownMenu {
   userId: string;
@@ -27,7 +27,6 @@ const DropdownMenu = ({ userId }: DropdownMenu) => {
               </a>
             </Link>
           </li>
-
           <li className="hover:bg-slate-100 dark:hover:bg-primary-dark-150  rounded-lg flex items-center w-full   ">
             <Link href="/bookmarks">
               <a className="px-3 py-3 w-full rounded-lg flex">
@@ -41,6 +40,14 @@ const DropdownMenu = ({ userId }: DropdownMenu) => {
               <a className="px-3 py-3 w-full rounded-lg flex">
                 <GraphIcon />
                 <span className="ml-2">Communities</span>
+              </a>
+            </Link>
+          </li>
+          <li className="hover:bg-slate-100 dark:hover:bg-primary-dark-150  rounded-lg flex items-center w-full   ">
+            <Link href="/explore">
+              <a className="px-3 py-3 w-full rounded-lg flex">
+                <HashIcon />
+                <span className="ml-2">Explore</span>
               </a>
             </Link>
           </li>

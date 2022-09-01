@@ -3,13 +3,12 @@ import { unstable_getServerSession } from "next-auth/next";
 import { authOptions } from "./api/auth/[...nextauth]";
 import PostInput from "@/components/post-input/post-input";
 import React from "react";
-import { useInfiniteFeedQuery } from "src/hooks/query";
+import { useInfiniteFeedQuery, useSuggestedUsersQuery } from "src/hooks/query";
 import Layout from "@/components/layouts/main-layout";
 import PostList from "@/components/post/post-list";
 import { useRouter } from "next/router";
 import ModalWrapper from "@/components/common/modal-wrapper";
 import PostDetails from "@/components/post/post-details";
-import Header from "@/components/header/header";
 import TextHeader from "@/components/common/text-header";
 import PostsSortPanel from "@/components/common/posts-sort-panel";
 
@@ -37,6 +36,9 @@ const Home: NextPage = () => {
     sort,
     time,
   });
+
+  const { data: suggested } = useSuggestedUsersQuery();
+  console.log("suggested users", suggested);
 
   if (!isSuccess) {
     return <div>loading...</div>;

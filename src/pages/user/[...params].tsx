@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import FollowersList from "@/components/common/followers-list";
+import UserFollows from "@/components/common/user-follows";
 import ProfileSettings from "@/components/common/profile-settings";
 import { unstable_getServerSession } from "next-auth/next";
 import { authOptions } from "src/pages/api/auth/[...nextauth]";
@@ -36,7 +36,7 @@ const User = () => {
       />
       {(section === "followers" || section === "following") && (
         <ModalWrapper title="Followers" handleCloseModal={closeModal}>
-          <FollowersList />
+          <UserFollows section={section} userId={userId} />
         </ModalWrapper>
       )}
 

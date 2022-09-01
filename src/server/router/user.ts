@@ -44,49 +44,115 @@ export const userRouter = createProtectedRouter()
       return ctx.session.user;
     },
   })
-  .query("getFollows", {
+  .query("getFollowing", {
     input: z.object({
       userId: z.string(),
     }),
-    async resolve({ input }) {
-      const user = await prisma.user.findFirstOrThrow({
+    async resolve({ input, ctx }) {
+      const userFollowing = await prisma.user.findMany({
         where: {
-          id: input.userId,
-        },
-        select: {
-          following: {
-            include: {
-              _count: {
-                select: {
-                  followedBy: true,
-                },
-              },
-            },
-          },
           followedBy: {
-            include: {
-              _count: {
-                select: {
-                  followedBy: true,
-                },
-              },
+            some: {
+              id: ctx.session.user.id,
             },
           },
         },
       });
-      const { followedBy, following, ...userData } = user;
 
-      return {
-        ...userData,
-        followedBy: followedBy.map(({ _count, ...data }) => ({
-          ...data,
-          followers: _count.followedBy,
-        })),
-        following: following.map(({ _count, ...data }) => ({
-          ...data,
-          followers: _count.followedBy,
-        })),
-      };
+      const userFollowsIds = userFollowing.map((user) => user.id);
+
+      const users = await prisma.user.findMany({
+        where: {
+          followedBy: {
+            some: {
+              id: input.userId,
+            },
+          },
+        },
+        include: {
+          followedBy: {
+            where: {
+              id: {
+                in: userFollowsIds,
+              },
+            },
+            select: {
+              id: true,
+              name: true,
+            },
+            // take: 1,
+          },
+          _count: {
+            select: {
+              followedBy: true,
+            },
+          },
+        },
+      });
+
+      return users.map(
+        ({ _count, bannerImage, emailVerified, followedBy, ...userData }) => ({
+          ...userData,
+          mutualUsers: followedBy,
+          followersCount: _count.followedBy,
+        })
+      );
+    },
+  })
+  .query("getFollowers", {
+    input: z.object({
+      userId: z.string(),
+    }),
+    async resolve({ input, ctx }) {
+      const userFollowing = await prisma.user.findMany({
+        where: {
+          followedBy: {
+            some: {
+              id: ctx.session.user.id,
+            },
+          },
+        },
+      });
+
+      const userFollowsIds = userFollowing.map((user) => user.id);
+      // .filter((id) => id !== ctx.session.user.id);
+
+      const users = await prisma.user.findMany({
+        where: {
+          following: {
+            some: {
+              id: input.userId,
+            },
+          },
+        },
+        include: {
+          followedBy: {
+            where: {
+              id: {
+                in: userFollowsIds,
+              },
+            },
+            select: {
+              id: true,
+              name: true,
+            },
+            // take: 1,
+          },
+          _count: {
+            select: {
+              followedBy: true,
+            },
+          },
+        },
+      });
+
+      return users.map(
+        ({ _count, bannerImage, emailVerified, followedBy, ...userData }) => ({
+          ...userData,
+          mutualUsers: followedBy,
+          followersCount: _count.followedBy,
+        })
+      );
     },
   })
   .query("getBySearchPhrase", {

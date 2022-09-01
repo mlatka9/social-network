@@ -36,7 +36,7 @@ const CommunityList = () => {
             categoryName={community.category.name}
             description={community.description}
             image={community.image}
-            memebrsCount={community.membersCount}
+            membersCount={community.membersCount}
             name={community.name}
           />
         </div>

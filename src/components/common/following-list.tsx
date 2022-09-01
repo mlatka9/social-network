@@ -1,14 +1,12 @@
-import { useFollowersQuery } from "src/hooks/query";
+import { useFollowingQuery } from "src/hooks/query";
 import UserCard from "./user-card";
 
-interface FollowersListProps {
+interface FollowingListProps {
   userId: string;
 }
 
-const FollowersList = ({ userId }: FollowersListProps) => {
-  const { data, isSuccess } = useFollowersQuery(userId);
-
-  console.log(data);
+const FollowingList = ({ userId }: FollowingListProps) => {
+  const { data, isSuccess } = useFollowingQuery(userId);
 
   if (!isSuccess) return <>loading...</>;
 
@@ -29,4 +27,4 @@ const FollowersList = ({ userId }: FollowersListProps) => {
   );
 };
 
-export default FollowersList;
+export default FollowingList;

@@ -23,7 +23,7 @@ const PopularCommunitiesList = () => {
                 {`#${communityData.communityName}`}
               </p>
               <p className="font-medium text-xs text-gray-400 dark:text-white">
-                {communityData.memebrsCount} members
+                {communityData.members} members
               </p>
             </div>
           </Link>

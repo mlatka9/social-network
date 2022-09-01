@@ -46,7 +46,7 @@ const UserProfileHero = ({}: UserProfileHeroProps) => {
 
             <div className="text-xs  text-neutral-500 tracking-wide font-medium flex ml-7 space-x-4 ">
               <Link href={`${asPath}/following`} shallow={true}>
-                <a>
+                <a className="hover:underline">
                   <p className="cursor-pointer dark:text-primary-dark-700">
                     <span className="text-neutral-800 dark:text-primary-dark-700 font-semibold mr-1 font-poppins">
                       {user.followingCount}
@@ -56,7 +56,7 @@ const UserProfileHero = ({}: UserProfileHeroProps) => {
                 </a>
               </Link>
               <Link href={`${asPath}/followers`} shallow={true}>
-                <a>
+                <a className="hover:underline">
                   <p className="cursor-pointer dark:text-primary-dark-700">
                     <span className="text-neutral-800 dark:text-primary-dark-700 font-semibold mr-1 font-poppins">
                       {user.followedByCount}

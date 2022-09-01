@@ -12,7 +12,7 @@ import CommunityFavouriteIcon from "./community-favourite-icon";
 type CommunityCardProps = {
   id: string;
   image: string;
-  memebrsCount: number;
+  membersCount: number;
   name: string;
   description: string;
   categoryName: string;
@@ -24,7 +24,7 @@ type CommunityCardProps = {
 const CommunityCard = ({
   id,
   image,
-  memebrsCount,
+  membersCount,
   name,
   description,
   categoryName,
@@ -47,7 +47,7 @@ const CommunityCard = ({
         <div className="ml-3">
           <p className=" font-poppins font-medium">{name}</p>
           <p className=" text-neutral-500 text-xs font-medium">
-            {memebrsCount} Members
+            {membersCount} Members
           </p>
         </div>
         <div className="flex items-baseline ml-auto space-x-1">
@@ -77,7 +77,7 @@ const CommunityCard = ({
           <JoinCommunityButton
             joinedByMe={joinedByMe}
             communityId={id}
-            className="text-xs !px-4 py-1"
+            isSmall
           />
         )}
       </div>

@@ -146,8 +146,12 @@ export const useTrendingTagsQuery = () => {
   return trpc.useQuery(["tags.trending"]);
 };
 
-export const useFollowsQuery = (userId: string) => {
-  return trpc.useQuery(["user.getFollows", { userId }]);
+export const useFollowingQuery = (userId: string) => {
+  return trpc.useQuery(["user.getFollowing", { userId }]);
+};
+
+export const useFollowersQuery = (userId: string) => {
+  return trpc.useQuery(["user.getFollowers", { userId }]);
 };
 
 export const useCommunitiesQuery = (category?: string, filter?: string) => {
@@ -207,4 +211,8 @@ export const useSearchUsersQuery = (searchPhrase: string) => {
 
 export const useCategoryQuery = () => {
   return trpc.useQuery(["community.getAllCategories"]);
+};
+
+export const useSuggestedUsersQuery = () => {
+  return trpc.useQuery(["explore.getSuggestedUsers"]);
 };

@@ -109,7 +109,7 @@ export const communityRouter = createProtectedRouter()
       const { _count, favouriteBy, ...communityData } = community;
       return {
         ...communityData,
-        memebrsCount: _count.members,
+        membersCount: _count.members,
         joinedByMe: !!member,
         isMyfavourite: favouriteBy.some(
           (user) => user.userId === ctx.session.user.id
@@ -122,8 +122,20 @@ export const communityRouter = createProtectedRouter()
     input: z.object({
       communityId: z.string(),
     }),
-    async resolve({ input }) {
-      const memebrs = await prisma.user.findMany({
+    async resolve({ input, ctx }) {
+      const userFollowing = await prisma.user.findMany({
+        where: {
+          followedBy: {
+            some: {
+              id: ctx.session.user.id,
+            },
+          },
+        },
+      });
+
+      const userFollowsIds = userFollowing.map((user) => user.id);
+
+      const members = await prisma.user.findMany({
         where: {
           communities: {
             some: {
@@ -132,6 +144,18 @@ export const communityRouter = createProtectedRouter()
           },
         },
         include: {
+          followedBy: {
+            where: {
+              id: {
+                in: userFollowsIds,
+              },
+            },
+            select: {
+              id: true,
+              name: true,
+            },
+            // take: 1,
+          },
           _count: {
             select: {
               followedBy: true,
@@ -139,10 +163,21 @@ export const communityRouter = createProtectedRouter()
           },
         },
       });
-      return memebrs.map(({ _count, ...memberData }) => ({
-        ...memberData,
-        followersCount: _count.followedBy,
-      }));
+
+      return members.map(
+        ({
+          _count,
+          emailVerified,
+          bannerImage,
+          followedBy,
+
+          ...memberData
+        }) => ({
+          ...memberData,
+          mutualUsers: followedBy,
+          followersCount: _count.followedBy,
+        })
+      );
     },
   })
   .mutation("addCommunity", {
@@ -236,7 +271,7 @@ export const communityRouter = createProtectedRouter()
       return data.map(({ _count, ...userCommunityData }, index) => ({
         ...userCommunityData,
         communityName: comunitiesNames[index]?.name!,
-        memebrsCount: _count.userId,
+        members: _count.userId,
       }));
     },
   })
