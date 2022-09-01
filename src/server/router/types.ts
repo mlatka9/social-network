@@ -50,6 +50,12 @@ export enum SearchType {
   USER,
 }
 
+export enum CommunityFilterType {
+  JOINED = "joined",
+  OWNED = "owned",
+  FAVOURITE = "favourite",
+}
+
 const postWithUserAndImages = Prisma.validator<Prisma.PostArgs>()({
   include: postDetailsInclude,
 });

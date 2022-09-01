@@ -2,10 +2,21 @@ import { useRouter } from "next/router";
 import Button from "../common/button";
 
 const CommunitySettingsButton = () => {
-  const { push, asPath } = useRouter();
-
+  const router = useRouter();
   const openCommuntiSettingsModal = () => {
-    push(`${asPath}/settings`, undefined, { shallow: true });
+    const { section, communityId, ...restParams } = router.query;
+
+    router.push(
+      {
+        pathname: `/community/${communityId}`,
+        query: { ...restParams, section: "settings" },
+      },
+      undefined,
+      {
+        shallow: true,
+        scroll: false,
+      }
+    );
   };
 
   return <Button onClick={openCommuntiSettingsModal}>Settings</Button>;

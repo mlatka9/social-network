@@ -28,3 +28,10 @@ export const populatePost = (post: PostCardProps, userId: string) => {
     bookmarkedByMe: bookmarkedBy.some((bookmark) => bookmark.userId === userId),
   };
 };
+
+export const getDateXDaysAgo = (numOfDays: number, date = new Date()) => {
+  const daysAgo = new Date(date.getTime());
+  daysAgo.setDate(date.getDate() - numOfDays);
+
+  return daysAgo;
+};

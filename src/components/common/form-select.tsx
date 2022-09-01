@@ -7,7 +7,7 @@ import {
   UseFormRegister,
   UseFormWatch,
 } from "react-hook-form";
-import FormErrorMessage from "./icons/form-error-message";
+import FormErrorMessage from "./form-error-message";
 
 type FormSelectOptionType = { id: string; name: string };
 
@@ -32,7 +32,6 @@ const FormSelect = <TFormValues,>({
   ...props
 }: FormSelectProps<TFormValues>) => {
   const selectedValue = watch(name);
-  console.log(selectedValue);
 
   return (
     <div>

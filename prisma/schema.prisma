@@ -54,25 +54,28 @@ model Session {
 }
 
 model User {
-  id            String          @id @default(cuid())
-  name          String?         @db.Text
-  email         String?         @unique
-  emailVerified DateTime?
-  image         String?         @db.Text
-  bannerImage   String?         @db.Text
-  accounts      Account[]
-  sessions      Session[]
-  followedBy    User[]          @relation("UserFollows")
-  following     User[]          @relation("UserFollows")
-  bio           String          @default("") @db.Text
-  posts         Post[]          @relation(name: "createdPosts")
-  comments      Comment[]
-  likedPosts    PostLike[]
-  likedComments CommentLike[]
-  bookmarks     Bookmark[]
-  communities   UserCommunity[]
-  mentions      Mention[]
+  id                   String          @id @default(cuid())
+  name                 String?         @db.Text
+  email                String?         @unique
+  emailVerified        DateTime?
+  image                String?         @db.Text
+  bannerImage          String?         @db.Text
+  accounts             Account[]
+  sessions             Session[]
+  followedBy           User[]          @relation("UserFollows")
+  following            User[]          @relation("UserFollows")
+  bio                  String          @default("") @db.Text
+  posts                Post[]          @relation(name: "createdPosts")
+  comments             Comment[]
+  likedPosts           PostLike[]
+  likedComments        CommentLike[]
+  bookmarks            Bookmark[]
+  communities          UserCommunity[]
+  mentions             Mention[]
+  favouriteCommunities FavouriteCommunity[]    
 }
+
+
 
 model VerificationToken {
   identifier String
@@ -187,8 +190,18 @@ model Community {
   description String          @default("") @db.Text
   posts       Post[]
   members     UserCommunity[]
+  favouriteBy FavouriteCommunity[]      
   categoryId  String
   category    Category        @relation(fields: [categoryId], references: [id])
+}
+
+model FavouriteCommunity {
+  communityId String
+  community   Community @relation(fields: [communityId], references: [id], onDelete: Cascade)
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@id([userId, communityId])
 }
 
 model Category {

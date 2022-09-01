@@ -5,7 +5,7 @@ import {
   RegisterOptions,
   UseFormRegister,
 } from "react-hook-form";
-import FormErrorMessage from "./icons/form-error-message";
+import FormErrorMessage from "./form-error-message";
 
 export type FormInputProps<TFormValues> = {
   label: string;

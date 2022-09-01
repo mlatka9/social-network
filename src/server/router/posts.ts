@@ -5,6 +5,7 @@ import { populatePost } from "./utils";
 import { postDetailsInclude } from "./types";
 import { trpc } from "src/utils/trpc";
 import { TRPCError } from "@trpc/server";
+import { getDateXDaysAgo } from "./utils";
 
 // Example router with queries that can only be hit if the user requesting is signed in
 export const postRouter = createProtectedRouter()
@@ -34,6 +35,8 @@ export const postRouter = createProtectedRouter()
     input: z.object({
       limit: z.number().min(1).max(100).nullish(),
       cursor: z.string().nullish(),
+      sort: z.enum(["top"]).optional(),
+      time: z.enum(["day", "week"]).optional(),
     }),
     async resolve({ ctx, input }) {
       const { cursor } = input;
@@ -62,14 +65,30 @@ export const postRouter = createProtectedRouter()
               },
             },
           ],
+          createdAt:
+            input.sort === "top"
+              ? {
+                  gte:
+                    input.time === "day"
+                      ? getDateXDaysAgo(1, new Date())
+                      : getDateXDaysAgo(7, new Date()),
+                }
+              : undefined,
           isDeleted: false,
           NOT: { userId: ctx.session.user.id },
         },
         include: postDetailsInclude,
         cursor: cursor ? { id: cursor } : undefined,
-        orderBy: {
-          createdAt: "desc",
-        },
+        orderBy:
+          input.sort === "top"
+            ? {
+                likes: {
+                  _count: "desc",
+                },
+              }
+            : {
+                createdAt: "desc",
+              },
       });
 
       const populatedPosts = posts.map((post) =>
@@ -95,6 +114,8 @@ export const postRouter = createProtectedRouter()
       userId: z.string().optional(),
       tagName: z.string().optional(),
       communityId: z.string().optional(),
+      sort: z.enum(["top"]).optional(),
+      time: z.enum(["day", "week"]).optional(),
     }),
     async resolve({ ctx, input }) {
       const { cursor } = input;
@@ -103,6 +124,15 @@ export const postRouter = createProtectedRouter()
       const posts = await prisma.post.findMany({
         take: limit + 1,
         where: {
+          createdAt:
+            input.sort === "top"
+              ? {
+                  gte:
+                    input.time === "day"
+                      ? getDateXDaysAgo(1, new Date())
+                      : getDateXDaysAgo(7, new Date()),
+                }
+              : undefined,
           user: {
             id: input.userId,
           },
@@ -120,9 +150,16 @@ export const postRouter = createProtectedRouter()
         },
         include: postDetailsInclude,
         cursor: cursor ? { id: cursor } : undefined,
-        orderBy: {
-          createdAt: "desc",
-        },
+        orderBy:
+          input.sort === "top"
+            ? {
+                likes: {
+                  _count: "desc",
+                },
+              }
+            : {
+                createdAt: "desc",
+              },
       });
 
       const populatedPosts = posts.map((post) =>

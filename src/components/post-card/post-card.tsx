@@ -17,16 +17,24 @@ export interface PostCardProps {
 const PostCard = ({ post }: PostCardProps) => {
   const router = useRouter();
 
-  const showModalOnClick = router.asPath === "/";
+  const basePath = router.asPath.split("?")[0];
+
+  const showModalOnClick = basePath === "/";
 
   const goToPostDetails = () => {
-    const url = showModalOnClick
-      ? `${router.asPath}?postId=${post.id}`
-      : `/post/${post.id}`;
-    router.push(url, `/post/${post.id}`, {
-      shallow: true,
-      scroll: showModalOnClick ? false : true,
-    });
+    const url = showModalOnClick ? `${basePath}` : `/post/${post.id}`;
+
+    router.push(
+      {
+        pathname: url,
+        query: { ...router.query, postId: post.id },
+      },
+      `/post/${post.id}`,
+      {
+        shallow: true,
+        scroll: false,
+      }
+    );
   };
 
   const [postContentRef, { height }] = useElementSize();

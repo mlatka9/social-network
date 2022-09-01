@@ -11,16 +11,32 @@ import ModalWrapper from "@/components/common/modal-wrapper";
 import PostDetails from "@/components/post/post-details";
 import Header from "@/components/header/header";
 import TextHeader from "@/components/common/text-header";
+import PostsSortPanel from "@/components/common/posts-sort-panel";
 
 const Home: NextPage = () => {
   const router = useRouter();
   const showcasedPostId = router.query.postId as string | undefined;
+  const sort = router.query.sort as string | undefined;
+  const time = router.query.time as string | undefined;
 
   const closeShowcasedPost = () => {
-    router.push("/", undefined, { scroll: false, shallow: true });
+    const { postId, ...restParams } = router.query;
+    router.push(
+      {
+        pathname: "/",
+        query: { ...restParams },
+      },
+      undefined,
+      {
+        shallow: true,
+        scroll: false,
+      }
+    );
   };
-  const { data, fetchNextPage, isSuccess, hasNextPage } =
-    useInfiniteFeedQuery();
+  const { data, fetchNextPage, isSuccess, hasNextPage } = useInfiniteFeedQuery({
+    sort,
+    time,
+  });
 
   if (!isSuccess) {
     return <div>loading...</div>;
@@ -36,6 +52,7 @@ const Home: NextPage = () => {
         </div>
 
         <div className="mb-5" />
+        <PostsSortPanel pathname={`/`} />
         <PostList
           data={data}
           fetchNextPage={fetchNextPage}

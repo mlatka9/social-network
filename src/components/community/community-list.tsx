@@ -1,14 +1,19 @@
 import { useCommunitiesQuery } from "src/hooks/query";
-import Link from "next/link";
 import CommunityCard from "./community-card";
 import { useRouter } from "next/router";
+import CommunityFilter from "./community-filter";
 
 const CommunityList = () => {
   const router = useRouter();
 
   const category = router.query.category as string | undefined;
+  const filter = router.query.filter as string | undefined;
 
-  const { data, isSuccess } = useCommunitiesQuery(category);
+  const { data, isSuccess } = useCommunitiesQuery(category, filter);
+
+  const goToCommunity = (communityId: string) => {
+    router.push(`/community/${communityId}`);
+  };
 
   if (!isSuccess) {
     return <div>loading...</div>;
@@ -16,20 +21,25 @@ const CommunityList = () => {
 
   return (
     <div>
+      <CommunityFilter />
       {data.map((community) => (
-        <Link href={`/community/${community.id}`} key={community.id}>
-          <a>
-            <CommunityCard
-              isOwner={community.isOwner}
-              joinedByMe={community.joinedByMe}
-              categoryName={community.category.name}
-              description={community.description}
-              image={community.image}
-              memebrsCount={community.membersCount}
-              name={community.name}
-            />
-          </a>
-        </Link>
+        <div
+          onClick={() => goToCommunity(community.id)}
+          key={community.id}
+          className="cursor-pointer"
+        >
+          <CommunityCard
+            isMyfavourite={community.isMyfavourite}
+            id={community.id}
+            isOwner={community.isOwner}
+            joinedByMe={community.joinedByMe}
+            categoryName={community.category.name}
+            description={community.description}
+            image={community.image}
+            memebrsCount={community.membersCount}
+            name={community.name}
+          />
+        </div>
       ))}
     </div>
   );

@@ -1,15 +1,28 @@
 import { trpc } from "../utils/trpc";
 import { useSession } from "next-auth/react";
+import { CommunityFilterType } from "src/server/router/types";
 
-export const useInfiniteFeedQuery = () => {
+export const useInfiniteFeedQuery = ({
+  sort,
+  time,
+}: {
+  sort?: string;
+  time?: string;
+} = {}) => {
   return trpc.useInfiniteQuery(
     [
       "post.getInfiniteFeed",
       {
         limit: 5,
+        sort: sort === "top" ? sort : undefined,
+        time:
+          time === "day" || time === "week"
+            ? (time as "day" | "week")
+            : undefined,
       },
     ],
     {
+      keepPreviousData: true,
       getNextPageParam: (lastPage) => lastPage.nextCursor,
     }
   );
@@ -137,20 +150,37 @@ export const useFollowsQuery = (userId: string) => {
   return trpc.useQuery(["user.getFollows", { userId }]);
 };
 
-export const useCommunitiesQuery = (category?: string) => {
-  return trpc.useQuery(["community.getAll", { categoryId: category }]);
+export const useCommunitiesQuery = (category?: string, filter?: string) => {
+  return trpc.useQuery(["community.getAll", { categoryId: category, filter }]);
 };
 
-export const useCommunityPostsQuery = (communityId: string) => {
+export const useCommunityPostsQuery = ({
+  communityId,
+  sort,
+  time,
+  enabled,
+}: {
+  communityId: string;
+  sort?: string;
+  time?: string;
+  enabled?: boolean;
+}) => {
   return trpc.useInfiniteQuery(
     [
       "post.getAll",
       {
         limit: 5,
         communityId: communityId,
+        sort: sort === "top" ? sort : undefined,
+        time:
+          time === "day" || time === "week"
+            ? (time as "day" | "week")
+            : undefined,
       },
     ],
     {
+      keepPreviousData: true,
+      retry: false,
       getNextPageParam: (lastPage) => lastPage.nextCursor,
     }
   );

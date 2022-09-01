@@ -17,3 +17,25 @@ body {
 *:focus-visible {
   outline: 2px dashed red;
 }
+
+/* ===== Scrollbar CSS ===== */
+/* Firefox */
+* {
+  scrollbar-width: auto;
+  scrollbar-color: #bbb7c8 #ffffff;
+}
+
+/* Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+  width: 14px;
+}
+
+*::-webkit-scrollbar-track {
+  background: #ffffff;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: #bbb7c8;
+  border-radius: 10px;
+  border: 2px solid #ffffff;
+}

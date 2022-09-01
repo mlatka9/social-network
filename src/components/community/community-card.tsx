@@ -3,8 +3,14 @@ import UserProfilePicture from "../common/user-profile-image";
 import type { CommunityDetailsType } from "@/types/db";
 import Image from "next/image";
 import JoinCommunityButton from "./join-community-button";
+import StarEmptyIcon from "../common/icons/star-empty";
+import StarIcon from "../common/icons/star";
+import { useToggleMarkFavouriteCommunityMutation } from "src/hooks/mutation";
+import React from "react";
+import CommunityFavouriteIcon from "./community-favourite-icon";
 
 type CommunityCardProps = {
+  id: string;
   image: string;
   memebrsCount: number;
   name: string;
@@ -12,9 +18,11 @@ type CommunityCardProps = {
   categoryName: string;
   isOwner: boolean;
   joinedByMe: boolean;
+  isMyfavourite: boolean;
 };
 
 const CommunityCard = ({
+  id,
   image,
   memebrsCount,
   name,
@@ -22,6 +30,7 @@ const CommunityCard = ({
   categoryName,
   isOwner,
   joinedByMe,
+  isMyfavourite,
 }: CommunityCardProps) => {
   return (
     <div className="mb-5 bg-white py-3 px-5 rounded-lg">
@@ -52,12 +61,26 @@ const CommunityCard = ({
               joined
             </div>
           )}
-          <p className="text-sm font-bold">{categoryName}</p>
+          <p className="text-sm font-medium font-poppins">{categoryName}</p>
         </div>
       </div>
       {description && (
-        <p className="text-sm text-neutral-600 mt-3">{description}</p>
+        <p className="text-sm text-neutral-600 my-3">{description}</p>
       )}
+
+      <div className="flex items-center ">
+        <CommunityFavouriteIcon
+          isMyfavourite={isMyfavourite}
+          communityId={id}
+        />
+        {!isOwner && (
+          <JoinCommunityButton
+            joinedByMe={joinedByMe}
+            communityId={id}
+            className="text-xs !px-4 py-1"
+          />
+        )}
+      </div>
     </div>
   );
 };

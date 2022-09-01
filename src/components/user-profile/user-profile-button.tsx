@@ -2,6 +2,7 @@ import { useSession } from "next-auth/react";
 import ButtonFollow from "@/components/common/button-follow";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import Button from "../common/button";
 
 interface UserProfileButtonProps {
   userId: string;
@@ -19,9 +20,7 @@ const UserProfileButton = ({ userId }: UserProfileButtonProps) => {
     <>
       <Link href={`${asPath}/settings`} shallow={true}>
         <a className="ml-auto">
-          <div className="bg-blue-600 text-white self-start py-2 px-4 rounded-lg cursor-pointer hover:bg-blue-500 transition-colors">
-            Settings
-          </div>
+          <Button>Settings</Button>
         </a>
       </Link>
     </>

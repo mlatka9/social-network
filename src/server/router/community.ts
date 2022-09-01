@@ -1,6 +1,8 @@
 import { createProtectedRouter } from "./protected-router";
 import { z } from "zod";
 import { prisma } from "../db/client";
+import { CommunityFilterType } from "./types";
+type test = keyof typeof CommunityFilterType;
 
 // Example router with queries that can only be hit if the user requesting is signed in
 export const communityRouter = createProtectedRouter()
@@ -8,6 +10,7 @@ export const communityRouter = createProtectedRouter()
     input: z
       .object({
         categoryId: z.string().optional(),
+        filter: z.string().optional(),
       })
       .optional(),
     async resolve({ input, ctx }) {
@@ -16,6 +19,29 @@ export const communityRouter = createProtectedRouter()
           category: {
             id: input?.categoryId,
           },
+          favouriteBy:
+            input?.filter === "favourite"
+              ? {
+                  some: {
+                    userId: ctx.session.user.id,
+                  },
+                }
+              : undefined,
+          members:
+            input?.filter === "joined"
+              ? {
+                  some: {
+                    userId: ctx.session.user.id,
+                  },
+                }
+              : input?.filter === "owned"
+              ? {
+                  some: {
+                    role: "ADMIN",
+                    userId: ctx.session.user.id,
+                  },
+                }
+              : undefined,
         },
         include: {
           _count: true,
@@ -26,19 +52,29 @@ export const communityRouter = createProtectedRouter()
               role: true,
             },
           },
+          favouriteBy: {
+            select: {
+              userId: true,
+            },
+          },
         },
       });
 
-      return communities.map(({ _count, members, ...communityData }) => ({
-        ...communityData,
-        membersCount: _count.members,
-        joinedByMe: members.some(
-          (member) => member.userId === ctx.session.user.id
-        ),
-        isOwner:
-          members.find((member) => member.role === "ADMIN")?.userId ===
-          ctx.session.user.id,
-      }));
+      return communities.map(
+        ({ _count, members, favouriteBy, ...communityData }) => ({
+          ...communityData,
+          membersCount: _count.members,
+          joinedByMe: members.some(
+            (member) => member.userId === ctx.session.user.id
+          ),
+          isMyfavourite: favouriteBy.some(
+            (user) => user.userId === ctx.session.user.id
+          ),
+          isOwner:
+            members.find((member) => member.role === "ADMIN")?.userId ===
+            ctx.session.user.id,
+        })
+      );
     },
   })
   .query("getById", {
@@ -53,6 +89,11 @@ export const communityRouter = createProtectedRouter()
         include: {
           category: true,
           _count: true,
+          favouriteBy: {
+            select: {
+              userId: true,
+            },
+          },
         },
       });
 
@@ -65,11 +106,14 @@ export const communityRouter = createProtectedRouter()
         },
       });
 
-      const { _count, ...communityData } = community;
+      const { _count, favouriteBy, ...communityData } = community;
       return {
         ...communityData,
         memebrsCount: _count.members,
         joinedByMe: !!member,
+        isMyfavourite: favouriteBy.some(
+          (user) => user.userId === ctx.session.user.id
+        ),
         isOwner: member?.role === "ADMIN",
       };
     },
@@ -119,6 +163,41 @@ export const communityRouter = createProtectedRouter()
           },
         },
       });
+    },
+  })
+  .mutation("markAsFavourite", {
+    input: z.object({
+      communityId: z.string(),
+    }),
+    async resolve({ ctx, input }) {
+      const favouriteCommunity = await prisma.favouriteCommunity.findUnique({
+        where: {
+          userId_communityId: {
+            userId: ctx.session.user.id,
+            communityId: input.communityId,
+          },
+        },
+      });
+
+      console.log(favouriteCommunity);
+
+      if (favouriteCommunity) {
+        await prisma.favouriteCommunity.delete({
+          where: {
+            userId_communityId: {
+              communityId: input.communityId,
+              userId: ctx.session.user.id,
+            },
+          },
+        });
+      } else {
+        await prisma.favouriteCommunity.create({
+          data: {
+            communityId: input.communityId,
+            userId: ctx.session.user.id,
+          },
+        });
+      }
     },
   })
   .query("popular", {

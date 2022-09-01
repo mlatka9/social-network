@@ -13,15 +13,15 @@ import Layout from "@/components/layouts/main-layout";
 import UserProfileHero from "@/components/user-profile/user-profile-hero";
 
 const User = () => {
-  const { query, push } = useRouter();
+  const router = useRouter();
 
-  const userId = query.params?.[0]!;
-  const section = query.params?.[1];
+  const userId = router.query.params?.[0]!;
+  const section = router.query.params?.[1];
 
   const { data, fetchNextPage, hasNextPage } = useUserPostsQuery(userId);
 
   const closeModal = () => {
-    push(`/user/${userId}`, undefined, { shallow: true });
+    router.push(`/user/${userId}`, undefined, { shallow: true });
   };
 
   if (!userId) return <div>no user id</div>;

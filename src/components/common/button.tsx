@@ -7,9 +7,10 @@ const Button: React.FC<ButtonProps> = ({ className, children, ...props }) => {
     <button
       type="submit"
       className={clsx(
-        "bg-blue-500 rounded px-6 py-2 ml-auto self-start text-white",
-        props.disabled && "bg-blue-300",
-        className
+        className,
+        "bg-blue-500 hover:bg-blue-400 rounded px-6 py-2 ml-auto self-start text-white font-medium transition-colors",
+
+        props.disabled && "bg-blue-300"
       )}
       {...props}
     >

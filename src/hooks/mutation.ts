@@ -169,6 +169,7 @@ export const useToggleCommunityMembershipMutation = () => {
     onSuccess() {
       utils.invalidateQueries(["community.getById"]);
       utils.invalidateQueries(["community.getAll"]);
+      utils.invalidateQueries(["community.popular"]);
     },
   });
   return mutation.mutate;
@@ -183,5 +184,16 @@ export const useCommunityMutation = () => {
     },
   });
 
+  return mutation.mutate;
+};
+
+export const useToggleMarkFavouriteCommunityMutation = () => {
+  const utils = trpc.useContext();
+  const mutation = trpc.useMutation(["community.markAsFavourite"], {
+    onSuccess() {
+      utils.invalidateQueries(["community.getById"]);
+      utils.invalidateQueries(["community.getAll"]);
+    },
+  });
   return mutation.mutate;
 };

@@ -34,7 +34,6 @@ const SearchCard = ({ searchEntry, isSelected }: SearchCardProps) => {
               height="40"
               alt=""
               className="rounded-lg"
-              // layout="fixed"
               objectFit="cover"
             />
           </div>

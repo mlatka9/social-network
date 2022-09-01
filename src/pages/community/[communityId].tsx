@@ -11,11 +11,15 @@ import {
 import CommunityProfileHero from "@/components/community/community-profile-hero";
 import Layout from "@/components/layouts/main-layout";
 import TextHeader from "@/components/common/text-header";
+import PostsSortPanel from "@/components/common/posts-sort-panel";
 
 const Community = () => {
-  const { query } = useRouter();
+  const router = useRouter();
 
-  const communityId = query.params?.[0] as string;
+  const communityId = router.query.communityId as string;
+  const section = router.query.section as string | undefined;
+  const sort = router.query.sort as string | undefined;
+  const time = router.query.time as string | undefined;
 
   const {
     data: community,
@@ -28,7 +32,7 @@ const Community = () => {
     fetchNextPage,
     hasNextPage,
     isSuccess: isSuccessPosts,
-  } = useCommunityPostsQuery(communityId);
+  } = useCommunityPostsQuery({ communityId, sort, time, enabled: !section });
 
   if (isError) {
     return <Layout>Community no exists</Layout>;
@@ -52,11 +56,14 @@ const Community = () => {
       )}
 
       {isSuccessPosts ? (
-        <PostList
-          data={posts}
-          fetchNextPage={fetchNextPage}
-          hasNextPage={hasNextPage}
-        />
+        <>
+          <PostsSortPanel pathname={`/community/${communityId}`} />
+          <PostList
+            data={posts}
+            fetchNextPage={fetchNextPage}
+            hasNextPage={hasNextPage}
+          />
+        </>
       ) : (
         <div>Loading</div>
       )}

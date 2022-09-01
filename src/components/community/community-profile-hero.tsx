@@ -11,19 +11,41 @@ import CommunitySettingsButton from "./community-settings-button";
 import CommunitySettings from "./community-settings";
 import { Community } from "@prisma/client";
 import { CommunityDetailsType } from "@/types/db";
+import CommunityFavouriteIcon from "./community-favourite-icon";
 
 interface CommunityProfileHeroProps {
   community: CommunityDetailsType;
 }
 
 const CommunityProfileHero = ({ community }: CommunityProfileHeroProps) => {
-  const { query, asPath, push } = useRouter();
+  const router = useRouter();
 
-  const communityId = query.params?.[0] as string;
-  const section = query.params?.[1] as string;
+  const communityId = router.query.communityId as string;
+  const basePath = router.asPath.split("?")[0]!;
+
+  const section = router.query.section;
 
   const closeModal = () => {
-    push(`/community/${communityId}`, undefined, { shallow: true });
+    const { section, communityId, ...restParams } = router.query;
+    router.push(
+      {
+        pathname: `/community/${communityId}`,
+        query: { ...restParams },
+      },
+      undefined,
+      {
+        shallow: true,
+        scroll: false,
+      }
+    );
+  };
+
+  const getMembersHref = () => {
+    const { communityId, ...restParams } = router.query;
+    return {
+      pathname: basePath,
+      query: { ...restParams, section: "members" },
+    };
   };
 
   return (
@@ -50,16 +72,18 @@ const CommunityProfileHero = ({ community }: CommunityProfileHeroProps) => {
         </div>
 
         <div className="ml-6 w-full">
-          <div className="flex items-baseline ">
+          <div className="flex items-center ">
             <div>
-              <p>{community.category.name}</p>
+              <Link href={`/community?category=${community.categoryId}`}>
+                <a className="hover:underline">{community.category.name}</a>
+              </Link>
               <h1 className="font-poppins font-semibold text-2xl">
                 {community.name}
               </h1>
             </div>
             <div className="text-xs  text-neutral-500 tracking-wide font-medium flex ml-7 space-x-4 self-end mb-1">
-              <Link href={`${asPath}/members`} shallow={true}>
-                <a>
+              <Link href={getMembersHref()} shallow={true}>
+                <a className="hover:underline">
                   <p className="cursor-pointer dark:text-primary-dark-700">
                     <span className="text-neutral-800 dark:text-primary-dark-700 font-semibold mr-1 font-poppins">
                       {community.memebrsCount}
@@ -69,14 +93,20 @@ const CommunityProfileHero = ({ community }: CommunityProfileHeroProps) => {
                 </a>
               </Link>
             </div>
-            {community.isOwner ? (
-              <CommunitySettingsButton />
-            ) : (
-              <JoinCommunityButton
+            <div className="flex itmes-center ml-auto space-x-3">
+              <CommunityFavouriteIcon
                 communityId={community.id}
-                joinedByMe={community.joinedByMe}
+                isMyfavourite={community.isMyfavourite}
               />
-            )}
+              {community.isOwner ? (
+                <CommunitySettingsButton />
+              ) : (
+                <JoinCommunityButton
+                  communityId={community.id}
+                  joinedByMe={community.joinedByMe}
+                />
+              )}
+            </div>
           </div>
           <p className="font-medium text-neutral-600 dark:text-primary-dark-700 mt-6 max-w-sm">
             {community.description}

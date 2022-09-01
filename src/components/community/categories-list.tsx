@@ -8,14 +8,41 @@ import CategoriesListItem from "./categories-list-item";
 const CategoryList = () => {
   const { data, isSuccess } = useCategoryQuery();
   const router = useRouter();
+  const basePath = router.asPath.split("?")[0];
 
   const allCommunitiesCounter =
     data?.reduce((sum, n) => sum + n.communitiesCount, 0) || 0;
 
   const currentCategory = router.query.category as string | undefined;
 
-  const handleChangeCategory = (url: string) => {
-    router.push(url, undefined, { shallow: true });
+  const handleChangeCategory = (categoryId: string) => {
+    router.push(
+      {
+        pathname: "/community",
+        query: { ...router.query, category: categoryId },
+      },
+      undefined,
+      {
+        shallow: true,
+        scroll: false,
+      }
+    );
+    // url, undefined, { shallow: true }
+  };
+
+  const setAllCategories = () => {
+    const { category, ...restParams } = router.query;
+    router.push(
+      {
+        pathname: "/community",
+        query: { ...restParams },
+      },
+      undefined,
+      {
+        shallow: true,
+        scroll: false,
+      }
+    );
   };
 
   const filteredCategories =
@@ -29,7 +56,7 @@ const CategoryList = () => {
         communitiesCounter={allCommunitiesCounter}
         isSelected={!currentCategory}
         label="all"
-        onClick={() => handleChangeCategory(`/community`)}
+        onClick={setAllCategories}
       />
       {filteredCategories.map((category) => (
         <CategoriesListItem
@@ -37,9 +64,7 @@ const CategoryList = () => {
           key={category.id}
           isSelected={currentCategory === category.id}
           label={category.name}
-          onClick={() =>
-            handleChangeCategory(`/community?category=${category.id}`)
-          }
+          onClick={() => handleChangeCategory(category.id)}
         />
       ))}
     </aside>
