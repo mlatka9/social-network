@@ -26,7 +26,7 @@ const CommunityCard = ({
   joinedByMe,
   isMyfavourite,
 }: CommunityCardProps) => (
-  <div className="mb-5 bg-white py-3 px-5 rounded-lg">
+  <div className="bg-white py-3 px-5 rounded-lg space-y-3">
     <div className="flex">
       <Image
         src={image || '/images/fallback.svg'}
@@ -57,14 +57,17 @@ const CommunityCard = ({
         <p className="text-sm font-medium font-poppins">{categoryName}</p>
       </div>
     </div>
-    {description && (
-      <p className="text-sm text-neutral-600 my-3">{description}</p>
-    )}
+    {description && <p className="text-sm text-neutral-600">{description}</p>}
 
     <div className="flex items-center ">
       <CommunityFavouriteIcon isMyfavourite={isMyfavourite} communityId={id} />
       {!isOwner && (
-        <JoinCommunityButton joinedByMe={joinedByMe} communityId={id} isSmall />
+        <JoinCommunityButton
+          joinedByMe={joinedByMe}
+          communityId={id}
+          isSmall
+          className="ml-auto"
+        />
       )}
     </div>
   </div>

@@ -81,13 +81,16 @@ export const useUpdateCommentMutation = (postId: string) => {
   return mutation.mutate;
 };
 
-export const useToggleFollowUserMutation = (userId: string, myId: string) => {
+export const useToggleFollowUserMutation = (userId: string) => {
   const utils = trpc.useContext();
   const mutation = trpc.useMutation('user.followUser', {
     onSuccess() {
-      utils.invalidateQueries(['user.getById', { userId }]);
-      utils.invalidateQueries(['user.getById', { userId: myId }]);
-      utils.invalidateQueries(['post.getInfiniteFeed']);
+      utils.invalidateQueries(['user.getById']);
+
+      utils.invalidateQueries(['user.getFollowers']);
+      utils.invalidateQueries(['user.getFollowing']);
+      utils.invalidateQueries(['community.getMembers']);
+      utils.invalidateQueries(['explore.getSuggestedUsers']);
     },
   });
 
@@ -146,6 +149,7 @@ export const useToggleCommunityMembershipMutation = () => {
       utils.invalidateQueries(['community.getById']);
       utils.invalidateQueries(['community.getAll']);
       utils.invalidateQueries(['community.popular']);
+      utils.invalidateQueries(['explore.getSuggestedCommunities']);
     },
   });
 
@@ -169,6 +173,7 @@ export const useToggleMarkFavouriteCommunityMutation = () => {
     onSuccess() {
       utils.invalidateQueries(['community.getById']);
       utils.invalidateQueries(['community.getAll']);
+      utils.invalidateQueries(['explore.getSuggestedCommunities']);
     },
   });
 

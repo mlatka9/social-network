@@ -1,3 +1,4 @@
+import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import ButtonFollow from './button-follow';
 import UserProfilePicture from './user-profile-image';
@@ -6,20 +7,25 @@ interface UserCardProps {
   id: string;
   name: string | null;
   image: string | null;
-  followers: number;
+  followersCount: number;
   bio: string;
   mutualUsers: { id: string; name: string | null }[];
+  followedByMe: boolean;
 }
 
 const UserCard = ({
   bio,
-  followers,
+  followersCount,
   id,
   image,
   name,
   mutualUsers,
+  followedByMe,
 }: UserCardProps) => {
   const mutualUserNumber = mutualUsers.length;
+
+  const { data: session } = useSession();
+  const myId = session?.user?.id!;
 
   return (
     <div className="flex flex-col">
@@ -30,14 +36,19 @@ const UserCard = ({
             <a className="font-poppins font-medium hover:underline">{name}</a>
           </Link>
           <p className=" text-neutral-500 text-xs font-medium">
-            {followers} followers
+            {followersCount} followers
           </p>
         </div>
-        <ButtonFollow userId={id} isSmall />
+        <ButtonFollow
+          userId={id}
+          isSmall
+          className="ml-auto mb-auto"
+          followedByMe={followedByMe}
+        />
       </div>
       {bio && <p className="text-sm text-neutral-900  mb-3">{bio}</p>}
 
-      {mutualUserNumber > 0 && id && (
+      {myId !== id && mutualUserNumber > 0 && (
         <div className=" text-sm text-neutral-600">
           Followed by
           {mutualUsers.slice(0, 1).map((user) => (

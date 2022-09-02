@@ -88,6 +88,7 @@ model Post {
   community     Community? @relation(fields: [communityId], references: [id], onDelete: Cascade)
   communityId   String?    @db.Text
   mentions      Mention[]
+  link          String? 
 }
 
 model Mention {

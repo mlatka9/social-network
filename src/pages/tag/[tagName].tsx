@@ -10,10 +10,7 @@ const TagPage = () => {
   const { query } = useRouter();
 
   const tagName = query.tagName as string;
-  const { data, fetchNextPage, isSuccess, hasNextPage } =
-    usePostsWithTagQuery(tagName);
-
-  if (!isSuccess) return <div>Loading...</div>;
+  const { data, fetchNextPage, hasNextPage } = usePostsWithTagQuery(tagName);
 
   return (
     <Layout>

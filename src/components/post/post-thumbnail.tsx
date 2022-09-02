@@ -39,7 +39,7 @@ const PostThumbnail = ({
           goToSharedPost();
         }
       }}
-      className="ring-2 ring-inset ring-blue-400/30 rounded-lg mb-5 overflow-hidden"
+      className="ring-2 ring-inset ring-blue-400/30 rounded-lg overflow-hidden"
       onClick={(e) => {
         e.stopPropagation();
         goToSharedPost();

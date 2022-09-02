@@ -2,6 +2,8 @@ import { inferQueryOutput } from 'src/utils/trpc';
 
 export type PostDetailsType = inferQueryOutput<'post.getById'>;
 
+export type UserDetailsType = inferQueryOutput<'user.getById'>;
+
 export type CommentDetailsType = inferQueryOutput<'comment.getAllByPostId'>[0];
 
 export type SharedPostType = NonNullable<PostDetailsType['shareParent']>;

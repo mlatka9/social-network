@@ -3,6 +3,7 @@ import { useEffect, Fragment } from 'react';
 import { InfiniteData } from '@tanstack/react-query';
 import PostCard from '@/components/post-card/post-card';
 import { PostDetailsType } from '@/types/db';
+import Loading from '../common/loading';
 
 interface PostInfinityData {
   posts: PostDetailsType[];
@@ -24,7 +25,14 @@ const PostList = ({ data, fetchNextPage, hasNextPage }: PostListProps) => {
     }
   }, [inView, fetchNextPage, hasNextPage]);
 
-  if (!data) return <div>Loading posts...</div>;
+  if (!data)
+    return (
+      <div className="space-y-5">
+        <Loading height={300} />
+        <Loading height={200} />
+        <Loading height={250} />
+      </div>
+    );
 
   return (
     <div className="space-y-5 mb-10">

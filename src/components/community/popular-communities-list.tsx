@@ -1,6 +1,7 @@
 import { usePopularCommunitiesQuery } from 'src/hooks/query';
 import Link from 'next/link';
 import TextHeader from '@/components/common/text-header';
+import Loading from '../common/loading';
 
 const PopularCommunitiesList = () => {
   const { isSuccess, data } = usePopularCommunitiesQuery();
@@ -9,7 +10,7 @@ const PopularCommunitiesList = () => {
     <aside className=" bg-white rounded-xl sticky h-fit top-[92px] dark:bg-primary-dark-100">
       <TextHeader className=" py-3 px-5 ">Popular communities</TextHeader>
       <hr className=" px-5 " />
-      {isSuccess &&
+      {isSuccess ? (
         data.map((communityData) => (
           <Link
             href={`/community/${communityData.communityId}`}
@@ -26,7 +27,10 @@ const PopularCommunitiesList = () => {
               </div>
             </a>
           </Link>
-        ))}
+        ))
+      ) : (
+        <Loading height={360} />
+      )}
     </aside>
   );
 };

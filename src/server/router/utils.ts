@@ -46,6 +46,41 @@ export const postDetailsInclude = {
   },
 };
 
+export const communityListInclude = {
+  _count: true,
+  category: true,
+  members: {
+    select: {
+      userId: true,
+      role: true,
+    },
+  },
+  favouriteBy: {
+    select: {
+      userId: true,
+    },
+  },
+};
+
+export const getUsersListInclude = (myFollowingIds: string[]) => ({
+  followedBy: {
+    where: {
+      id: {
+        in: myFollowingIds,
+      },
+    },
+    select: {
+      id: true,
+      name: true,
+    },
+  },
+  _count: {
+    select: {
+      followedBy: true,
+    },
+  },
+});
+
 const postWithUserAndImages = Prisma.validator<Prisma.PostArgs>()({
   include: postDetailsInclude,
 });
@@ -55,6 +90,52 @@ type PostWithUserAndImages = Prisma.PostGetPayload<
 >;
 
 export type PostCardProps = PostWithUserAndImages;
+
+const communitiesList = Prisma.validator<Prisma.CommunityArgs>()({
+  include: communityListInclude,
+});
+
+type CommunitiesList = Prisma.CommunityGetPayload<typeof communitiesList>;
+
+const usersList = Prisma.validator<Prisma.UserArgs>()({
+  include: getUsersListInclude([]),
+});
+
+type UsersListType = Prisma.UserGetPayload<typeof usersList>;
+
+export const populateUsersList = (
+  users: UsersListType[],
+  myFollowingIds: string[]
+) =>
+  users.map(
+    ({
+      _count,
+      bannerImage,
+      emailVerified,
+      followedBy,
+      id,
+      ...suggestedUserData
+    }) => ({
+      ...suggestedUserData,
+      id,
+      mutualUsers: followedBy,
+      followersCount: _count.followedBy,
+      followedByMe: myFollowingIds.some((follow) => follow === id),
+    })
+  );
+
+export const populateCommunitiesList = (
+  communities: CommunitiesList[],
+  userId: string
+) =>
+  communities.map(({ _count, members, favouriteBy, ...communityData }) => ({
+    ...communityData,
+    membersCount: _count.members,
+    joinedByMe: members.some((member) => member.userId === userId),
+    isMyfavourite: favouriteBy.some((user) => user.userId === userId),
+    isOwner:
+      members.find((member) => member.role === 'ADMIN')?.userId === userId,
+  }));
 
 export const populatePost = (post: PostCardProps, userId: string) => {
   const {

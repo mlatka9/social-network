@@ -8,7 +8,7 @@ module.exports = {
         poppins: ['Poppins', 'sans-serif'],
       },
       gridTemplateColumns: {
-        fill: 'repeat(auto-fit, minmax(300px, 1fr))',
+        fill: 'repeat(auto-fit, minmax(200px, 1fr))',
       },
       colors: {
         primary: {

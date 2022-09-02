@@ -1,4 +1,4 @@
-import { FormEvent, useState } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 
 import { uploadImage } from 'src/utils/cloudinary';
 import { useDropzone } from 'react-dropzone';
@@ -15,6 +15,13 @@ import Button from '../common/button';
 import PostThumbnail from '../post/post-thumbnail';
 import PostmentionsPicker from './post-mentions-picker';
 import { PostDetailsType, SearchUserType } from '@/types/db';
+import LinkIcon from '../common/icons/link';
+import FormErrorMessage from '../common/form-error-message';
+
+const URL_REGEX =
+  /[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)/;
+
+const isUrlValid = (url: string) => URL_REGEX.test(url);
 
 interface PostInputProps {
   sharedPost?: PostDetailsType;
@@ -35,12 +42,21 @@ const PostInput = ({
   const [selectedmentions, setSelectedMentions] = useState<SearchUserType[]>(
     []
   );
+  const [isUrlInputOpen, setIsUrlInputOpen] = useState(false);
+  const [urlInputValue, setUrlInputValue] = useState('');
+  const [urlError, setUrlError] = useState('');
+
   const [selectedImages, setSelectedImages] = useState<File[]>([]);
   const [imagesUploadProgress, setImagesUploadProgress] = useState<number[]>(
     []
   );
 
   const addPost = useAddPostMutation(submitCallback);
+
+  useEffect(() => {
+    if (!urlError && urlInputValue) return;
+    if (isUrlValid(urlInputValue)) setUrlError('');
+  }, [urlInputValue, urlError]);
 
   const {
     getRootProps,
@@ -69,6 +85,21 @@ const PostInput = ({
     },
   });
 
+  const resetInputValues = () => {
+    setPostContent('');
+    setSelectedImages([]);
+    setImagesUploadProgress([]);
+    setSelectedTags([]);
+    setSelectedMentions([]);
+    setUrlError('');
+    setUrlInputValue('');
+    setIsUrlInputOpen(false);
+  };
+
+  const toggleUrlInputOpen = () => {
+    setIsUrlInputOpen(!isUrlInputOpen);
+  };
+
   const removeImage = (fileName: string) => {
     setSelectedImages(
       selectedImages.filter((image) => image.name !== fileName)
@@ -81,6 +112,12 @@ const PostInput = ({
 
   const handleFormSubmit = async (e: FormEvent) => {
     e.preventDefault();
+
+    if (isUrlInputOpen && !isUrlValid(urlInputValue)) {
+      setUrlError('Invalid link');
+      return;
+    }
+
     if (!postContent) return;
 
     const imageUrls = await Promise.all(
@@ -102,17 +139,14 @@ const PostInput = ({
       mentions: selectedmentions.map((mention) => mention.id),
       shareParentId: sharedPost?.id,
       communityId,
+      link: isUrlInputOpen ? urlInputValue : undefined,
     });
-    setPostContent('');
-    setSelectedImages([]);
-    setImagesUploadProgress([]);
-    setSelectedTags([]);
-    setSelectedMentions([]);
+    resetInputValues();
   };
 
   return (
     <form onSubmit={handleFormSubmit} className="">
-      <div className="flex mb-5">
+      <div className="flex">
         <UserProfilePicture imageUrl={me.image} userID={me.id} />
         <div
           {...getRootProps()}
@@ -132,9 +166,24 @@ const PostInput = ({
             mentions={selectedmentions}
             setMention={setSelectedMentions}
           />
-          {sharedPost && (
-            <PostThumbnail sharedPost={sharedPost} isSmall disableLink />
-          )}
+
+          <div className="mb-3">
+            {isUrlInputOpen && (
+              <input
+                onChange={({ target }) => setUrlInputValue(target.value)}
+                value={urlInputValue}
+                className="block  w-full text-md"
+                placeholder="Add link"
+              />
+            )}
+            {isUrlInputOpen && urlError && (
+              <FormErrorMessage message={urlError} />
+            )}
+          </div>
+
+          <button type="button" onClick={toggleUrlInputOpen} className="mr-2">
+            <LinkIcon />
+          </button>
           <EmojiPicker appendEmoji={appendEmoji} />
           <PostFileInput
             imagesUploadProgress={imagesUploadProgress}
@@ -142,10 +191,15 @@ const PostInput = ({
             removeImage={removeImage}
             selectedImages={selectedImages}
           />
+          <div className="mt-5" />
+          {sharedPost && (
+            <PostThumbnail sharedPost={sharedPost} isSmall disableLink />
+          )}
         </div>
       </div>
+
       <div className="flex items-center ml-[50px]">
-        <Button type="submit" disabled={!postContent}>
+        <Button type="submit" disabled={!postContent} className="ml-auto">
           Share
         </Button>
       </div>

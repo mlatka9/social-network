@@ -8,15 +8,24 @@ import ImagesGrid from '../post-card/images-grid';
 import PostCardFooter from '../post-card/post-card-footer';
 import PostThumbnail from './post-thumbnail';
 import CommunityBadge from '../post-card/community-badge';
+import PostCardLink from '../post-card/post-card-link';
+import ErrorFallback from '../common/error-fallback';
+import Loading from '../common/loading';
 
 interface PostDetailsProps {
   postId: string;
 }
 
 const PostDetails = ({ postId }: PostDetailsProps) => {
-  const { data: post, isError, isSuccess, error } = usePostQuery(postId);
+  const {
+    data: post,
+    isError,
+    isSuccess: isPostSuccess,
+  } = usePostQuery(postId);
 
-  const postComments = usePostCommentsQuery(postId);
+  const { data: comments, isSuccess: isCommentsSuccess } =
+    usePostCommentsQuery(postId);
+
   const addComment = useAddCommentMutation(postId);
 
   const handleAddComment = (message: string) => {
@@ -27,42 +36,53 @@ const PostDetails = ({ postId }: PostDetailsProps) => {
   };
 
   if (isError) {
-    if (error.data?.code === 'NOT_FOUND') {
-      return <div>Post was deleted</div>;
-    }
-    return <div>Unexpected error...</div>;
-  }
-
-  if (!isSuccess) {
-    return <div>Loading...</div>;
+    return <ErrorFallback message="This user does't exists" />;
   }
 
   return (
-    <div className=" w-full rounded-lg grid gap-x-10 ">
-      {post.communityId && post.communityName && (
-        <CommunityBadge
-          communityId={post.communityId}
-          communityName={post.communityName}
-        />
+    <>
+      {isPostSuccess ? (
+        <div className="mb-20">
+          {post.communityId && post.communityName && (
+            <CommunityBadge
+              communityId={post.communityId}
+              communityName={post.communityName}
+            />
+          )}
+          <div className="bg-white w-full mb-5  rounded-lg dark:bg-primary-dark-100 mt-2">
+            <Author
+              authorId={post.user.id}
+              authorImage={post.user.image}
+              authorName={post.user.name}
+              postCreatedAt={post.createdAt}
+            />
+            <TagsList tags={post.tags} />
+            <p className="mb-3">{post.content}</p>
+            {post.link && <PostCardLink link={post.link} />}
+            <ImagesGrid images={post.images} />
+            {post.shareParent && (
+              <>
+                <div className="mt-3 h-1" />
+                <PostThumbnail sharedPost={post.shareParent} />
+              </>
+            )}
+
+            <PostCardFooter post={post} />
+          </div>
+        </div>
+      ) : (
+        <Loading height={600} />
       )}
-      <div className="bg-white w-full mb-5  rounded-lg dark:bg-primary-dark-100 mt-2">
-        <Author
-          authorId={post.user.id}
-          authorImage={post.user.image}
-          authorName={post.user.name}
-          postCreatedAt={post.createdAt}
-        />
-        <TagsList tags={post.tags} />
-        <p className="mb-3">{post.content}</p>
-        <ImagesGrid images={post.images} />
-        {post.shareParent && <PostThumbnail sharedPost={post.shareParent} />}
 
-        <PostCardFooter post={post} />
-      </div>
-
-      <CommentInput onMessageSubmit={handleAddComment} />
-      {postComments.isSuccess && <CommentsList comments={postComments.data} />}
-    </div>
+      {isCommentsSuccess ? (
+        <>
+          <CommentInput onMessageSubmit={handleAddComment} />
+          <CommentsList comments={comments} />
+        </>
+      ) : (
+        <Loading height={200} />
+      )}
+    </>
   );
 };
 

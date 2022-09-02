@@ -1,17 +1,24 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import { useUserQuery } from 'src/hooks/query';
 import { useRouter } from 'next/router';
 import UserProfileButton from './user-profile-button';
+import Loading from '../common/loading';
+import { UserDetailsType } from '@/types/db';
 
-const UserProfileHero = () => {
-  const { query, asPath } = useRouter();
-  const userId = query.params?.[0]!;
+interface UserProfileHeroProps {
+  userDetails: UserDetailsType | undefined;
+}
 
-  const { data: user, status } = useUserQuery(userId);
+const UserProfileHero = ({ userDetails }: UserProfileHeroProps) => {
+  const router = useRouter();
 
-  if (status === 'error') return <div>Cant find user</div>;
-  if (status !== 'success') return <div>Loading</div>;
+  if (!userDetails) {
+    return (
+      <div className="mb-10">
+        <Loading height={440} />
+      </div>
+    );
+  }
 
   return (
     <>
@@ -20,14 +27,14 @@ const UserProfileHero = () => {
           alt=""
           layout="fill"
           objectFit="cover"
-          src={user?.bannerImage || '/images/fallback.svg'}
+          src={userDetails?.bannerImage || '/images/fallback.svg'}
         />
       </div>
 
       <div className="flex p-6 min-h-[160px] rounded-xl bg-primary-0 dark:bg-primary-dark-100 mb-10 relative -mt-10">
         <div className="relative -mt-20 p-1 bg-primary-0 dark:bg-primary-dark-100 rounded-lg shrink-0">
           <Image
-            src={user?.image || '/images/fallback.svg'}
+            src={userDetails?.image || '/images/fallback.svg'}
             width="150"
             height="150"
             className="rounded-lg"
@@ -36,40 +43,43 @@ const UserProfileHero = () => {
           />
         </div>
 
-        <div className="ml-6 w-full">
-          <div className="flex items-baseline ">
-            <h1 className="font-poppins font-semibold text-2xl">
-              {user?.name}
+        <div className="ml-4 w-full">
+          <div className="flex items-baseline justify-between">
+            <h1 className="font-poppins font-semibold text-2xl max-w-[150px]">
+              {userDetails?.name}
             </h1>
 
-            <div className="text-xs  text-neutral-500 tracking-wide font-medium flex ml-7 space-x-4 ">
-              <Link href={`${asPath}/following`} shallow>
+            <div className="text-xs  text-neutral-500 tracking-wide font-medium flex space-x-4 ">
+              <Link href={`${router.asPath}/following`} shallow>
                 <a className="hover:underline">
                   <p className="cursor-pointer dark:text-primary-dark-700">
                     <span className="text-neutral-800 dark:text-primary-dark-700 font-semibold mr-1 font-poppins">
-                      {user.followingCount}
+                      {userDetails.followingCount}
                     </span>
                     Following
                   </p>
                 </a>
               </Link>
-              <Link href={`${asPath}/followers`} shallow>
+              <Link href={`${router.asPath}/followers`} shallow>
                 <a className="hover:underline">
                   <p className="cursor-pointer dark:text-primary-dark-700">
                     <span className="text-neutral-800 dark:text-primary-dark-700 font-semibold mr-1 font-poppins">
-                      {user.followedByCount}
+                      {userDetails.followedByCount}
                     </span>
                     Followers
                   </p>
                 </a>
               </Link>
             </div>
-            <div className="ml-auto">
-              <UserProfileButton userId={userId} />
+            <div className="">
+              <UserProfileButton
+                userId={userDetails.id}
+                followedByMe={userDetails.followedByMe}
+              />
             </div>
           </div>
           <p className="font-medium text-neutral-600 dark:text-primary-dark-700 mt-6 max-w-sm">
-            {user.bio}
+            {userDetails.bio}
           </p>
         </div>
       </div>

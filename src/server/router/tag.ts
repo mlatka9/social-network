@@ -2,6 +2,7 @@
 import { z } from 'zod';
 import { prisma } from '@/server/db/client';
 import createProtectedRouter from '@/server/router/protected-router';
+import { getDateXDaysAgo } from './utils';
 
 const tagRouter = createProtectedRouter()
   .query('getBySearchPhrase', {
@@ -29,6 +30,9 @@ const tagRouter = createProtectedRouter()
         where: {
           post: {
             isDeleted: false,
+            createdAt: {
+              gte: getDateXDaysAgo(7, new Date()),
+            },
           },
         },
         _count: {

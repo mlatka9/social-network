@@ -32,9 +32,8 @@ const ModalWrapper = ({
 
   return createPortal(
     <div className="z-1">
-      <button
+      <div
         aria-label="Close modal"
-        type="button"
         className="bg-neutral-800 opacity-80 fixed inset-0 z-10"
         onClick={(e) => {
           e.stopPropagation();
@@ -49,7 +48,7 @@ const ModalWrapper = ({
           ],
           !isBig && 'h-fit max-w-2xl max-h-[90vh]',
           isBig &&
-            'max-w-[900px] mx-auto mt-10 inset-0 rounded-b-none max-h-[1000px]'
+            'max-w-[800px] mx-auto mt-10 inset-0 rounded-b-none max-h-[1000px]'
         )}
       >
         <div className="flex justify-between items-center ">

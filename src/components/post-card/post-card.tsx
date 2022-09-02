@@ -10,6 +10,7 @@ import PostThumbnail from '../post/post-thumbnail';
 
 import CommunityBadge from './community-badge';
 import MentionsList from './mentions-list';
+import PostCardLink from './post-card-link';
 
 export interface PostCardProps {
   post: PostDetailsType;
@@ -73,8 +74,9 @@ const PostCard = ({ post }: PostCardProps) => {
         <TagsList tags={post.tags} />
 
         <div className="relative">
-          <div className="max-h-[600px] overflow-hidden" ref={postContentRef}>
+          <div className="max-h-[500px] overflow-hidden" ref={postContentRef}>
             <p className="mb-3 whitespace-pre-wrap">{post.content}</p>
+            {post.link && <PostCardLink link={post.link} />}
             <ImagesGrid images={post.images} />
             {post.shareParent && (
               <>
@@ -83,7 +85,7 @@ const PostCard = ({ post }: PostCardProps) => {
               </>
             )}
           </div>
-          {height === 600 && (
+          {height === 500 && (
             <div className="bg-gradient-to-t from-white  dark:from-primary-dark-100 to-white/0 absolute h-5 w-full bottom-0 flex items-center justify-center text-white" />
           )}
         </div>

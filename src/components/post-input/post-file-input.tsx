@@ -1,6 +1,10 @@
 import clsx from 'clsx';
-import Image from 'next/image';
+import PhotoIcon from '../common/icons/photo';
 import UploadImageThumbnail from '../common/upload-image-thumbnail';
+import {
+  getImageHeightRatio,
+  getImageWidthRatio,
+} from '../post-card/images-grid';
 
 interface PostFileInputProps {
   selectedImages: File[];
@@ -21,27 +25,34 @@ const PostFileInput = ({
       onClick={openFilePicker}
       type="button"
     >
-      <Image
-        src="/icons/photo.png"
-        width="24"
-        height="24"
-        alt=""
-        className="block"
-      />
+      <PhotoIcon />
     </button>
-    <div className={clsx(['grid grid-cols-2 gap-3 auto-rows-[200px]'])}>
+
+    <div className="grid gap-2 grid-cols-fill">
       {selectedImages.length > 0 &&
-        selectedImages.map((image, index) => (
-          <UploadImageThumbnail
-            className={clsx(
-              selectedImages.length === 3 && index === 0 && 'row-span-2'
-            )}
-            key={image.name}
-            image={image}
-            imageUploadProgress={imagesUploadProgress[index] || 0}
-            removeFile={removeImage}
-          />
-        ))}
+        selectedImages.map((image, index) => {
+          const widthRatio = getImageWidthRatio(selectedImages.length, index);
+          const heightRatio = getImageHeightRatio(selectedImages.length, index);
+          return (
+            <UploadImageThumbnail
+              className={clsx(
+                'relative',
+                selectedImages.length === 3 && index === 0 && 'row-span-2',
+                selectedImages.length === 3 && index === 2 && 'self-end'
+              )}
+              // className={clsx(
+              //   selectedImages.length === 3 && index === 0 && 'row-span-2'
+              // )}
+
+              key={image.name}
+              image={image}
+              imageUploadProgress={imagesUploadProgress[index] || 0}
+              removeFile={removeImage}
+              imageWidthRatio={widthRatio}
+              imageHeightRatio={heightRatio}
+            />
+          );
+        })}
     </div>
   </>
 );

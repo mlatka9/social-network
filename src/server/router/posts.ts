@@ -120,6 +120,12 @@ const postRouter = createProtectedRouter()
       time: z.enum(['day', 'week']).optional(),
     }),
     async resolve({ ctx, input }) {
+      // await prisma.user.findUniqueOrThrow({
+      //   where: {
+      //     id : input.userId
+      //   }
+      // })
+
       const { cursor } = input;
       const limit = input.limit ?? 10;
 
@@ -184,6 +190,7 @@ const postRouter = createProtectedRouter()
   .mutation('addPost', {
     input: z.object({
       content: z.string(),
+      link: z.string().optional(),
       images: z
         .array(
           z.object({
@@ -210,12 +217,18 @@ const postRouter = createProtectedRouter()
         throw new Error('Post must have content text');
       }
 
+      let formattedLink = input.link;
+      if (input.link && !/^(http:\/\/|https:\/\/)/i.test(input.link)) {
+        formattedLink = `http://${input.link}`;
+      }
+
       const post = await prisma.post.create({
         data: {
           content: input.content,
           userId: ctx.session.user.id,
           shareParentId: input.shareParentId,
           communityId: input.communityId,
+          link: formattedLink,
         },
       });
 

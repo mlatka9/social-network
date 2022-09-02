@@ -1,3 +1,4 @@
+/* eslint-disable arrow-body-style */
 import { useSession } from 'next-auth/react';
 import { trpc } from '../utils/trpc';
 
@@ -21,7 +22,7 @@ export const useInfiniteFeedQuery = ({
       },
     ],
     {
-      keepPreviousData: true,
+      // keepPreviousData: true,
       getNextPageParam: (lastPage) => lastPage.nextCursor,
     }
   );
@@ -173,7 +174,9 @@ export const useCommunityPostsQuery = ({
   );
 
 export const useCommunityDetailsQuery = (communityId: string) =>
-  trpc.useQuery(['community.getById', { id: communityId }]);
+  trpc.useQuery(['community.getById', { id: communityId }], {
+    retry: false,
+  });
 
 export const useCommunityMembersQuery = (communityId: string) =>
   trpc.useQuery(['community.getMembers', { communityId }]);
@@ -181,14 +184,19 @@ export const useCommunityMembersQuery = (communityId: string) =>
 export const usePopularCommunitiesQuery = () =>
   trpc.useQuery(['community.popular']);
 
-export const useSearchUsersQuery = (searchPhrase: string) =>
-  trpc.useQuery(['user.getBySearchPhrase', { searchPhrase }], {
+export const useSearchUsersQuery = (searchPhrase: string) => {
+  return trpc.useQuery(['user.getBySearchPhrase', { searchPhrase }], {
     keepPreviousData: true,
     // enabled: !!searchPhrase,
   });
+};
 
 export const useCategoryQuery = () =>
   trpc.useQuery(['community.getAllCategories']);
 
 export const useSuggestedUsersQuery = () =>
   trpc.useQuery(['explore.getSuggestedUsers']);
+
+export const useSuggestedCommunitiesQuery = () => {
+  return trpc.useQuery(['explore.getSuggestedCommunities']);
+};

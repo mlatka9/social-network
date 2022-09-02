@@ -34,14 +34,10 @@ const Home: NextPage = () => {
       }
     );
   };
-  const { data, fetchNextPage, isSuccess, hasNextPage } = useInfiniteFeedQuery({
+  const { data, fetchNextPage, hasNextPage } = useInfiniteFeedQuery({
     sort,
     time,
   });
-
-  if (!isSuccess) {
-    return <div>loading...</div>;
-  }
 
   return (
     <>
@@ -54,6 +50,7 @@ const Home: NextPage = () => {
 
         <div className="mb-5" />
         <PostsSortPanel pathname="/" />
+
         <PostList
           data={data}
           fetchNextPage={fetchNextPage}

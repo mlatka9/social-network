@@ -1,10 +1,10 @@
-import data from '@emoji-mart/data';
+// import data from '@emoji-mart/data';
 // @ts-ignore
 import Picker from '@emoji-mart/react';
 import { useTheme } from 'next-themes';
-import Image from 'next/image';
 import { useRef, useState } from 'react';
 import { useOnClickOutside } from 'usehooks-ts';
+import EmojiIcon from './icons/emoji';
 
 interface EmojiPickerProps {
   appendEmoji: (emoji: string) => void;
@@ -34,18 +34,18 @@ const EmojiPicker = ({ appendEmoji }: EmojiPickerProps) => {
         onClick={toggleIsPickerOpen}
         type="button"
       >
-        <Image
-          src="/icons/emoji.png"
-          width="24"
-          height="24"
-          alt=""
-          className="block"
-        />
+        <EmojiIcon />
       </button>
       {isPickerOpen && (
         <div className="absolute top-full z-10 shadow-lg">
           <Picker
-            data={data}
+            data={async () => {
+              const response = await fetch(
+                'https://cdn.jsdelivr.net/npm/@emoji-mart/data'
+              );
+
+              return response.json();
+            }}
             onEmojiSelect={handleSelectEmoji}
             theme={resolvedTheme}
           />

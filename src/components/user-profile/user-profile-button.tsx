@@ -7,14 +7,18 @@ import Button from '../common/button';
 
 interface UserProfileButtonProps {
   userId: string;
+  followedByMe: boolean;
 }
-const UserProfileButton = ({ userId }: UserProfileButtonProps) => {
+const UserProfileButton = ({
+  followedByMe,
+  userId,
+}: UserProfileButtonProps) => {
   const { asPath } = useRouter();
   const { data: session } = useSession();
   const currentUser = session?.user!;
 
   if (userId !== currentUser.id) {
-    return <ButtonFollow userId={userId} />;
+    return <ButtonFollow userId={userId} followedByMe={followedByMe} />;
   }
 
   return (

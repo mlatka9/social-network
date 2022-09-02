@@ -3,6 +3,12 @@ import { z } from 'zod';
 import { Prisma } from '@prisma/client';
 import createProtectedRouter from '@/server/router/protected-router';
 import { prisma } from '../db/client';
+import {
+  communityListInclude,
+  getUsersListInclude,
+  populateCommunitiesList,
+  populateUsersList,
+} from './utils';
 
 const communityRouter = createProtectedRouter()
   .query('getAll', {
@@ -47,38 +53,10 @@ const communityRouter = createProtectedRouter()
               : undefined,
           members: membersFilter,
         },
-        include: {
-          _count: true,
-          category: true,
-          members: {
-            select: {
-              userId: true,
-              role: true,
-            },
-          },
-          favouriteBy: {
-            select: {
-              userId: true,
-            },
-          },
-        },
+        include: communityListInclude,
       });
 
-      return communities.map(
-        ({ _count, members, favouriteBy, ...communityData }) => ({
-          ...communityData,
-          membersCount: _count.members,
-          joinedByMe: members.some(
-            (member) => member.userId === ctx.session.user.id
-          ),
-          isMyfavourite: favouriteBy.some(
-            (user) => user.userId === ctx.session.user.id
-          ),
-          isOwner:
-            members.find((member) => member.role === 'ADMIN')?.userId ===
-            ctx.session.user.id,
-        })
-      );
+      return populateCommunitiesList(communities, ctx.session.user.id);
     },
   })
   .query('getById', {
@@ -127,7 +105,7 @@ const communityRouter = createProtectedRouter()
       communityId: z.string(),
     }),
     async resolve({ input, ctx }) {
-      const userFollowing = await prisma.user.findMany({
+      const myFollowing = await prisma.user.findMany({
         where: {
           followedBy: {
             some: {
@@ -137,7 +115,7 @@ const communityRouter = createProtectedRouter()
         },
       });
 
-      const userFollowsIds = userFollowing.map((user) => user.id);
+      const myFollowingIds = myFollowing.map((user) => user.id);
 
       const members = await prisma.user.findMany({
         where: {
@@ -147,41 +125,10 @@ const communityRouter = createProtectedRouter()
             },
           },
         },
-        include: {
-          followedBy: {
-            where: {
-              id: {
-                in: userFollowsIds,
-              },
-            },
-            select: {
-              id: true,
-              name: true,
-            },
-            // take: 1,
-          },
-          _count: {
-            select: {
-              followedBy: true,
-            },
-          },
-        },
+        include: getUsersListInclude(myFollowingIds),
       });
 
-      return members.map(
-        ({
-          _count,
-          emailVerified,
-          bannerImage,
-          followedBy,
-
-          ...memberData
-        }) => ({
-          ...memberData,
-          mutualUsers: followedBy,
-          followersCount: _count.followedBy,
-        })
-      );
+      return populateUsersList(members, myFollowingIds);
     },
   })
   .mutation('addCommunity', {

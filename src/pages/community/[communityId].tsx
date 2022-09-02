@@ -13,6 +13,8 @@ import CommunityProfileHero from '@/components/community/community-profile-hero'
 import Layout from '@/components/layouts/main-layout';
 import TextHeader from '@/components/common/text-header';
 import PostsSortPanel from '@/components/common/posts-sort-panel';
+import Loading from '@/components/common/loading';
+import ErrorFallback from '@/components/common/error-fallback';
 
 const Community = () => {
   const router = useRouter();
@@ -25,23 +27,26 @@ const Community = () => {
   const {
     data: community,
     isError,
-    isSuccess: isSuccessDetails,
+    isSuccess: isDetailsSuccess,
   } = useCommunityDetailsQuery(communityId);
 
   const {
     data: posts,
     fetchNextPage,
     hasNextPage,
-    isSuccess: isSuccessPosts,
   } = useCommunityPostsQuery({ communityId, sort, time, enabled: !section });
 
   if (isError) {
-    return <Layout>Community no exists</Layout>;
+    return (
+      <Layout>
+        <ErrorFallback message="This community does't exists" />
+      </Layout>
+    );
   }
 
   return (
     <Layout>
-      {isSuccessDetails ? (
+      {isDetailsSuccess ? (
         <>
           <CommunityProfileHero community={community} />
           {community.joinedByMe && (
@@ -53,21 +58,16 @@ const Community = () => {
           )}
         </>
       ) : (
-        <div>Loading</div>
+        <div className="space-y-10">
+          <Loading height={440} />
+        </div>
       )}
-
-      {isSuccessPosts ? (
-        <>
-          <PostsSortPanel pathname={`/community/${communityId}`} />
-          <PostList
-            data={posts}
-            fetchNextPage={fetchNextPage}
-            hasNextPage={hasNextPage}
-          />
-        </>
-      ) : (
-        <div>Loading</div>
-      )}
+      <PostsSortPanel pathname={`/community/${communityId}`} />
+      <PostList
+        data={posts}
+        fetchNextPage={fetchNextPage}
+        hasNextPage={hasNextPage}
+      />
     </Layout>
   );
 };

@@ -6,7 +6,7 @@ interface ImagesGridProps {
   images: ImageType[];
 }
 
-const getImageWidthRatio = (imageNumber: number, imageIndex: number) => {
+export const getImageWidthRatio = (imageNumber: number, imageIndex: number) => {
   if (imageNumber === 1) {
     return 100;
   }
@@ -22,7 +22,10 @@ const getImageWidthRatio = (imageNumber: number, imageIndex: number) => {
   return 100;
 };
 
-const getImageHeightRatio = (imageNumber: number, imageIndex: number) => {
+export const getImageHeightRatio = (
+  imageNumber: number,
+  imageIndex: number
+) => {
   if (imageNumber === 1) {
     return 50;
   }
@@ -39,13 +42,7 @@ const getImageHeightRatio = (imageNumber: number, imageIndex: number) => {
 };
 
 const ImagesGrid = ({ images }: ImagesGridProps) => (
-  <div
-    className={clsx([
-      'grid gap-2 grid-cols-fill',
-      images.length > 1 && '',
-      images.length > 2 && '',
-    ])}
-  >
+  <div className="grid gap-2 grid-cols-fill">
     {images.length > 0 &&
       images.map((image, index) => {
         const widthRatio = getImageWidthRatio(images.length, index);

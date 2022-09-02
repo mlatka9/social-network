@@ -2,8 +2,8 @@
 import { z } from 'zod';
 import createProtectedRouter from './protected-router';
 import { prisma } from '../db/client';
+import { getUsersListInclude, populateUsersList } from './utils';
 
-// Example router with queries that can only be hit if the user requesting is signed in
 const userRouter = createProtectedRouter()
   .query('getById', {
     input: z.object({
@@ -33,7 +33,7 @@ const userRouter = createProtectedRouter()
         ...userData,
         followingCount: _count.following,
         followedByCount: _count.followedBy,
-        followedByMe: followedBy.find(
+        followedByMe: followedBy.some(
           (follower) => follower.id === ctx.session.user.id
         ),
       };
@@ -49,7 +49,7 @@ const userRouter = createProtectedRouter()
       userId: z.string(),
     }),
     async resolve({ input, ctx }) {
-      const userFollowing = await prisma.user.findMany({
+      const myFollowing = await prisma.user.findMany({
         where: {
           followedBy: {
             some: {
@@ -59,7 +59,7 @@ const userRouter = createProtectedRouter()
         },
       });
 
-      const userFollowsIds = userFollowing.map((user) => user.id);
+      const myFollowingIds = myFollowing.map((user) => user.id);
 
       const users = await prisma.user.findMany({
         where: {
@@ -69,33 +69,10 @@ const userRouter = createProtectedRouter()
             },
           },
         },
-        include: {
-          followedBy: {
-            where: {
-              id: {
-                in: userFollowsIds,
-              },
-            },
-            select: {
-              id: true,
-              name: true,
-            },
-          },
-          _count: {
-            select: {
-              followedBy: true,
-            },
-          },
-        },
+        include: getUsersListInclude(myFollowingIds),
       });
 
-      return users.map(
-        ({ _count, bannerImage, emailVerified, followedBy, ...userData }) => ({
-          ...userData,
-          mutualUsers: followedBy,
-          followersCount: _count.followedBy,
-        })
-      );
+      return populateUsersList(users, myFollowingIds);
     },
   })
   .query('getFollowers', {
@@ -103,7 +80,7 @@ const userRouter = createProtectedRouter()
       userId: z.string(),
     }),
     async resolve({ input, ctx }) {
-      const userFollowing = await prisma.user.findMany({
+      const myFollowing = await prisma.user.findMany({
         where: {
           followedBy: {
             some: {
@@ -113,8 +90,7 @@ const userRouter = createProtectedRouter()
         },
       });
 
-      const userFollowsIds = userFollowing.map((user) => user.id);
-      // .filter((id) => id !== ctx.session.user.id);
+      const myFollowingIds = myFollowing.map((user) => user.id);
 
       const users = await prisma.user.findMany({
         where: {
@@ -124,34 +100,10 @@ const userRouter = createProtectedRouter()
             },
           },
         },
-        include: {
-          followedBy: {
-            where: {
-              id: {
-                in: userFollowsIds,
-              },
-            },
-            select: {
-              id: true,
-              name: true,
-            },
-            // take: 1,
-          },
-          _count: {
-            select: {
-              followedBy: true,
-            },
-          },
-        },
+        include: getUsersListInclude(myFollowingIds),
       });
 
-      return users.map(
-        ({ _count, bannerImage, emailVerified, followedBy, ...userData }) => ({
-          ...userData,
-          mutualUsers: followedBy,
-          followersCount: _count.followedBy,
-        })
-      );
+      return populateUsersList(users, myFollowingIds);
     },
   })
   .query('getBySearchPhrase', {

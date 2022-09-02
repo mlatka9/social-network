@@ -1,15 +1,16 @@
 import { useTrendingTagsQuery } from 'src/hooks/query';
 import Link from 'next/link';
 import TextHeader from './text-header';
+import Loading from './loading';
 
 const TrendingTagsList = () => {
   const { isSuccess, data } = useTrendingTagsQuery();
 
   return (
     <aside className=" bg-white rounded-xl dark:bg-primary-dark-100">
-      <TextHeader className=" py-3 px-5 ">Trends for you</TextHeader>
+      <TextHeader className=" py-3 px-5 ">Trends this week</TextHeader>
       <hr className=" px-5 " />
-      {isSuccess &&
+      {isSuccess ? (
         data.map((tagData) => (
           <Link href={`/tag/${tagData.tagName}`} key={tagData.tagName}>
             <a className="block">
@@ -23,7 +24,10 @@ const TrendingTagsList = () => {
               </div>
             </a>
           </Link>
-        ))}
+        ))
+      ) : (
+        <Loading height={360} />
+      )}
     </aside>
   );
 };

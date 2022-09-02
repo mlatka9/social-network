@@ -1,4 +1,5 @@
 import { useFollowersQuery } from 'src/hooks/query';
+import Loading from './loading';
 import UserCard from './user-card';
 
 interface FollowersListProps {
@@ -8,15 +9,16 @@ interface FollowersListProps {
 const FollowersList = ({ userId }: FollowersListProps) => {
   const { data, isSuccess } = useFollowersQuery(userId);
 
-  if (!isSuccess) return <>loading...</>;
+  if (!isSuccess) return <Loading height={500} />;
 
   return (
     <div className="space-y-5">
       {data.map((user) => (
         <UserCard
+          followedByMe={user.followedByMe}
           key={user.id}
           bio={user.bio}
-          followers={user.followersCount}
+          followersCount={user.followersCount}
           id={user.id}
           image={user.image}
           name={user.name}

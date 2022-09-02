@@ -1,5 +1,6 @@
 import { useRouter } from 'next/router';
 import { useCommunityMembersQuery } from 'src/hooks/query';
+import Loading from '../common/loading';
 import UserCard from '../common/user-card';
 
 const Members = () => {
@@ -7,15 +8,21 @@ const Members = () => {
   const communityId = router.query.communityId as string;
   const { data: members, isSuccess } = useCommunityMembersQuery(communityId);
 
-  if (!isSuccess) return <>loading</>;
+  if (!isSuccess)
+    return (
+      <div className="space-y-5">
+        <Loading height={500} />
+      </div>
+    );
 
   return (
     <div className="space-y-5">
       {members.map((user) => (
         <UserCard
+          followedByMe={user.followedByMe}
           key={user.id}
           bio={user.bio}
-          followers={user.followersCount}
+          followersCount={user.followersCount}
           id={user.id}
           image={user.image}
           name={user.name}

@@ -3,6 +3,7 @@ import { GetServerSidePropsContext } from 'next/types';
 import { authOptions } from '../api/auth/[...nextauth]';
 import MainLayout from '@/components/layouts/main-layout';
 import SuggestedUsersList from '@/components/explore/suggested-users-list';
+import SuggestedCommunitiesList from '@/components/explore/suggested-communities-list';
 
 const ExplorePage = () => (
   <MainLayout>
@@ -12,6 +13,8 @@ const ExplorePage = () => (
       </p>
     </h1>
     <SuggestedUsersList />
+    <div className="mt-10" />
+    <SuggestedCommunitiesList />
   </MainLayout>
 );
 

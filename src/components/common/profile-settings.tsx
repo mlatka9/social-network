@@ -7,6 +7,7 @@ import FormInput from './form-input';
 import FormTextarea from './form-textarea';
 import FormImages from './form-images';
 import Button from './button';
+import Loading from './loading';
 
 export interface ProfileSettingsFormType {
   name: string;
@@ -33,6 +34,7 @@ const ProfileSettings = () => {
   });
 
   const { data: profileData, isSuccess } = useCurrentUserProfileQuery();
+
   const updateProfile = useProfileMutation();
 
   useEffect(() => {
@@ -70,7 +72,12 @@ const ProfileSettings = () => {
     setValue('bannerImages', file);
   };
 
-  if (!profileData) return <div>loading...</div>;
+  if (!isSuccess)
+    return (
+      <div className="space-y-10">
+        <Loading height={600} />
+      </div>
+    );
 
   return (
     <div>

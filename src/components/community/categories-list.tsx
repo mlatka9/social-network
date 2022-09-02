@@ -1,5 +1,6 @@
 import { useRouter } from 'next/router';
 import { useCategoryQuery } from 'src/hooks/query';
+import Loading from '../common/loading';
 import TextHeader from '../common/text-header';
 import CategoriesListItem from './categories-list-item';
 
@@ -48,21 +49,27 @@ const CategoryList = () => {
     <aside className=" bg-white rounded-xl dark:bg-primary-dark-100">
       <TextHeader className=" py-3 px-5 ">Categories</TextHeader>
       <hr className=" px-5 " />
-      <CategoriesListItem
-        communitiesCounter={allCommunitiesCounter}
-        isSelected={!currentCategory}
-        label="all"
-        onClick={setAllCategories}
-      />
-      {filteredCategories.map((category) => (
-        <CategoriesListItem
-          communitiesCounter={category.communitiesCount}
-          key={category.id}
-          isSelected={currentCategory === category.id}
-          label={category.name}
-          onClick={() => handleChangeCategory(category.id)}
-        />
-      ))}
+      {isSuccess ? (
+        <>
+          <CategoriesListItem
+            communitiesCounter={allCommunitiesCounter}
+            isSelected={!currentCategory}
+            label="all"
+            onClick={setAllCategories}
+          />
+          {filteredCategories.map((category) => (
+            <CategoriesListItem
+              communitiesCounter={category.communitiesCount}
+              key={category.id}
+              isSelected={currentCategory === category.id}
+              label={category.name}
+              onClick={() => handleChangeCategory(category.id)}
+            />
+          ))}
+        </>
+      ) : (
+        <Loading height={360} />
+      )}
     </aside>
   );
 };
