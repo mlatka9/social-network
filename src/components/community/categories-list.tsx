@@ -1,14 +1,11 @@
-import clsx from "clsx";
-import Link from "next/link";
-import { useRouter } from "next/router";
-import { useCategoryQuery } from "src/hooks/query";
-import TextHeader from "../common/text-header";
-import CategoriesListItem from "./categories-list-item";
+import { useRouter } from 'next/router';
+import { useCategoryQuery } from 'src/hooks/query';
+import TextHeader from '../common/text-header';
+import CategoriesListItem from './categories-list-item';
 
 const CategoryList = () => {
   const { data, isSuccess } = useCategoryQuery();
   const router = useRouter();
-  const basePath = router.asPath.split("?")[0];
 
   const allCommunitiesCounter =
     data?.reduce((sum, n) => sum + n.communitiesCount, 0) || 0;
@@ -18,7 +15,7 @@ const CategoryList = () => {
   const handleChangeCategory = (categoryId: string) => {
     router.push(
       {
-        pathname: "/community",
+        pathname: '/community',
         query: { ...router.query, category: categoryId },
       },
       undefined,
@@ -27,14 +24,13 @@ const CategoryList = () => {
         scroll: false,
       }
     );
-    // url, undefined, { shallow: true }
   };
 
   const setAllCategories = () => {
     const { category, ...restParams } = router.query;
     router.push(
       {
-        pathname: "/community",
+        pathname: '/community',
         query: { ...restParams },
       },
       undefined,

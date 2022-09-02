@@ -1,10 +1,10 @@
-import type { GetServerSidePropsContext } from "next";
-import Head from "next/head";
-import { unstable_getServerSession } from "next-auth/next";
-import { useRouter } from "next/router";
-import { authOptions } from "src/pages/api/auth/[...nextauth]";
-import Layout from "@/components/layouts/main-layout";
-import PostDetails from "@/components/post/post-details";
+import type { GetServerSidePropsContext } from 'next';
+import Head from 'next/head';
+import { unstable_getServerSession } from 'next-auth/next';
+import { useRouter } from 'next/router';
+import { authOptions } from 'src/pages/api/auth/[...nextauth]';
+import Layout from '@/components/layouts/main-layout';
+import PostDetails from '@/components/post/post-details';
 
 const PostPage = () => {
   const { query } = useRouter();
@@ -36,7 +36,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   if (!session) {
     return {
       redirect: {
-        destination: "/api/auth/signin",
+        destination: '/api/auth/signin',
         permanent: false,
       },
     };

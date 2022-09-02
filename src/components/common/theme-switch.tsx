@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import ThemeSwitcherButton from "./theme-switcher-button";
+import { useState, useEffect } from 'react';
+import ThemeSwitcherButton from './theme-switcher-button';
 
 const ThemeSwitch = () => {
   const [mounted, setMounted] = useState(false);

@@ -1,19 +1,20 @@
-import { FormEvent, useState } from "react";
-import UserProfilePicture from "../common/user-profile-image";
-import { uploadImage } from "src/utils/cloudinary";
-import { useDropzone } from "react-dropzone";
-import { useAddPostMutation } from "src/hooks/mutation";
-import PostTagPicker from "./post-tags-picker";
-import PostFileInput from "./post-file-input";
-import { useSession } from "next-auth/react";
-import type { Tag } from "@prisma/client";
-import clsx from "clsx";
-import EmojiPicker from "../common/emoji-picker";
-import Button from "../common/button";
-import PostThumbnail from "../post/post-thumbnail";
-import { PostDetailsType, SearchUserType } from "@/types/db";
-import PostMentionsInput from "./post-mentions-input";
-import PostmentionsPicker from "./post-mentions-picker";
+import { FormEvent, useState } from 'react';
+
+import { uploadImage } from 'src/utils/cloudinary';
+import { useDropzone } from 'react-dropzone';
+import { useAddPostMutation } from 'src/hooks/mutation';
+
+import { useSession } from 'next-auth/react';
+import type { Tag } from '@prisma/client';
+import clsx from 'clsx';
+import PostTagPicker from './post-tags-picker';
+import PostFileInput from './post-file-input';
+import UserProfilePicture from '../common/user-profile-image';
+import EmojiPicker from '../common/emoji-picker';
+import Button from '../common/button';
+import PostThumbnail from '../post/post-thumbnail';
+import PostmentionsPicker from './post-mentions-picker';
+import { PostDetailsType, SearchUserType } from '@/types/db';
 
 interface PostInputProps {
   sharedPost?: PostDetailsType;
@@ -29,7 +30,7 @@ const PostInput = ({
   const { data: session } = useSession();
   const me = session?.user!;
 
-  const [postContent, setPostContent] = useState("");
+  const [postContent, setPostContent] = useState('');
   const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
   const [selectedmentions, setSelectedMentions] = useState<SearchUserType[]>(
     []
@@ -49,7 +50,7 @@ const PostInput = ({
   } = useDropzone({
     noClick: true,
     accept: {
-      "image/*": [".png", ".gif", ".jpeg", ".jpg"],
+      'image/*': ['.png', '.gif', '.jpeg', '.jpg'],
     },
     onDrop: (files: File[]) => {
       setSelectedImages([...selectedImages, ...files]);
@@ -60,7 +61,7 @@ const PostInput = ({
     validator: (file: File) => {
       if (selectedImages.some((image) => image.name === file.name)) {
         return {
-          code: "file-exists",
+          code: 'file-exists',
           message: `File with name ${file.name} was added already`,
         };
       }
@@ -95,14 +96,14 @@ const PostInput = ({
     addPost({
       content: postContent,
       images: imageUrls.length
-        ? imageUrls.map((url) => ({ imageAlt: "alt", imageUrl: url }))
+        ? imageUrls.map((url) => ({ imageAlt: 'alt', imageUrl: url }))
         : null,
       tags: selectedTags,
       mentions: selectedmentions.map((mention) => mention.id),
       shareParentId: sharedPost?.id,
-      communityId: communityId,
+      communityId,
     });
-    setPostContent("");
+    setPostContent('');
     setSelectedImages([]);
     setImagesUploadProgress([]);
     setSelectedTags([]);
@@ -116,8 +117,8 @@ const PostInput = ({
         <div
           {...getRootProps()}
           className={clsx(
-            "ml-3 w-full",
-            isImageDragged && "outline-blue-500 outline-dashed"
+            'ml-3 w-full',
+            isImageDragged && 'outline-blue-500 outline-dashed'
           )}
         >
           <input {...getInputProps()} />

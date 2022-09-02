@@ -1,34 +1,35 @@
+/* eslint-disable react/prop-types */
 // src/pages/_app.tsx
-import { withTRPC } from "@trpc/next";
-import type { AppRouter } from "../server/router";
-import type { AppType } from "next/dist/shared/lib/utils";
-import superjson from "superjson";
-import { SessionProvider } from "next-auth/react";
-import "../styles/globals.css";
-import { ReactQueryDevtools } from "react-query/devtools";
-import { ThemeProvider } from "next-themes";
+import { withTRPC } from '@trpc/next';
 
-import TimeAgo from "javascript-time-ago";
-import en from "javascript-time-ago/locale/en.json";
+import type { AppType } from 'next/dist/shared/lib/utils';
+import superjson from 'superjson';
+import { SessionProvider } from 'next-auth/react';
+import '../styles/globals.css';
+import { ReactQueryDevtools } from 'react-query/devtools';
+import { ThemeProvider } from 'next-themes';
+
+import TimeAgo from 'javascript-time-ago';
+import en from 'javascript-time-ago/locale/en.json';
+import type { AppRouter } from '../server/router';
+
 TimeAgo.addDefaultLocale(en);
 
 const MyApp: AppType = ({
   Component,
   pageProps: { session, ...pageProps },
-}) => {
-  return (
-    <SessionProvider session={session}>
-      <ThemeProvider attribute="class" enableSystem={true}>
-        <Component {...pageProps} />
-      </ThemeProvider>
-      <ReactQueryDevtools initialIsOpen={false} />
-    </SessionProvider>
-  );
-};
+}) => (
+  <SessionProvider session={session}>
+    <ThemeProvider attribute="class" enableSystem>
+      <Component {...pageProps} />
+    </ThemeProvider>
+    <ReactQueryDevtools initialIsOpen={false} />
+  </SessionProvider>
+);
 
 const getBaseUrl = () => {
-  if (typeof window !== "undefined") {
-    return "";
+  if (typeof window !== 'undefined') {
+    return '';
   }
   if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`; // SSR should use vercel url
 
@@ -36,7 +37,7 @@ const getBaseUrl = () => {
 };
 
 export default withTRPC<AppRouter>({
-  config({ ctx }) {
+  config() {
     /**
      * If you want to use SSR, you need to use the server's full URL
      * @link https://trpc.io/docs/ssr

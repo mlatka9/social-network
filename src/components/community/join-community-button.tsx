@@ -1,6 +1,6 @@
-import React from "react";
-import { useToggleCommunityMembershipMutation } from "src/hooks/mutation";
-import Button from "../common/button";
+import React from 'react';
+import { useToggleCommunityMembershipMutation } from 'src/hooks/mutation';
+import Button from '../common/button';
 
 interface JoinCommunityButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -22,7 +22,7 @@ const JoinCommunityButton = ({
   };
   return (
     <Button onClick={handleToggleCommunity} {...buttonProps} isSmall={isSmall}>
-      {joinedByMe ? "Leave" : "Join"}
+      {joinedByMe ? 'Leave' : 'Join'}
     </Button>
   );
 };

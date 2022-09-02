@@ -1,10 +1,10 @@
-import { createProtectedRouter } from "./protected-router";
-import { prisma } from "../db/client";
-import { z } from "zod";
+/* eslint-disable no-underscore-dangle */
+import { z } from 'zod';
+import { prisma } from '@/server/db/client';
+import createProtectedRouter from '@/server/router/protected-router';
 
-// Example router with queries that can only be hit if the user requesting is signed in
-export const tagRouter = createProtectedRouter()
-  .query("getBySearchPhrase", {
+const tagRouter = createProtectedRouter()
+  .query('getBySearchPhrase', {
     input: z.object({
       searchPhrase: z.string(),
     }),
@@ -12,21 +12,20 @@ export const tagRouter = createProtectedRouter()
       if (!input.searchPhrase) {
         return [];
       }
-      return await prisma.tag.findMany({
+      return prisma.tag.findMany({
         where: {
           name: {
             contains: input.searchPhrase,
-            // mode: "insensitive",
           },
         },
         take: 5,
       });
     },
   })
-  .query("trending", {
+  .query('trending', {
     async resolve() {
       const data = await prisma.postTag.groupBy({
-        by: ["tagName"],
+        by: ['tagName'],
         where: {
           post: {
             isDeleted: false,
@@ -37,7 +36,7 @@ export const tagRouter = createProtectedRouter()
         },
         orderBy: {
           _count: {
-            postId: "desc",
+            postId: 'desc',
           },
         },
         take: 5,
@@ -49,3 +48,5 @@ export const tagRouter = createProtectedRouter()
       }));
     },
   });
+
+export default tagRouter;

@@ -1,16 +1,14 @@
-import { useRouter } from "next/router";
-import UserFollows from "@/components/common/user-follows";
-import ProfileSettings from "@/components/common/profile-settings";
-import { unstable_getServerSession } from "next-auth/next";
-import { authOptions } from "src/pages/api/auth/[...nextauth]";
-import type { GetServerSidePropsContext } from "next";
-import PostList from "@/components/post/post-list";
-import ModalWrapper from "@/components/common/modal-wrapper";
-
-import { useUserPostsQuery } from "src/hooks/query";
-
-import Layout from "@/components/layouts/main-layout";
-import UserProfileHero from "@/components/user-profile/user-profile-hero";
+import { useRouter } from 'next/router';
+import { useUserPostsQuery } from 'src/hooks/query';
+import { unstable_getServerSession } from 'next-auth/next';
+import { authOptions } from 'src/pages/api/auth/[...nextauth]';
+import type { GetServerSidePropsContext } from 'next';
+import ProfileSettings from '@/components/common/profile-settings';
+import UserFollows from '@/components/common/user-follows';
+import PostList from '@/components/post/post-list';
+import ModalWrapper from '@/components/common/modal-wrapper';
+import Layout from '@/components/layouts/main-layout';
+import UserProfileHero from '@/components/user-profile/user-profile-hero';
 
 const User = () => {
   const router = useRouter();
@@ -34,13 +32,13 @@ const User = () => {
         fetchNextPage={fetchNextPage}
         hasNextPage={hasNextPage}
       />
-      {(section === "followers" || section === "following") && (
+      {(section === 'followers' || section === 'following') && (
         <ModalWrapper title="Followers" handleCloseModal={closeModal}>
           <UserFollows section={section} userId={userId} />
         </ModalWrapper>
       )}
 
-      {section === "settings" && (
+      {section === 'settings' && (
         <ModalWrapper title="Settings" handleCloseModal={closeModal}>
           <ProfileSettings />
         </ModalWrapper>
@@ -59,7 +57,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   if (!session) {
     return {
       redirect: {
-        destination: "/api/auth/signin",
+        destination: '/api/auth/signin',
         permanent: false,
       },
     };

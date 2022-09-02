@@ -1,10 +1,12 @@
-import useSuggestionList from "src/hooks/use-suggestion-popup";
-import clsx from "clsx";
-import { ChangeEvent, useState } from "react";
-import { useSearchTagQuery } from "src/hooks/query";
-import { Tag } from "@prisma/client";
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+import useSuggestionList from 'src/hooks/use-suggestion-popup';
+import clsx from 'clsx';
+import { ChangeEvent, useState } from 'react';
+import { useSearchTagQuery } from 'src/hooks/query';
+import { Tag } from '@prisma/client';
 
-const DEFAULT_TAG_COLOR = "#c1d0e3";
+const DEFAULT_TAG_COLOR = '#c1d0e3';
 
 interface PostTagsInputProps {
   tags: Tag[];
@@ -12,19 +14,19 @@ interface PostTagsInputProps {
 }
 
 const PostTagsInput = ({ setTags, tags }: PostTagsInputProps) => {
-  const [tagInputValue, setTagInputValue] = useState("");
+  const [tagInputValue, setTagInputValue] = useState('');
 
   const addTag = (tag: Tag) => {
     const tagName = tag.name;
     const formattedTagName = tagName.trim().toLowerCase();
-    const isAlreadyInState = tags.some((tag) => tag.name === formattedTagName);
+    const isAlreadyInState = tags.some((t) => t.name === formattedTagName);
     if (isAlreadyInState || !formattedTagName) {
-      setTagInputValue("");
+      setTagInputValue('');
       return;
     }
     const newTag = { ...tag, name: formattedTagName };
     setTags([...tags, newTag]);
-    setTagInputValue("");
+    setTagInputValue('');
   };
 
   const { data: hintTags } = useSearchTagQuery(tagInputValue);
@@ -34,27 +36,28 @@ const PostTagsInput = ({ setTags, tags }: PostTagsInputProps) => {
 
   const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     switch (e.key) {
-      case "ArrowUp":
-      case "ArrowDown":
-      case "Enter":
+      case 'ArrowUp':
+      case 'ArrowDown':
+      case 'Enter':
         e.preventDefault();
         break;
-      case " ":
+      case ' ':
         addTag({
           name: tagInputValue,
           color: DEFAULT_TAG_COLOR,
         });
         break;
-      case "Backspace":
+      case 'Backspace':
         if (!tagInputValue.length && tags.length) {
           setTags([...tags.slice(0, -1)]);
         }
         break;
+      default:
     }
   };
 
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
-    if (e.target.value === " ") return;
+    if (e.target.value === ' ') return;
     setTagInputValue(e.target.value);
   };
 
@@ -62,7 +65,7 @@ const PostTagsInput = ({ setTags, tags }: PostTagsInputProps) => {
     <div className="relative w-full" {...wrapperProps}>
       <input
         className="text-md  dark:bg-primary-dark-100 w-full"
-        placeholder={tags.length ? "Add another..." : "Add tag"}
+        placeholder={tags.length ? 'Add another...' : 'Add tag'}
         value={tagInputValue}
         onChange={onChange}
         onKeyDown={onKeyDown}
@@ -80,9 +83,9 @@ const PostTagsInput = ({ setTags, tags }: PostTagsInputProps) => {
             onClick={() => addTag(tag)}
             key={tag.name}
             className={clsx([
-              "p-3 bg-white fle flex-col cursor-pointer hover:bg-blue-50 dark:bg-primary-dark-200 hover:dark:bg-primary-dark-300",
+              'p-3 bg-white fle flex-col cursor-pointer hover:bg-blue-50 dark:bg-primary-dark-200 hover:dark:bg-primary-dark-300',
               selectedItemIndex === index &&
-                "bg-primary-100 dark:bg-primary-dark-300",
+                'bg-primary-100 dark:bg-primary-dark-300',
             ])}
           >
             {tag.name}

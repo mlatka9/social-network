@@ -1,16 +1,18 @@
-import type { GetServerSidePropsContext, NextPage } from "next";
-import { unstable_getServerSession } from "next-auth/next";
-import { authOptions } from "./api/auth/[...nextauth]";
-import PostInput from "@/components/post-input/post-input";
-import React from "react";
-import { useInfiniteFeedQuery, useSuggestedUsersQuery } from "src/hooks/query";
-import Layout from "@/components/layouts/main-layout";
-import PostList from "@/components/post/post-list";
-import { useRouter } from "next/router";
-import ModalWrapper from "@/components/common/modal-wrapper";
-import PostDetails from "@/components/post/post-details";
-import TextHeader from "@/components/common/text-header";
-import PostsSortPanel from "@/components/common/posts-sort-panel";
+import type { GetServerSidePropsContext, NextPage } from 'next';
+import { unstable_getServerSession } from 'next-auth/next';
+import React from 'react';
+import { useRouter } from 'next/router';
+import { useInfiniteFeedQuery } from 'src/hooks/query';
+import { authOptions } from './api/auth/[...nextauth]';
+import PostInput from '@/components/post-input/post-input';
+
+import Layout from '@/components/layouts/main-layout';
+import PostList from '@/components/post/post-list';
+
+import ModalWrapper from '@/components/common/modal-wrapper';
+import PostDetails from '@/components/post/post-details';
+import TextHeader from '@/components/common/text-header';
+import PostsSortPanel from '@/components/common/posts-sort-panel';
 
 const Home: NextPage = () => {
   const router = useRouter();
@@ -22,7 +24,7 @@ const Home: NextPage = () => {
     const { postId, ...restParams } = router.query;
     router.push(
       {
-        pathname: "/",
+        pathname: '/',
         query: { ...restParams },
       },
       undefined,
@@ -36,9 +38,6 @@ const Home: NextPage = () => {
     sort,
     time,
   });
-
-  const { data: suggested } = useSuggestedUsersQuery();
-  console.log("suggested users", suggested);
 
   if (!isSuccess) {
     return <div>loading...</div>;
@@ -54,7 +53,7 @@ const Home: NextPage = () => {
         </div>
 
         <div className="mb-5" />
-        <PostsSortPanel pathname={`/`} />
+        <PostsSortPanel pathname="/" />
         <PostList
           data={data}
           fetchNextPage={fetchNextPage}
@@ -80,7 +79,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   if (!session) {
     return {
       redirect: {
-        destination: "/api/auth/signin",
+        destination: '/api/auth/signin',
         permanent: false,
       },
     };

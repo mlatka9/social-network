@@ -1,10 +1,10 @@
-import data from "@emoji-mart/data";
+import data from '@emoji-mart/data';
 // @ts-ignore
-import Picker from "@emoji-mart/react";
-import { useTheme } from "next-themes";
-import Image from "next/image";
-import { useRef, useState } from "react";
-import { useOnClickOutside } from "usehooks-ts";
+import Picker from '@emoji-mart/react';
+import { useTheme } from 'next-themes';
+import Image from 'next/image';
+import { useRef, useState } from 'react';
+import { useOnClickOutside } from 'usehooks-ts';
 
 interface EmojiPickerProps {
   appendEmoji: (emoji: string) => void;
@@ -24,7 +24,7 @@ const EmojiPicker = ({ appendEmoji }: EmojiPickerProps) => {
   useOnClickOutside(ref, () => closePicker());
 
   const handleSelectEmoji = (emoji: any) => {
-    appendEmoji(emoji.native || "");
+    appendEmoji(emoji.native || '');
   };
 
   return (

@@ -1,8 +1,8 @@
-import clsx from "clsx";
-import Image from "next/image";
-import { useMemo } from "react";
+import clsx from 'clsx';
+import Image from 'next/image';
+import { useMemo } from 'react';
 
-interface UploadImageThumbnail {
+interface UploadImageThumbnailProps {
   image: File;
   imageUploadProgress: number;
   className: string;
@@ -14,11 +14,12 @@ const UploadImageThumbnail = ({
   imageUploadProgress,
   removeFile,
   className,
-}: UploadImageThumbnail) => {
+}: UploadImageThumbnailProps) => {
   const imageSrc = useMemo(() => URL.createObjectURL(image), [image]);
   return (
-    <div className={clsx(["relative"], className)}>
+    <div className={clsx(['relative'], className)}>
       <button
+        type="button"
         onClick={() => removeFile(image.name)}
         className="absolute top-2 left-2 bg-neutral-800/80  z-[5] w-6 h-6 rounded-full flex justify-center items-center"
       >

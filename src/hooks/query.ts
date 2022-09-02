@@ -1,6 +1,5 @@
-import { trpc } from "../utils/trpc";
-import { useSession } from "next-auth/react";
-import { CommunityFilterType } from "src/server/router/types";
+import { useSession } from 'next-auth/react';
+import { trpc } from '../utils/trpc';
 
 export const useInfiniteFeedQuery = ({
   sort,
@@ -8,16 +7,16 @@ export const useInfiniteFeedQuery = ({
 }: {
   sort?: string;
   time?: string;
-} = {}) => {
-  return trpc.useInfiniteQuery(
+} = {}) =>
+  trpc.useInfiniteQuery(
     [
-      "post.getInfiniteFeed",
+      'post.getInfiniteFeed',
       {
         limit: 5,
-        sort: sort === "top" ? sort : undefined,
+        sort: sort === 'top' ? sort : undefined,
         time:
-          time === "day" || time === "week"
-            ? (time as "day" | "week")
+          time === 'day' || time === 'week'
+            ? (time as 'day' | 'week')
             : undefined,
       },
     ],
@@ -26,12 +25,11 @@ export const useInfiniteFeedQuery = ({
       getNextPageParam: (lastPage) => lastPage.nextCursor,
     }
   );
-};
 
-export const useUserPostsQuery = (useId: string) => {
-  return trpc.useInfiniteQuery(
+export const useUserPostsQuery = (useId: string) =>
+  trpc.useInfiniteQuery(
     [
-      "post.getAll",
+      'post.getAll',
       {
         limit: 5,
         userId: useId,
@@ -41,12 +39,11 @@ export const useUserPostsQuery = (useId: string) => {
       getNextPageParam: (lastPage) => lastPage.nextCursor,
     }
   );
-};
 
-export const useUserBookmarkedPostsQuery = () => {
-  return trpc.useInfiniteQuery(
+export const useUserBookmarkedPostsQuery = () =>
+  trpc.useInfiniteQuery(
     [
-      "bookmarks.getAll",
+      'bookmarks.getAll',
       {
         limit: 5,
       },
@@ -55,12 +52,11 @@ export const useUserBookmarkedPostsQuery = () => {
       getNextPageParam: (lastPage) => lastPage.nextCursor,
     }
   );
-};
 
-export const usePostsWithTagQuery = (tag: string) => {
-  const res = trpc.useInfiniteQuery(
+export const usePostsWithTagQuery = (tag: string) =>
+  trpc.useInfiniteQuery(
     [
-      "post.getAll",
+      'post.getAll',
       {
         limit: 5,
         tagName: tag,
@@ -70,13 +66,11 @@ export const usePostsWithTagQuery = (tag: string) => {
       getNextPageParam: (lastPage) => lastPage.nextCursor,
     }
   );
-  return res;
-};
 
-export const useUserQuery = (userId: string) => {
-  return trpc.useQuery(
+export const useUserQuery = (userId: string) =>
+  trpc.useQuery(
     [
-      "user.getById",
+      'user.getById',
       {
         userId,
       },
@@ -85,7 +79,6 @@ export const useUserQuery = (userId: string) => {
       retry: false,
     }
   );
-};
 
 export const useCurrentUserProfileQuery = () => {
   const { data } = useSession();
@@ -93,7 +86,7 @@ export const useCurrentUserProfileQuery = () => {
 
   return trpc.useQuery(
     [
-      "user.getById",
+      'user.getById',
       {
         userId: currentUserId!,
       },
@@ -105,10 +98,10 @@ export const useCurrentUserProfileQuery = () => {
   );
 };
 
-export const usePostQuery = (postId?: string) => {
-  return trpc.useQuery(
+export const usePostQuery = (postId?: string) =>
+  trpc.useQuery(
     [
-      "post.getById",
+      'post.getById',
       {
         postId: postId!,
       },
@@ -118,67 +111,57 @@ export const usePostQuery = (postId?: string) => {
       retry: false,
     }
   );
-};
 
-export const usePostCommentsQuery = (postId: string) => {
-  return trpc.useQuery([
-    "comment.getAllByPostId",
+export const usePostCommentsQuery = (postId: string) =>
+  trpc.useQuery([
+    'comment.getAllByPostId',
     {
       postId,
     },
   ]);
-};
 
-export const useSearchQuery = (searchPhrase: string) => {
-  return trpc.useQuery(["search.getBySearchPhrase", { searchPhrase }], {
+export const useSearchQuery = (searchPhrase: string) =>
+  trpc.useQuery(['search.getBySearchPhrase', { searchPhrase }], {
     keepPreviousData: true,
     enabled: !!searchPhrase,
   });
-};
 
-export const useSearchTagQuery = (searchPhrase: string) => {
-  return trpc.useQuery(["tags.getBySearchPhrase", { searchPhrase }], {
+export const useSearchTagQuery = (searchPhrase: string) =>
+  trpc.useQuery(['tags.getBySearchPhrase', { searchPhrase }], {
     keepPreviousData: true,
   });
-};
 
-export const useTrendingTagsQuery = () => {
-  return trpc.useQuery(["tags.trending"]);
-};
+export const useTrendingTagsQuery = () => trpc.useQuery(['tags.trending']);
 
-export const useFollowingQuery = (userId: string) => {
-  return trpc.useQuery(["user.getFollowing", { userId }]);
-};
+export const useFollowingQuery = (userId: string) =>
+  trpc.useQuery(['user.getFollowing', { userId }]);
 
-export const useFollowersQuery = (userId: string) => {
-  return trpc.useQuery(["user.getFollowers", { userId }]);
-};
+export const useFollowersQuery = (userId: string) =>
+  trpc.useQuery(['user.getFollowers', { userId }]);
 
-export const useCommunitiesQuery = (category?: string, filter?: string) => {
-  return trpc.useQuery(["community.getAll", { categoryId: category, filter }]);
-};
+export const useCommunitiesQuery = (category?: string, filter?: string) =>
+  trpc.useQuery(['community.getAll', { categoryId: category, filter }]);
 
 export const useCommunityPostsQuery = ({
   communityId,
   sort,
   time,
-  enabled,
 }: {
   communityId: string;
   sort?: string;
   time?: string;
   enabled?: boolean;
-}) => {
-  return trpc.useInfiniteQuery(
+}) =>
+  trpc.useInfiniteQuery(
     [
-      "post.getAll",
+      'post.getAll',
       {
         limit: 5,
-        communityId: communityId,
-        sort: sort === "top" ? sort : undefined,
+        communityId,
+        sort: sort === 'top' ? sort : undefined,
         time:
-          time === "day" || time === "week"
-            ? (time as "day" | "week")
+          time === 'day' || time === 'week'
+            ? (time as 'day' | 'week')
             : undefined,
       },
     ],
@@ -188,31 +171,24 @@ export const useCommunityPostsQuery = ({
       getNextPageParam: (lastPage) => lastPage.nextCursor,
     }
   );
-};
 
-export const useCommunityDetailsQuery = (communityId: string) => {
-  return trpc.useQuery(["community.getById", { id: communityId }]);
-};
+export const useCommunityDetailsQuery = (communityId: string) =>
+  trpc.useQuery(['community.getById', { id: communityId }]);
 
-export const useCommunityMembersQuery = (communityId: string) => {
-  return trpc.useQuery(["community.getMembers", { communityId: communityId }]);
-};
+export const useCommunityMembersQuery = (communityId: string) =>
+  trpc.useQuery(['community.getMembers', { communityId }]);
 
-export const usePopularCommunitiesQuery = () => {
-  return trpc.useQuery(["community.popular"]);
-};
+export const usePopularCommunitiesQuery = () =>
+  trpc.useQuery(['community.popular']);
 
-export const useSearchUsersQuery = (searchPhrase: string) => {
-  return trpc.useQuery(["user.getBySearchPhrase", { searchPhrase }], {
+export const useSearchUsersQuery = (searchPhrase: string) =>
+  trpc.useQuery(['user.getBySearchPhrase', { searchPhrase }], {
     keepPreviousData: true,
     // enabled: !!searchPhrase,
   });
-};
 
-export const useCategoryQuery = () => {
-  return trpc.useQuery(["community.getAllCategories"]);
-};
+export const useCategoryQuery = () =>
+  trpc.useQuery(['community.getAllCategories']);
 
-export const useSuggestedUsersQuery = () => {
-  return trpc.useQuery(["explore.getSuggestedUsers"]);
-};
+export const useSuggestedUsersQuery = () =>
+  trpc.useQuery(['explore.getSuggestedUsers']);

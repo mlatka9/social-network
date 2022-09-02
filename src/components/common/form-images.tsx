@@ -1,7 +1,9 @@
-import clsx from "clsx";
-import { useMemo } from "react";
-import useSettingsDropZone from "src/hooks/use-settings-dropzone";
-import Image from "next/image";
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+import clsx from 'clsx';
+import { useMemo } from 'react';
+import useSettingsDropZone from 'src/hooks/use-settings-dropzone';
+import Image from 'next/image';
 
 interface FormImagesProps {
   image: string | null;
@@ -49,14 +51,14 @@ const FormImages = ({
     <>
       <div
         className={clsx([
-          "w-full h-[150px] relative cursor-pointer group",
-          isBannerDragged && "outline-blue-500 outline-dashed",
+          'w-full h-[150px] relative cursor-pointer group',
+          isBannerDragged && 'outline-blue-500 outline-dashed',
         ])}
         {...getRootbannerProps()}
         onClick={openBanner}
       >
         <Image
-          src={draftBannerImage || bannerImage || "/images/fallback.svg"}
+          src={draftBannerImage || bannerImage || '/images/fallback.svg'}
           layout="fill"
           alt=""
           objectFit="cover"
@@ -75,14 +77,14 @@ const FormImages = ({
 
       <div
         className={clsx([
-          "w-32 h-32  rounded-full relative -top-16 left-5 overflow-hidden cursor-pointer group z-[100]",
-          isImageDragged && "outline-blue-500 outline-dashed",
+          'w-32 h-32  rounded-full relative -top-16 left-5 overflow-hidden cursor-pointer group z-[100]',
+          isImageDragged && 'outline-blue-500 outline-dashed',
         ])}
         {...getRootImageProps()}
         onClick={openImage}
       >
         <Image
-          src={draftImage || image || "/images/fallback.svg"}
+          src={draftImage || image || '/images/fallback.svg'}
           layout="fill"
           alt=""
           objectFit="cover"

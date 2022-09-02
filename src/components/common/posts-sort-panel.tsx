@@ -1,6 +1,6 @@
-import { useRouter } from "next/router";
-import Link from "next/link";
-import clsx from "clsx";
+import { useRouter } from 'next/router';
+import Link from 'next/link';
+import clsx from 'clsx';
 
 interface PostsSortPanelProps {
   pathname: string;
@@ -8,8 +8,6 @@ interface PostsSortPanelProps {
 
 const PostsSortPanel = ({ pathname }: PostsSortPanelProps) => {
   const router = useRouter();
-
-  // `/community/${router.query.params[0]}`
 
   const sort = router.query.sort as string | undefined;
   const time = router.query.time as string | undefined;
@@ -22,9 +20,9 @@ const PostsSortPanel = ({ pathname }: PostsSortPanelProps) => {
             href={{
               pathname,
             }}
-            shallow={true}
+            shallow
           >
-            <a className={clsx("text-lg p-3 block", !sort && "font-bold")}>
+            <a className={clsx('text-lg p-3 block', !sort && 'font-bold')}>
               Latest
             </a>
           </Link>
@@ -33,14 +31,14 @@ const PostsSortPanel = ({ pathname }: PostsSortPanelProps) => {
           <Link
             href={{
               pathname,
-              query: { sort: "top", time: "day" },
+              query: { sort: 'top', time: 'day' },
             }}
-            shallow={true}
+            shallow
           >
             <a
               className={clsx(
-                "text-lg p-3 block",
-                sort === "top" && "font-bold"
+                'text-lg p-3 block',
+                sort === 'top' && 'font-bold'
               )}
             >
               Top
@@ -48,19 +46,19 @@ const PostsSortPanel = ({ pathname }: PostsSortPanelProps) => {
           </Link>
         </li>
       </ul>
-      {sort === "top" && (
+      {sort === 'top' && (
         <ul className="ml-auto flex">
           <Link
             href={{
               pathname,
-              query: { sort: "top", time: "day" },
+              query: { sort: 'top', time: 'day' },
             }}
-            shallow={true}
+            shallow
           >
             <a
               className={clsx(
-                "text-lg p-3 block",
-                time === "day" && "font-bold"
+                'text-lg p-3 block',
+                time === 'day' && 'font-bold'
               )}
             >
               Day
@@ -69,14 +67,14 @@ const PostsSortPanel = ({ pathname }: PostsSortPanelProps) => {
           <Link
             href={{
               pathname,
-              query: { sort: "top", time: "week" },
+              query: { sort: 'top', time: 'week' },
             }}
-            shallow={true}
+            shallow
           >
             <a
               className={clsx(
-                "text-lg p-3 block",
-                time === "week" && "font-bold"
+                'text-lg p-3 block',
+                time === 'week' && 'font-bold'
               )}
             >
               Week

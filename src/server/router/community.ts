@@ -1,12 +1,11 @@
-import { createProtectedRouter } from "./protected-router";
-import { z } from "zod";
-import { prisma } from "../db/client";
-import { CommunityFilterType } from "./types";
-type test = keyof typeof CommunityFilterType;
+/* eslint-disable @typescript-eslint/naming-convention */
+import { z } from 'zod';
+import { Prisma } from '@prisma/client';
+import createProtectedRouter from '@/server/router/protected-router';
+import { prisma } from '../db/client';
 
-// Example router with queries that can only be hit if the user requesting is signed in
-export const communityRouter = createProtectedRouter()
-  .query("getAll", {
+const communityRouter = createProtectedRouter()
+  .query('getAll', {
     input: z
       .object({
         categoryId: z.string().optional(),
@@ -14,34 +13,39 @@ export const communityRouter = createProtectedRouter()
       })
       .optional(),
     async resolve({ input, ctx }) {
+      let membersFilter: Prisma.UserCommunityListRelationFilter | undefined;
+
+      if (input?.filter === 'joined') {
+        membersFilter = {
+          some: {
+            userId: ctx.session.user.id,
+          },
+        };
+      }
+
+      if (input?.filter === 'owned') {
+        membersFilter = {
+          some: {
+            role: 'ADMIN',
+            userId: ctx.session.user.id,
+          },
+        };
+      }
+
       const communities = await prisma.community.findMany({
         where: {
           category: {
             id: input?.categoryId,
           },
           favouriteBy:
-            input?.filter === "favourite"
+            input?.filter === 'favourite'
               ? {
                   some: {
                     userId: ctx.session.user.id,
                   },
                 }
               : undefined,
-          members:
-            input?.filter === "joined"
-              ? {
-                  some: {
-                    userId: ctx.session.user.id,
-                  },
-                }
-              : input?.filter === "owned"
-              ? {
-                  some: {
-                    role: "ADMIN",
-                    userId: ctx.session.user.id,
-                  },
-                }
-              : undefined,
+          members: membersFilter,
         },
         include: {
           _count: true,
@@ -71,13 +75,13 @@ export const communityRouter = createProtectedRouter()
             (user) => user.userId === ctx.session.user.id
           ),
           isOwner:
-            members.find((member) => member.role === "ADMIN")?.userId ===
+            members.find((member) => member.role === 'ADMIN')?.userId ===
             ctx.session.user.id,
         })
       );
     },
   })
-  .query("getById", {
+  .query('getById', {
     input: z.object({
       id: z.string(),
     }),
@@ -114,11 +118,11 @@ export const communityRouter = createProtectedRouter()
         isMyfavourite: favouriteBy.some(
           (user) => user.userId === ctx.session.user.id
         ),
-        isOwner: member?.role === "ADMIN",
+        isOwner: member?.role === 'ADMIN',
       };
     },
   })
-  .query("getMembers", {
+  .query('getMembers', {
     input: z.object({
       communityId: z.string(),
     }),
@@ -180,19 +184,19 @@ export const communityRouter = createProtectedRouter()
       );
     },
   })
-  .mutation("addCommunity", {
+  .mutation('addCommunity', {
     input: z.object({
       name: z.string(),
       categoryId: z.string(),
     }),
     async resolve({ ctx, input }) {
-      return await prisma.community.create({
+      return prisma.community.create({
         data: {
           name: input.name,
           categoryId: input.categoryId,
           members: {
             create: {
-              role: "ADMIN",
+              role: 'ADMIN',
               userId: ctx.session.user.id,
             },
           },
@@ -200,7 +204,7 @@ export const communityRouter = createProtectedRouter()
       });
     },
   })
-  .mutation("markAsFavourite", {
+  .mutation('markAsFavourite', {
     input: z.object({
       communityId: z.string(),
     }),
@@ -213,8 +217,6 @@ export const communityRouter = createProtectedRouter()
           },
         },
       });
-
-      console.log(favouriteCommunity);
 
       if (favouriteCommunity) {
         await prisma.favouriteCommunity.delete({
@@ -235,17 +237,17 @@ export const communityRouter = createProtectedRouter()
       }
     },
   })
-  .query("popular", {
+  .query('popular', {
     async resolve() {
       const data = await prisma.userCommunity.groupBy({
-        by: ["communityId"],
+        by: ['communityId'],
         _count: {
           communityId: true,
           userId: true,
         },
         orderBy: {
           _count: {
-            userId: "desc",
+            userId: 'desc',
           },
         },
         take: 5,
@@ -275,7 +277,7 @@ export const communityRouter = createProtectedRouter()
       }));
     },
   })
-  .query("getAllCategories", {
+  .query('getAllCategories', {
     async resolve() {
       const categores = await prisma.category.findMany({
         include: {
@@ -293,7 +295,7 @@ export const communityRouter = createProtectedRouter()
       }));
     },
   })
-  .mutation("toggleMembership", {
+  .mutation('toggleMembership', {
     input: z.object({
       communityId: z.string(),
     }),
@@ -326,7 +328,7 @@ export const communityRouter = createProtectedRouter()
       }
     },
   })
-  .mutation("update", {
+  .mutation('update', {
     input: z.object({
       communityId: z.string(),
       name: z.string(),
@@ -345,8 +347,8 @@ export const communityRouter = createProtectedRouter()
         },
       });
 
-      if (user?.role !== "ADMIN") {
-        throw new Error("You dont have permissions to modify this community");
+      if (user?.role !== 'ADMIN') {
+        throw new Error('You dont have permissions to modify this community');
       }
 
       await prisma.community.update({
@@ -363,3 +365,5 @@ export const communityRouter = createProtectedRouter()
       });
     },
   });
+
+export default communityRouter;

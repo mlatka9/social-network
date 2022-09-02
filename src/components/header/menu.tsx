@@ -1,9 +1,9 @@
-import { useRouter } from "next/router";
-import { useCallback, useEffect, useRef, useState } from "react";
-import { useOnClickOutside } from "usehooks-ts";
-import DropdownMenu from "./dropdown-menu";
-import Image from "next/image";
-import { useSession } from "next-auth/react";
+import { useRouter } from 'next/router';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { useOnClickOutside } from 'usehooks-ts';
+import Image from 'next/image';
+import { useSession } from 'next-auth/react';
+import DropdownMenu from './dropdown-menu';
 
 const Menu = () => {
   const router = useRouter();
@@ -30,22 +30,19 @@ const Menu = () => {
     setIsDropdownShown(true);
   };
 
-  const toggleDropdownShow = () => {
-    setIsDropdownShown(!isDropdownShow);
-  };
-
   if (!me) return <div>Loading</div>;
 
   return (
     // <div ref={ref} onClick={toggleDropdownShow}>
     <div ref={ref}>
       <button
+        type="button"
         className="w-10 h-10 rounded-full relative overflow-hidden block"
         onClick={openDropDown}
       >
         <Image
           layout="fixed"
-          src={me.image || "/images/fallback.svg"}
+          src={me.image || '/images/fallback.svg'}
           alt=""
           objectFit="cover"
           width="40"

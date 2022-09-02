@@ -1,16 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// generator client {
-//   provider        = "prisma-client-js"
-//   previewFeatures = ["fullTextSearch"]
-// }
-
-// datasource db {
-//   provider = "postgresql"
-//   url      = env("DATABASE_URL")
-// }
-
 generator client {
   provider        = "prisma-client-js"
   previewFeatures = ["referentialIntegrity"]
@@ -26,7 +13,6 @@ model Example {
   id String @id @default(cuid())
 }
 
-// Necessary for Next auth
 model Account {
   id                String  @id @default(cuid())
   userId            String
@@ -54,28 +40,26 @@ model Session {
 }
 
 model User {
-  id                   String          @id @default(cuid())
-  name                 String?         @db.Text
-  email                String?         @unique
+  id                   String               @id @default(cuid())
+  name                 String?              @db.Text
+  email                String?              @unique
   emailVerified        DateTime?
-  image                String?         @db.Text
-  bannerImage          String?         @db.Text
+  image                String?              @db.Text
+  bannerImage          String?              @db.Text
   accounts             Account[]
   sessions             Session[]
-  followedBy           User[]          @relation("UserFollows")
-  following            User[]          @relation("UserFollows")
-  bio                  String          @default("") @db.Text
-  posts                Post[]          @relation(name: "createdPosts")
+  followedBy           User[]               @relation("UserFollows")
+  following            User[]               @relation("UserFollows")
+  bio                  String               @default("") @db.Text
+  posts                Post[]               @relation(name: "createdPosts")
   comments             Comment[]
   likedPosts           PostLike[]
   likedComments        CommentLike[]
   bookmarks            Bookmark[]
   communities          UserCommunity[]
   mentions             Mention[]
-  favouriteCommunities FavouriteCommunity[]    
+  favouriteCommunities FavouriteCommunity[]
 }
-
-
 
 model VerificationToken {
   identifier String
@@ -170,7 +154,6 @@ model Tag {
   name  String    @id @unique
   color String
   posts PostTag[]
-
 }
 
 model PostTag {
@@ -183,24 +166,24 @@ model PostTag {
 }
 
 model Community {
-  id          String          @id @default(uuid())
-  name        String          @unique @db.VarChar(100)
-  image       String          @default("") @db.Text
-  bannerImage String          @default("") @db.Text
-  description String          @default("") @db.Text
+  id          String               @id @default(uuid())
+  name        String               @unique @db.VarChar(100)
+  image       String               @default("") @db.Text
+  bannerImage String               @default("") @db.Text
+  description String               @default("") @db.Text
   posts       Post[]
   members     UserCommunity[]
-  favouriteBy FavouriteCommunity[]      
+  favouriteBy FavouriteCommunity[]
   categoryId  String
-  category    Category        @relation(fields: [categoryId], references: [id])
+  category    Category             @relation(fields: [categoryId], references: [id])
 }
 
 model FavouriteCommunity {
   communityId String
   community   Community @relation(fields: [communityId], references: [id], onDelete: Cascade)
+  userId      String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  userId String
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   @@id([userId, communityId])
 }
 
@@ -213,11 +196,9 @@ model Category {
 model UserCommunity {
   communityId String
   community   Community @relation(fields: [communityId], references: [id], onDelete: Cascade)
-
-  userId String
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  role Role @default(USER)
+  userId      String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role        Role      @default(USER)
 
   @@id([userId, communityId])
 }

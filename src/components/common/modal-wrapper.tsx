@@ -1,10 +1,10 @@
-import React from "react";
-import Image from "next/image";
-import { useEffect, useState } from "react";
-import { createPortal } from "react-dom";
-import clsx from "clsx";
-import { useLockBodyScroll } from "src/hooks/utils";
-import CloseIcon from "@/components/common/icons/close";
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+import React, { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
+import clsx from 'clsx';
+import useLockBodyScroll from 'src/hooks/use-lock-body-scroll';
+import CloseIcon from '@/components/common/icons/close';
 
 interface ModalWrapperProps {
   isBig?: boolean;
@@ -32,7 +32,9 @@ const ModalWrapper = ({
 
   return createPortal(
     <div className="z-1">
-      <div
+      <button
+        aria-label="Close modal"
+        type="button"
         className="bg-neutral-800 opacity-80 fixed inset-0 z-10"
         onClick={(e) => {
           e.stopPropagation();
@@ -43,34 +45,28 @@ const ModalWrapper = ({
         onClick={(e) => e.stopPropagation()}
         className={clsx(
           [
-            "fixed p-10 bg-white z-[10] inset-0  m-auto rounded-lg overflow-y-scroll dark:bg-primary-dark-100 min-h-[80vh]",
+            'fixed p-10 bg-white z-[10] inset-0  m-auto rounded-lg overflow-y-scroll dark:bg-primary-dark-100 min-h-[80vh]',
           ],
-          !isBig && "h-fit max-w-2xl max-h-[90vh]",
+          !isBig && 'h-fit max-w-2xl max-h-[90vh]',
           isBig &&
-            "max-w-[900px] mx-auto mt-10 inset-0 rounded-b-none max-h-[1000px]"
+            'max-w-[900px] mx-auto mt-10 inset-0 rounded-b-none max-h-[1000px]'
         )}
       >
         <div className="flex justify-between items-center ">
           <div className="font-poppins font-semibold ">{title}</div>
           <button
+            type="button"
             className="cursor-pointer flex justify-center items-center"
             onClick={handleCloseModal}
           >
             <CloseIcon />
-            {/* <Image
-              src="/icons/close.png"
-              width="20"
-              height="20"
-              layout="fixed"
-              alt="close modal"
-            /> */}
           </button>
         </div>
         <hr className="mt-3 mb-10" />
         <div className="">{children}</div>
       </div>
     </div>,
-    document.querySelector("#modal") as HTMLElement
+    document.querySelector('#modal') as HTMLElement
   );
 };
 

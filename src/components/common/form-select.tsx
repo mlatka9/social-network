@@ -1,13 +1,13 @@
-import clsx from "clsx";
-import React from "react";
+import clsx from 'clsx';
+import React from 'react';
 import {
   FieldError,
   Path,
   RegisterOptions,
   UseFormRegister,
   UseFormWatch,
-} from "react-hook-form";
-import FormErrorMessage from "./form-error-message";
+} from 'react-hook-form';
+import FormErrorMessage from './form-error-message';
 
 type FormSelectOptionType = { id: string; name: string };
 
@@ -19,7 +19,7 @@ export type FormSelectProps<TFormValues> = {
   error: FieldError | undefined;
   options: FormSelectOptionType[];
   watch: UseFormWatch<TFormValues>;
-} & React.ComponentProps<"select">;
+} & React.ComponentProps<'select'>;
 
 const FormSelect = <TFormValues,>({
   register,
@@ -52,8 +52,8 @@ const FormSelect = <TFormValues,>({
         <label
           htmlFor={label}
           className={clsx(
-            "pointer-events-none absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-5 scale-75 top-2 z-10 origin-[0] dark:bg-gray-900 px-2 peer-focus:px-2   peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-5 left-1",
-            !selectedValue && "scale-100 -translate-y-1/2 top-1/2 "
+            'pointer-events-none absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-5 scale-75 top-2 z-10 origin-[0] dark:bg-gray-900 px-2 peer-focus:px-2   peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-5 left-1',
+            !selectedValue && 'scale-100 -translate-y-1/2 top-1/2 '
           )}
         >
           {label}

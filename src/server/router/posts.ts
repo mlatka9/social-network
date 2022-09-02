@@ -1,15 +1,16 @@
-import { createProtectedRouter } from "./protected-router";
-import { string, z } from "zod";
-import { prisma } from "../db/client";
-import { populatePost } from "./utils";
-import { postDetailsInclude } from "./types";
-import { trpc } from "src/utils/trpc";
-import { TRPCError } from "@trpc/server";
-import { getDateXDaysAgo } from "./utils";
+/* eslint-disable @typescript-eslint/naming-convention */
+import { z } from 'zod';
+import { TRPCError } from '@trpc/server';
+import createProtectedRouter from './protected-router';
+import { prisma } from '../db/client';
+import {
+  populatePost,
+  postDetailsInclude,
+  getDateXDaysAgo,
+} from '@/server/router/utils';
 
-// Example router with queries that can only be hit if the user requesting is signed in
-export const postRouter = createProtectedRouter()
-  .query("getById", {
+const postRouter = createProtectedRouter()
+  .query('getById', {
     input: z.object({
       postId: z.string(),
     }),
@@ -23,20 +24,20 @@ export const postRouter = createProtectedRouter()
 
       if (post.isDeleted) {
         throw new TRPCError({
-          code: "NOT_FOUND",
-          message: "Post was deleted",
+          code: 'NOT_FOUND',
+          message: 'Post was deleted',
         });
       }
 
       return populatePost(post, ctx.session.user.id);
     },
   })
-  .query("getInfiniteFeed", {
+  .query('getInfiniteFeed', {
     input: z.object({
       limit: z.number().min(1).max(100).nullish(),
       cursor: z.string().nullish(),
-      sort: z.enum(["top"]).optional(),
-      time: z.enum(["day", "week"]).optional(),
+      sort: z.enum(['top']).optional(),
+      time: z.enum(['day', 'week']).optional(),
     }),
     async resolve({ ctx, input }) {
       const { cursor } = input;
@@ -66,10 +67,10 @@ export const postRouter = createProtectedRouter()
             },
           ],
           createdAt:
-            input.sort === "top"
+            input.sort === 'top'
               ? {
                   gte:
-                    input.time === "day"
+                    input.time === 'day'
                       ? getDateXDaysAgo(1, new Date())
                       : getDateXDaysAgo(7, new Date()),
                 }
@@ -80,14 +81,14 @@ export const postRouter = createProtectedRouter()
         include: postDetailsInclude,
         cursor: cursor ? { id: cursor } : undefined,
         orderBy:
-          input.sort === "top"
+          input.sort === 'top'
             ? {
                 likes: {
-                  _count: "desc",
+                  _count: 'desc',
                 },
               }
             : {
-                createdAt: "desc",
+                createdAt: 'desc',
               },
       });
 
@@ -95,6 +96,7 @@ export const postRouter = createProtectedRouter()
         populatePost(post, ctx.session.user.id)
       );
 
+      // eslint-disable-next-line no-undef-init
       let nextCursor: typeof cursor | undefined = undefined;
 
       if (populatedPosts.length > limit) {
@@ -107,15 +109,15 @@ export const postRouter = createProtectedRouter()
       };
     },
   })
-  .query("getAll", {
+  .query('getAll', {
     input: z.object({
       limit: z.number().min(1).max(100).nullish(),
       cursor: z.string().nullish(),
       userId: z.string().optional(),
       tagName: z.string().optional(),
       communityId: z.string().optional(),
-      sort: z.enum(["top"]).optional(),
-      time: z.enum(["day", "week"]).optional(),
+      sort: z.enum(['top']).optional(),
+      time: z.enum(['day', 'week']).optional(),
     }),
     async resolve({ ctx, input }) {
       const { cursor } = input;
@@ -125,10 +127,10 @@ export const postRouter = createProtectedRouter()
         take: limit + 1,
         where: {
           createdAt:
-            input.sort === "top"
+            input.sort === 'top'
               ? {
                   gte:
-                    input.time === "day"
+                    input.time === 'day'
                       ? getDateXDaysAgo(1, new Date())
                       : getDateXDaysAgo(7, new Date()),
                 }
@@ -151,14 +153,14 @@ export const postRouter = createProtectedRouter()
         include: postDetailsInclude,
         cursor: cursor ? { id: cursor } : undefined,
         orderBy:
-          input.sort === "top"
+          input.sort === 'top'
             ? {
                 likes: {
-                  _count: "desc",
+                  _count: 'desc',
                 },
               }
             : {
-                createdAt: "desc",
+                createdAt: 'desc',
               },
       });
 
@@ -166,6 +168,7 @@ export const postRouter = createProtectedRouter()
         populatePost(post, ctx.session.user.id)
       );
 
+      // eslint-disable-next-line no-undef-init
       let nextCursor: typeof cursor | undefined = undefined;
 
       if (populatedPosts.length > limit) {
@@ -178,7 +181,7 @@ export const postRouter = createProtectedRouter()
       };
     },
   })
-  .mutation("addPost", {
+  .mutation('addPost', {
     input: z.object({
       content: z.string(),
       images: z
@@ -204,7 +207,7 @@ export const postRouter = createProtectedRouter()
     }),
     async resolve({ input, ctx }) {
       if (input.content.trim().length === 0) {
-        throw new Error("Post must have content text");
+        throw new Error('Post must have content text');
       }
 
       const post = await prisma.post.create({
@@ -235,9 +238,9 @@ export const postRouter = createProtectedRouter()
         });
       }
 
-      const getRandomColor = () => {
-        return "#" + (((1 << 24) * Math.random()) | 0).toString(16);
-      };
+      const getRandomColor = () =>
+        // eslint-disable-next-line no-bitwise, prefer-template
+        '#' + (((1 << 24) * Math.random()) | 0).toString(16);
 
       if (input.tags) {
         const tagsAlreadyInDB = await prisma.tag.findMany({
@@ -273,7 +276,7 @@ export const postRouter = createProtectedRouter()
       }
     },
   })
-  .mutation("toggleLike", {
+  .mutation('toggleLike', {
     input: z.object({
       postId: z.string(),
     }),
@@ -322,7 +325,7 @@ export const postRouter = createProtectedRouter()
       };
     },
   })
-  .mutation("remove", {
+  .mutation('remove', {
     input: z.object({
       postId: z.string(),
     }),
@@ -334,7 +337,7 @@ export const postRouter = createProtectedRouter()
         },
       });
       if (!isCurretUserPostAuthor) {
-        throw Error("You are not the owner of the post");
+        throw Error('You are not the owner of the post');
       }
 
       await prisma.post.update({
@@ -347,3 +350,5 @@ export const postRouter = createProtectedRouter()
       });
     },
   });
+
+export default postRouter;

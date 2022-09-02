@@ -3,15 +3,11 @@
 @tailwind utilities;
 
 html {
-  font-family: "Noto Sans", sans-serif;
+  font-family: 'Noto Sans', sans-serif;
 }
 
 body {
   @apply dark:bg-primary-dark-300 min-h-screen bg-primary-100;
-}
-
-*:focus {
-  /* outline: 2px dashed green; */
 }
 
 *:focus-visible {

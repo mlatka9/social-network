@@ -1,21 +1,19 @@
-import clsx from "clsx";
-import Image from "next/image";
-import { PostDetailsType } from "@/types/db";
+import clsx from 'clsx';
+import { useSession } from 'next-auth/react';
 import {
   useRemovePostMutation,
   useToggleBookmarkMutation,
   useTogglePostLikeMutation,
-} from "src/hooks/mutation";
-import React, { useState } from "react";
-import ModalWrapper from "../common/modal-wrapper";
-import PostInput from "../post-input/post-input";
-import { useSession } from "next-auth/react";
-
-import BookmarkIcon from "@/components/common/icons/bookmark-empty";
-import BookmarkEmptyIcon from "@/components/common/icons/bookmark";
-import ShareIcon from "@/components/common/icons/share";
-import HeartIcon from "@/components/common/icons/heart";
-import HeartEmptyIcon from "@/components/common/icons/heart-empty";
+} from 'src/hooks/mutation';
+import React, { useState } from 'react';
+import { PostDetailsType } from '@/types/db';
+import ModalWrapper from '../common/modal-wrapper';
+import PostInput from '../post-input/post-input';
+import BookmarkIcon from '@/components/common/icons/bookmark-empty';
+import BookmarkEmptyIcon from '@/components/common/icons/bookmark';
+import ShareIcon from '@/components/common/icons/share';
+import HeartIcon from '@/components/common/icons/heart';
+import HeartEmptyIcon from '@/components/common/icons/heart-empty';
 
 interface PostCardFooterProps {
   post: PostDetailsType;
@@ -45,6 +43,7 @@ const PostCardFooter = ({ post }: PostCardFooterProps) => {
   };
 
   const handleToggleLike = (e: React.MouseEvent) => {
+    // e.preventDefault();
     e.stopPropagation();
     togglePostLike({ postId: post.id });
   };
@@ -60,9 +59,10 @@ const PostCardFooter = ({ post }: PostCardFooterProps) => {
     <>
       <div className="flex items-center mt-5">
         <button
+          type="button"
           className={clsx([
-            "flex items-center cursor-pointer w-fit hover:opacity-80 transition-opacity",
-            post.likedByMe && "text-red-500",
+            'flex items-center cursor-pointer w-fit hover:opacity-80 transition-opacity',
+            post.likedByMe && 'text-red-500',
           ])}
           onClick={handleToggleLike}
         >
@@ -70,6 +70,7 @@ const PostCardFooter = ({ post }: PostCardFooterProps) => {
           <p className="ml-2">{post.likesCount}</p>
         </button>
         <button
+          type="button"
           className="flex items-center cursor-pointer w-fit opacity-80 ml-5 hover:opacity-50 transition-opacity"
           onClick={toggleIsSharing}
         >
@@ -77,6 +78,7 @@ const PostCardFooter = ({ post }: PostCardFooterProps) => {
           <p className="ml-2">{post.sharesCount}</p>
         </button>
         <button
+          type="button"
           className="flex items-center cursor-pointer w-fit opacity-80 ml-5 hover:opacity-50 transition-opacity"
           onClick={handleToggleBookmark}
         >
@@ -87,6 +89,7 @@ const PostCardFooter = ({ post }: PostCardFooterProps) => {
         </div>
         {me.id === post.userId && (
           <button
+            type="button"
             onClick={handleRemovePost}
             className="ml-3 font-medium text-xs text-red-400 hover:text-red-500 transition-colors"
           >

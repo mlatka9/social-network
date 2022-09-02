@@ -1,17 +1,16 @@
-import { createProtectedRouter } from "./protected-router";
-import { z } from "zod";
-import { prisma } from "../db/client";
+import { z } from 'zod';
+import { prisma } from '@/server/db/client';
+import createProtectedRouter from '@/server/router/protected-router';
 
-// Example router with queries that can only be hit if the user requesting is signed in
-export const commentRouter = createProtectedRouter()
-  .query("getAllByPostId", {
+const commentRouter = createProtectedRouter()
+  .query('getAllByPostId', {
     input: z.object({
       postId: z.string(),
     }),
     async resolve({ input, ctx }) {
       const comments = await prisma.comment.findMany({
         orderBy: {
-          createdAt: "desc",
+          createdAt: 'desc',
         },
         where: {
           postId: input.postId,
@@ -47,9 +46,7 @@ export const commentRouter = createProtectedRouter()
         }));
 
       const commentsMap = new Map(
-        filteredComments.map((object) => {
-          return [object.id, object];
-        })
+        filteredComments.map((object) => [object.id, object])
       );
 
       const getRepliesCount = (com: string) => {
@@ -77,7 +74,7 @@ export const commentRouter = createProtectedRouter()
         .filter((comment) => comment.children.length || !comment.isDeleted);
     },
   })
-  .mutation("add", {
+  .mutation('add', {
     input: z.object({
       postId: z.string(),
       parentId: z.string().nullable(),
@@ -102,6 +99,7 @@ export const commentRouter = createProtectedRouter()
         },
       });
 
+      // eslint-disable-next-line @typescript-eslint/naming-convention
       const { _count, likes, ...commentData } = comment;
 
       return {
@@ -113,7 +111,7 @@ export const commentRouter = createProtectedRouter()
       };
     },
   })
-  .mutation("delete", {
+  .mutation('delete', {
     input: z.object({
       commentId: z.string(),
     }),
@@ -125,7 +123,7 @@ export const commentRouter = createProtectedRouter()
         },
       });
       if (!isCurretUserPostAuthor) {
-        throw Error("You are not the owner of the post");
+        throw Error('You are not the owner of the post');
       }
 
       await prisma.comment.update({
@@ -138,7 +136,7 @@ export const commentRouter = createProtectedRouter()
       });
     },
   })
-  .mutation("toggleLike", {
+  .mutation('toggleLike', {
     input: z.object({
       commentId: z.string(),
     }),
@@ -181,7 +179,7 @@ export const commentRouter = createProtectedRouter()
       };
     },
   })
-  .mutation("update", {
+  .mutation('update', {
     input: z.object({
       commentId: z.string(),
       newContent: z.string(),
@@ -194,7 +192,7 @@ export const commentRouter = createProtectedRouter()
         },
       });
       if (!isCurretUserPostAuthor) {
-        throw Error("You are not the owner of the post");
+        throw Error('You are not the owner of the post');
       }
 
       await prisma.comment.update({
@@ -207,3 +205,5 @@ export const commentRouter = createProtectedRouter()
       });
     },
   });
+
+export default commentRouter;

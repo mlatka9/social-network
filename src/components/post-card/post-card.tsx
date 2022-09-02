@@ -1,14 +1,15 @@
-import React from "react";
-import { useRouter } from "next/router";
-import Author from "./author";
-import TagsList from "./tags-list";
-import ImagesGrid from "./images-grid";
-import { PostDetailsType } from "@/types/db";
-import PostCardFooter from "./post-card-footer";
-import PostThumbnail from "../post/post-thumbnail";
-import { useElementSize } from "usehooks-ts";
-import CommunityBadge from "./community-badge";
-import MentionsList from "./mentions-list";
+import React from 'react';
+import { useRouter } from 'next/router';
+import { useElementSize } from 'usehooks-ts';
+import Author from './author';
+import TagsList from './tags-list';
+import ImagesGrid from './images-grid';
+import { PostDetailsType } from '@/types/db';
+import PostCardFooter from './post-card-footer';
+import PostThumbnail from '../post/post-thumbnail';
+
+import CommunityBadge from './community-badge';
+import MentionsList from './mentions-list';
 
 export interface PostCardProps {
   post: PostDetailsType;
@@ -17,9 +18,9 @@ export interface PostCardProps {
 const PostCard = ({ post }: PostCardProps) => {
   const router = useRouter();
 
-  const basePath = router.asPath.split("?")[0];
+  const basePath = router.asPath.split('?')[0];
 
-  const showModalOnClick = basePath === "/";
+  const showModalOnClick = basePath === '/';
 
   const goToPostDetails = () => {
     const url = showModalOnClick ? `${basePath}` : `/post/${post.id}`;
@@ -40,7 +41,15 @@ const PostCard = ({ post }: PostCardProps) => {
   const [postContentRef, { height }] = useElementSize();
 
   return (
-    <article
+    <div
+      role="link"
+      tabIndex={0}
+      onKeyDown={(e) => {
+        if (e.target !== e.currentTarget) return;
+        if (e.code === 'Enter') {
+          goToPostDetails();
+        }
+      }}
       className="bg-primary-0 dark:bg-primary-dark-100 w-full p-5 shadow-sm rounded-lg cursor-pointer"
       onClick={goToPostDetails}
     >
@@ -81,7 +90,7 @@ const PostCard = ({ post }: PostCardProps) => {
         <MentionsList mentions={post.mentions} />
         <PostCardFooter post={post} />
       </div>
-    </article>
+    </div>
   );
 };
 

@@ -1,17 +1,18 @@
-import { GetServerSidePropsContext } from "next";
-import { unstable_getServerSession } from "next-auth";
-import { useRouter } from "next/router";
-import { authOptions } from "../api/auth/[...nextauth]";
-import PostInput from "@/components/post-input/post-input";
-import PostList from "@/components/post/post-list";
+import { GetServerSidePropsContext } from 'next';
+import { unstable_getServerSession } from 'next-auth';
+import { useRouter } from 'next/router';
 import {
   useCommunityDetailsQuery,
   useCommunityPostsQuery,
-} from "src/hooks/query";
-import CommunityProfileHero from "@/components/community/community-profile-hero";
-import Layout from "@/components/layouts/main-layout";
-import TextHeader from "@/components/common/text-header";
-import PostsSortPanel from "@/components/common/posts-sort-panel";
+} from 'src/hooks/query';
+import { authOptions } from '../api/auth/[...nextauth]';
+import PostInput from '@/components/post-input/post-input';
+import PostList from '@/components/post/post-list';
+
+import CommunityProfileHero from '@/components/community/community-profile-hero';
+import Layout from '@/components/layouts/main-layout';
+import TextHeader from '@/components/common/text-header';
+import PostsSortPanel from '@/components/common/posts-sort-panel';
 
 const Community = () => {
   const router = useRouter();
@@ -81,7 +82,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   if (!session) {
     return {
       redirect: {
-        destination: "/api/auth/signin",
+        destination: '/api/auth/signin',
         permanent: false,
       },
     };

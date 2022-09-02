@@ -1,5 +1,5 @@
-import { useRouter } from "next/router";
-import Button from "../common/button";
+import { useRouter } from 'next/router';
+import Button from '../common/button';
 
 const CommunitySettingsButton = () => {
   const router = useRouter();
@@ -9,7 +9,7 @@ const CommunitySettingsButton = () => {
     router.push(
       {
         pathname: `/community/${communityId}`,
-        query: { ...restParams, section: "settings" },
+        query: { ...restParams, section: 'settings' },
       },
       undefined,
       {

@@ -1,6 +1,6 @@
-import Link from "next/link";
-import ButtonFollow from "./button-follow";
-import UserProfilePicture from "./user-profile-image";
+import Link from 'next/link';
+import ButtonFollow from './button-follow';
+import UserProfilePicture from './user-profile-image';
 
 interface UserCardProps {
   id: string;

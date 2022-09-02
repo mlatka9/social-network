@@ -1,30 +1,26 @@
 // src/server/router/index.ts
-import { createRouter } from "./context";
-import superjson from "superjson";
+import superjson from 'superjson';
+import { createRouter } from './context';
 
-import { exampleRouter } from "./example";
-import { protectedExampleRouter } from "./protected-example-router";
-import { postRouter } from "./posts";
-import { commentRouter } from "./comment";
-import { userRouter } from "./user";
-import { bookmarkRouter } from "./bookmark";
-import { tagRouter } from "./tag";
-import { communityRouter } from "./community";
-import { searchRouter } from "./search";
-import { exploreRouter } from "./explore";
+import postRouter from '@/server/router/posts';
+import commentRouter from '@/server/router/comment';
+import userRouter from '@/server/router/user';
+import bookmarkRouter from '@/server/router/bookmark';
+import tagRouter from '@/server/router/tag';
+import communityRouter from '@/server/router/community';
+import searchRouter from '@/server/router/search';
+import exploreRouter from '@/server/router/explore';
 
 export const appRouter = createRouter()
   .transformer(superjson)
-  .merge("example.", exampleRouter)
-  .merge("question.", protectedExampleRouter)
-  .merge("post.", postRouter)
-  .merge("comment.", commentRouter)
-  .merge("user.", userRouter)
-  .merge("bookmarks.", bookmarkRouter)
-  .merge("tags.", tagRouter)
-  .merge("community.", communityRouter)
-  .merge("search.", searchRouter)
-  .merge("explore.", exploreRouter);
+  .merge('post.', postRouter)
+  .merge('comment.', commentRouter)
+  .merge('user.', userRouter)
+  .merge('bookmarks.', bookmarkRouter)
+  .merge('tags.', tagRouter)
+  .merge('community.', communityRouter)
+  .merge('search.', searchRouter)
+  .merge('explore.', exploreRouter);
 
 // export type definition of API
 export type AppRouter = typeof appRouter;

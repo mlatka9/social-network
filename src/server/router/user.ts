@@ -1,11 +1,11 @@
-import { createProtectedRouter } from "./protected-router";
-import { z } from "zod";
-import { prisma } from "../db/client";
-import { SearchType } from "./types";
+/* eslint-disable @typescript-eslint/naming-convention */
+import { z } from 'zod';
+import createProtectedRouter from './protected-router';
+import { prisma } from '../db/client';
 
 // Example router with queries that can only be hit if the user requesting is signed in
-export const userRouter = createProtectedRouter()
-  .query("getById", {
+const userRouter = createProtectedRouter()
+  .query('getById', {
     input: z.object({
       userId: z.string(),
     }),
@@ -25,7 +25,7 @@ export const userRouter = createProtectedRouter()
         },
       });
 
-      if (!user) throw new Error("no user with id");
+      if (!user) throw new Error('no user with id');
 
       const { _count, followedBy, ...userData } = user;
 
@@ -39,12 +39,12 @@ export const userRouter = createProtectedRouter()
       };
     },
   })
-  .query("me", {
+  .query('me', {
     async resolve({ ctx }) {
       return ctx.session.user;
     },
   })
-  .query("getFollowing", {
+  .query('getFollowing', {
     input: z.object({
       userId: z.string(),
     }),
@@ -80,7 +80,6 @@ export const userRouter = createProtectedRouter()
               id: true,
               name: true,
             },
-            // take: 1,
           },
           _count: {
             select: {
@@ -99,7 +98,7 @@ export const userRouter = createProtectedRouter()
       );
     },
   })
-  .query("getFollowers", {
+  .query('getFollowers', {
     input: z.object({
       userId: z.string(),
     }),
@@ -155,7 +154,7 @@ export const userRouter = createProtectedRouter()
       );
     },
   })
-  .query("getBySearchPhrase", {
+  .query('getBySearchPhrase', {
     input: z.object({
       searchPhrase: z.string(),
     }),
@@ -180,14 +179,14 @@ export const userRouter = createProtectedRouter()
       return matchingUsers;
     },
   })
-  .mutation("followUser", {
+  .mutation('followUser', {
     input: z.object({
       userId: z.string(),
     }),
 
     async resolve({ ctx, input }) {
       if (input.userId === ctx.session.user.id) {
-        throw new Error("U cant follow yourself");
+        throw new Error('U cant follow yourself');
       }
 
       const user = await prisma.user.findFirst({
@@ -200,7 +199,7 @@ export const userRouter = createProtectedRouter()
       });
 
       const isUserFollowed =
-        user?.following.some((user) => user.id === input.userId) || false;
+        user?.following.some((u) => u.id === input.userId) || false;
 
       await prisma.user.update({
         where: {
@@ -222,7 +221,7 @@ export const userRouter = createProtectedRouter()
       });
     },
   })
-  .mutation("update", {
+  .mutation('update', {
     input: z.object({
       name: z.string(),
       bio: z.string(),
@@ -243,3 +242,5 @@ export const userRouter = createProtectedRouter()
       });
     },
   });
+
+export default userRouter;

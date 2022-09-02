@@ -1,7 +1,8 @@
-import { useCommunitiesQuery } from "src/hooks/query";
-import CommunityCard from "./community-card";
-import { useRouter } from "next/router";
-import CommunityFilter from "./community-filter";
+import { useCommunitiesQuery } from 'src/hooks/query';
+import { useRouter } from 'next/router';
+import CommunityCard from './community-card';
+
+import CommunityFilter from './community-filter';
 
 const CommunityList = () => {
   const router = useRouter();
@@ -24,6 +25,14 @@ const CommunityList = () => {
       <CommunityFilter />
       {data.map((community) => (
         <div
+          role="link"
+          tabIndex={0}
+          onKeyDown={(e) => {
+            if (e.target !== e.currentTarget) return;
+            if (e.code === 'Enter') {
+              goToCommunity(community.id);
+            }
+          }}
           onClick={() => goToCommunity(community.id)}
           key={community.id}
           className="cursor-pointer"

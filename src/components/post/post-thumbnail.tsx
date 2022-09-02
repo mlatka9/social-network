@@ -1,9 +1,8 @@
-import { PostDetailsType, SharedPostType } from "@/types/db";
-import clsx from "clsx";
-import Image from "next/image";
-import router from "next/router";
-import React from "react";
-import { usePostQuery } from "src/hooks/query";
+import clsx from 'clsx';
+import Image from 'next/image';
+import router from 'next/router';
+import React from 'react';
+import { SharedPostType } from '@/types/db';
 
 interface PostThumbnailProps {
   sharedPost: SharedPostType;
@@ -16,9 +15,8 @@ const PostThumbnail = ({
   disableLink,
   isSmall,
 }: PostThumbnailProps) => {
-  const goToSharedPost = (e: React.MouseEvent<HTMLElement>) => {
+  const goToSharedPost = () => {
     if (disableLink) return;
-    e.stopPropagation();
     router.push(`/post/${sharedPost.id}`);
   };
 
@@ -34,12 +32,22 @@ const PostThumbnail = ({
 
   return (
     <div
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => {
+        if (e.code === 'Enter') {
+          goToSharedPost();
+        }
+      }}
       className="ring-2 ring-inset ring-blue-400/30 rounded-lg mb-5 overflow-hidden"
-      onClick={goToSharedPost}
+      onClick={(e) => {
+        e.stopPropagation();
+        goToSharedPost();
+      }}
     >
       <div className="flex items-center p-2">
         <Image
-          src={sharedPost.user.image || "/images/fallback.svg"}
+          src={sharedPost.user.image || '/images/fallback.svg'}
           alt=""
           width="20"
           height="20"
@@ -58,8 +66,8 @@ const PostThumbnail = ({
       {firstImage && (
         <div
           className={clsx([
-            "w-full h-96 relative overflow-hidden",
-            isSmall && "!h-",
+            'w-full h-96 relative overflow-hidden',
+            isSmall && '!h-',
           ])}
         >
           <Image src={firstImage} alt="" layout="fill" objectFit="cover" />

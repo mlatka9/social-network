@@ -1,6 +1,6 @@
-import { Image as ImageType } from "@prisma/client";
-import clsx from "clsx";
-import Image from "next/image";
+import { Image as ImageType } from '@prisma/client';
+import clsx from 'clsx';
+import Image from 'next/image';
 
 interface ImagesGridProps {
   images: ImageType[];
@@ -38,43 +38,41 @@ const getImageHeightRatio = (imageNumber: number, imageIndex: number) => {
   return 100;
 };
 
-const ImagesGrid = ({ images }: ImagesGridProps) => {
-  return (
-    <div
-      className={clsx([
-        "grid gap-2 grid-cols-fill",
-        images.length > 1 && "",
-        images.length > 2 && "",
-      ])}
-    >
-      {images.length > 0 &&
-        images.map((image, index) => {
-          const widthRatio = getImageWidthRatio(images.length, index);
-          const heightRatio = getImageHeightRatio(images.length, index);
-          return (
-            <div
-              key={image.id}
-              className={clsx(
-                "relative",
-                images.length === 3 && index === 0 && "row-span-2",
-                images.length === 3 && index === 2 && "self-end"
-              )}
-            >
-              <Image
-                layout="responsive"
-                width={widthRatio}
-                height={heightRatio}
-                src={image.url}
-                objectFit="cover"
-                className="rounded-lg"
-                alt=""
-                sizes="700px"
-              />
-            </div>
-          );
-        })}
-    </div>
-  );
-};
+const ImagesGrid = ({ images }: ImagesGridProps) => (
+  <div
+    className={clsx([
+      'grid gap-2 grid-cols-fill',
+      images.length > 1 && '',
+      images.length > 2 && '',
+    ])}
+  >
+    {images.length > 0 &&
+      images.map((image, index) => {
+        const widthRatio = getImageWidthRatio(images.length, index);
+        const heightRatio = getImageHeightRatio(images.length, index);
+        return (
+          <div
+            key={image.id}
+            className={clsx(
+              'relative',
+              images.length === 3 && index === 0 && 'row-span-2',
+              images.length === 3 && index === 2 && 'self-end'
+            )}
+          >
+            <Image
+              layout="responsive"
+              width={widthRatio}
+              height={heightRatio}
+              src={image.url}
+              objectFit="cover"
+              className="rounded-lg"
+              alt=""
+              sizes="700px"
+            />
+          </div>
+        );
+      })}
+  </div>
+);
 
 export default ImagesGrid;

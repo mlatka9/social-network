@@ -1,1 +1,1 @@
-export * from "./post-input";
+export * as PostInput from './post-input';

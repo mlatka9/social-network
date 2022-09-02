@@ -1,6 +1,6 @@
-import { useState } from "react";
-import UserProfilePicture from "../common/user-profile-image";
-import { useSession } from "next-auth/react";
+import { useSession } from 'next-auth/react';
+import { useState } from 'react';
+import UserProfilePicture from '../common/user-profile-image';
 
 interface CommentInputProps {
   onMessageSubmit: (message: string) => void;
@@ -8,12 +8,12 @@ interface CommentInputProps {
 
 const CommentInput = ({ onMessageSubmit }: CommentInputProps) => {
   const { data } = useSession();
-  const [commentMessageValue, setCommentMessageValue] = useState("");
+  const [commentMessageValue, setCommentMessageValue] = useState('');
 
   const handleOnSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onMessageSubmit(commentMessageValue);
-    setCommentMessageValue("");
+    setCommentMessageValue('');
   };
 
   const me = data?.user!;

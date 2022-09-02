@@ -1,9 +1,10 @@
-import React, { useState } from "react";
 import {
   useAddCommentMutation,
   useUpdateCommentMutation,
-} from "src/hooks/mutation";
-import { CommentDetailsType } from "@/types/db";
+} from 'src/hooks/mutation';
+import React, { useState } from 'react';
+
+import { CommentDetailsType } from '@/types/db';
 
 interface UseCommenProps {
   comment: CommentDetailsType;
@@ -31,7 +32,7 @@ const useComment = ({ comment }: UseCommenProps) => {
 
   const handleAddCommentReply = (message: string) => {
     addComment({
-      message: message,
+      message,
       parentId: comment.id,
     });
     setIsReplying(false);

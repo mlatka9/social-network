@@ -1,6 +1,6 @@
-import { useRouter } from "next/router";
-import { useCommunityMembersQuery } from "src/hooks/query";
-import UserCard from "../common/user-card";
+import { useRouter } from 'next/router';
+import { useCommunityMembersQuery } from 'src/hooks/query';
+import UserCard from '../common/user-card';
 
 const Members = () => {
   const router = useRouter();

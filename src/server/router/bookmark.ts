@@ -1,11 +1,10 @@
-import { createProtectedRouter } from "./protected-router";
-import { z } from "zod";
-import { prisma } from "../db/client";
-import { populatePost } from "./utils";
-import { postDetailsInclude } from "./types";
+import { z } from 'zod';
+import { prisma } from '@/server/db/client';
+import createProtectedRouter from '@/server/router/protected-router';
+import { postDetailsInclude, populatePost } from '@/server/router/utils';
 
-export const bookmarkRouter = createProtectedRouter()
-  .query("getAll", {
+const bookmarkRouter = createProtectedRouter()
+  .query('getAll', {
     input: z.object({
       limit: z.number().min(1).max(100).nullish(),
       cursor: z.string().nullish(),
@@ -26,7 +25,7 @@ export const bookmarkRouter = createProtectedRouter()
         include: postDetailsInclude,
         cursor: cursor ? { id: cursor } : undefined,
         orderBy: {
-          createdAt: "desc",
+          createdAt: 'desc',
         },
       });
 
@@ -34,6 +33,7 @@ export const bookmarkRouter = createProtectedRouter()
         populatePost(post, ctx.session.user.id)
       );
 
+      // eslint-disable-next-line no-undef-init
       let nextCursor: typeof cursor | undefined = undefined;
 
       if (populatedPosts.length > limit) {
@@ -46,7 +46,7 @@ export const bookmarkRouter = createProtectedRouter()
       };
     },
   })
-  .mutation("add", {
+  .mutation('add', {
     input: z.object({
       postId: z.string(),
     }),
@@ -73,3 +73,5 @@ export const bookmarkRouter = createProtectedRouter()
       }
     },
   });
+
+export default bookmarkRouter;

@@ -1,6 +1,7 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from '@prisma/client';
+import categories from 'prisma/data/categories';
+
 const prisma = new PrismaClient();
-import { categories } from "./data/categories";
 
 async function main() {
   await prisma.category.createMany({
@@ -12,8 +13,7 @@ main()
   .then(async () => {
     await prisma.$disconnect();
   })
-  .catch(async (e) => {
-    console.error(e);
+  .catch(async () => {
     await prisma.$disconnect();
     process.exit(1);
   });

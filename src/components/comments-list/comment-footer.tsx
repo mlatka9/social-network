@@ -1,11 +1,12 @@
-import Image from "next/image";
-import clsx from "clsx";
+import clsx from 'clsx';
+import { useSession } from 'next-auth/react';
+import Image from 'next/image';
+
 import {
   useDeleteCommentMutation,
   useToggleCommentLikeMutation,
-} from "src/hooks/mutation";
-import { CommentDetailsType } from "@/types/db";
-import { useSession } from "next-auth/react";
+} from 'src/hooks/mutation';
+import { CommentDetailsType } from '@/types/db';
 
 interface CommentFooterProps {
   comment: CommentDetailsType;
@@ -33,10 +34,11 @@ const CommentFooter = ({
 
   return (
     <div className="flex">
-      <div
+      <button
+        type="button"
         className={clsx([
-          "flex items-center cursor-pointer w-fit",
-          comment.likedByMe && "text-red-500",
+          'flex items-center cursor-pointer w-fit',
+          comment.likedByMe && 'text-red-500',
         ])}
         onClick={handleToggleLike}
       >
@@ -48,8 +50,8 @@ const CommentFooter = ({
           alt=""
         />
         <p className="ml-2">{comment.likeCount}</p>
-      </div>
-      <div className={clsx(["flex items-center w-fit ml-5"])}>
+      </button>
+      <div className={clsx(['flex items-center w-fit ml-5'])}>
         <Image
           src="/icons/replay.png"
           width="20"
@@ -60,6 +62,7 @@ const CommentFooter = ({
         <p className="ml-2">{comment.repliesCount}</p>
       </div>
       <button
+        type="button"
         onClick={toggleIsReplying}
         className="ml-auto font-medium text-xs text-gray-400 hover:text-neutral-800 transition-colors"
       >
@@ -68,12 +71,14 @@ const CommentFooter = ({
       {comment.userId === me.id && (
         <>
           <button
+            type="button"
             onClick={toggleIsEditing}
             className="ml-3 font-medium text-xs text-gray-400 hover:text-neutral-800 transition-colors"
           >
             Edit
           </button>
           <button
+            type="button"
             onClick={handleDeleteComment}
             className="ml-3 font-medium text-xs text-red-400 hover:text-red-500 transition-colors"
           >

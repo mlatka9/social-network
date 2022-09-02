@@ -1,11 +1,11 @@
-import { ReactNode, useState } from "react";
-import PopularCommunitiesList from "@/components/community/popular-communities-list";
-import Header from "../header/header";
-import TrendingTagsList from "@/components/common/trending-tags-list";
-import CategoryList from "../community/categories-list";
-import ModalWrapper from "../common/modal-wrapper";
-import CommunityCreator from "../community/community-creator";
-import Button from "../common/button";
+import { ReactNode, useState } from 'react';
+import PopularCommunitiesList from '@/components/community/popular-communities-list';
+import Header from '../header/header';
+import TrendingTagsList from '@/components/common/trending-tags-list';
+import CategoryList from '../community/categories-list';
+import ModalWrapper from '../common/modal-wrapper';
+import CommunityCreator from '../community/community-creator';
+import Button from '../common/button';
 
 interface LayoutProps {
   children: ReactNode;

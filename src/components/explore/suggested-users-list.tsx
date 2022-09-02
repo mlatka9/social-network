@@ -1,5 +1,5 @@
-import { useSuggestedUsersQuery } from "src/hooks/query";
-import UserCard from "../common/user-card";
+import { useSuggestedUsersQuery } from 'src/hooks/query';
+import UserCard from '../common/user-card';
 
 const SuggestedUsersList = () => {
   const { data, isSuccess } = useSuggestedUsersQuery();

@@ -18,7 +18,9 @@
     "baseUrl": ".",
     "paths": {
       "@/components/*": ["src/components/*"],
-      "@/types/*": ["src/types/*"]
+      "@/types/*": ["src/types/*"],
+      "@/server/*": ["src/server/*"],
+      "@/hooks/*": ["src/hooks/*"]
     }
   },
   "include": [
@@ -26,7 +28,8 @@
     "next-auth.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    "**/*.js"
+    "**/*.js",
+    "tailwind.config.cjs"
   ],
   "exclude": ["node_modules"]
 }

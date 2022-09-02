@@ -1,8 +1,9 @@
-import { useSession } from "next-auth/react";
-import ButtonFollow from "@/components/common/button-follow";
-import Link from "next/link";
-import { useRouter } from "next/router";
-import Button from "../common/button";
+import { useSession } from 'next-auth/react';
+
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import ButtonFollow from '@/components/common/button-follow';
+import Button from '../common/button';
 
 interface UserProfileButtonProps {
   userId: string;
@@ -17,13 +18,11 @@ const UserProfileButton = ({ userId }: UserProfileButtonProps) => {
   }
 
   return (
-    <>
-      <Link href={`${asPath}/settings`} shallow={true}>
-        <a className="ml-auto">
-          <Button>Settings</Button>
-        </a>
-      </Link>
-    </>
+    <Link href={`${asPath}/settings`} shallow>
+      <a className="ml-auto">
+        <Button>Settings</Button>
+      </a>
+    </Link>
   );
 };
 

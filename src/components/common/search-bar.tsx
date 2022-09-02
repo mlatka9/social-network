@@ -1,24 +1,23 @@
-import React, { useEffect, useState } from "react";
-import { trpc } from "src/utils/trpc";
-import { useSearchQuery } from "src/hooks/query";
-import { useRouter } from "next/router";
-import { useDebounce } from "usehooks-ts";
-import SearchCard from "@/components/common/search-card";
-import useSuggestionList from "src/hooks/use-suggestion-popup";
-import SearchIcon from "@/components/common/icons/search";
-import type { SearchEntryType } from "@/types/db";
-import { SearchType } from "src/server/router/types";
+import React, { useEffect, useState } from 'react';
+import { useSearchQuery } from 'src/hooks/query';
+import { useRouter } from 'next/router';
+import { useDebounce } from 'usehooks-ts';
+import useSuggestionList from 'src/hooks/use-suggestion-popup';
+import { SearchType } from 'src/server/router/types';
+import SearchCard from '@/components/common/search-card';
+import SearchIcon from '@/components/common/icons/search';
+import type { SearchEntryType } from '@/types/db';
 
 const SearchBar = () => {
   const router = useRouter();
 
-  const [searchPhrase, setSearchPhrase] = useState("");
+  const [searchPhrase, setSearchPhrase] = useState('');
   const debouncedSearchPhrase = useDebounce(searchPhrase, 300);
 
   const { data } = useSearchQuery(debouncedSearchPhrase);
 
   useEffect(() => {
-    setSearchPhrase("");
+    setSearchPhrase('');
   }, [router.asPath]);
 
   const onSelect = (searchEntry: SearchEntryType) => {

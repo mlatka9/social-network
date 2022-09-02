@@ -1,13 +1,13 @@
-import CommentsList from "@/components/comments-list/comments-list";
-import CommentInput from "@/components/comments-list/comment-input";
-import { usePostQuery, usePostCommentsQuery } from "src/hooks/query";
-import { useAddCommentMutation } from "src/hooks/mutation";
-import Author from "../post-card/author";
-import TagsList from "../post-card/tags-list";
-import ImagesGrid from "../post-card/images-grid";
-import PostCardFooter from "../post-card/post-card-footer";
-import PostThumbnail from "./post-thumbnail";
-import CommunityBadge from "../post-card/community-badge";
+import { usePostQuery, usePostCommentsQuery } from 'src/hooks/query';
+import { useAddCommentMutation } from 'src/hooks/mutation';
+import CommentsList from '@/components/comments-list/comments-list';
+import CommentInput from '@/components/comments-list/comment-input';
+import Author from '../post-card/author';
+import TagsList from '../post-card/tags-list';
+import ImagesGrid from '../post-card/images-grid';
+import PostCardFooter from '../post-card/post-card-footer';
+import PostThumbnail from './post-thumbnail';
+import CommunityBadge from '../post-card/community-badge';
 
 interface PostDetailsProps {
   postId: string;
@@ -21,13 +21,13 @@ const PostDetails = ({ postId }: PostDetailsProps) => {
 
   const handleAddComment = (message: string) => {
     addComment({
-      message: message,
+      message,
       parentId: null,
     });
   };
 
   if (isError) {
-    if (error.data?.code === "NOT_FOUND") {
+    if (error.data?.code === 'NOT_FOUND') {
       return <div>Post was deleted</div>;
     }
     return <div>Unexpected error...</div>;
@@ -38,35 +38,31 @@ const PostDetails = ({ postId }: PostDetailsProps) => {
   }
 
   return (
-    <>
-      <div className=" w-full rounded-lg grid gap-x-10 ">
-        {post.communityId && post.communityName && (
-          <CommunityBadge
-            communityId={post.communityId}
-            communityName={post.communityName}
-          />
-        )}
-        <div className="bg-white w-full mb-5  rounded-lg dark:bg-primary-dark-100 mt-2">
-          <Author
-            authorId={post.user.id}
-            authorImage={post.user.image}
-            authorName={post.user.name}
-            postCreatedAt={post.createdAt}
-          />
-          <TagsList tags={post.tags} />
-          <p className="mb-3">{post.content}</p>
-          <ImagesGrid images={post.images} />
-          {post.shareParent && <PostThumbnail sharedPost={post.shareParent} />}
+    <div className=" w-full rounded-lg grid gap-x-10 ">
+      {post.communityId && post.communityName && (
+        <CommunityBadge
+          communityId={post.communityId}
+          communityName={post.communityName}
+        />
+      )}
+      <div className="bg-white w-full mb-5  rounded-lg dark:bg-primary-dark-100 mt-2">
+        <Author
+          authorId={post.user.id}
+          authorImage={post.user.image}
+          authorName={post.user.name}
+          postCreatedAt={post.createdAt}
+        />
+        <TagsList tags={post.tags} />
+        <p className="mb-3">{post.content}</p>
+        <ImagesGrid images={post.images} />
+        {post.shareParent && <PostThumbnail sharedPost={post.shareParent} />}
 
-          <PostCardFooter post={post} />
-        </div>
-
-        <CommentInput onMessageSubmit={handleAddComment} />
-        {postComments.isSuccess && (
-          <CommentsList comments={postComments.data} />
-        )}
+        <PostCardFooter post={post} />
       </div>
-    </>
+
+      <CommentInput onMessageSubmit={handleAddComment} />
+      {postComments.isSuccess && <CommentsList comments={postComments.data} />}
+    </div>
   );
 };
 

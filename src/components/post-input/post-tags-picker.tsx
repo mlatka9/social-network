@@ -1,6 +1,6 @@
-import { Tag } from "@prisma/client";
-import PostTagsInput from "./post-tags-input";
-import SelectedTagsList from "./selected-tags-list";
+import { Tag } from '@prisma/client';
+import PostTagsInput from './post-tags-input';
+import SelectedTagsList from './selected-tags-list';
 
 interface PostTagInputProps {
   tags: Tag[];

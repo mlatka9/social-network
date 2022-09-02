@@ -1,6 +1,6 @@
-import { SearchUserType } from "@/types/db";
-import PostMentionsInput from "./post-mentions-input";
-import SelectedMentionsList from "./selected-mentions-list";
+import { SearchUserType } from '@/types/db';
+import PostMentionsInput from './post-mentions-input';
+import SelectedMentionsList from './selected-mentions-list';
 
 interface PostUserPickerProps {
   mentions: SearchUserType[];

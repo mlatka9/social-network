@@ -1,9 +1,9 @@
-import { useUserBookmarkedPostsQuery } from "src/hooks/query";
-import Layout from "@/components/layouts/main-layout";
-import { unstable_getServerSession } from "next-auth";
-import { GetServerSidePropsContext } from "next";
-import { authOptions } from "./api/auth/[...nextauth]";
-import PostList from "@/components/post/post-list";
+import { useUserBookmarkedPostsQuery } from 'src/hooks/query';
+import { unstable_getServerSession } from 'next-auth';
+import { GetServerSidePropsContext } from 'next';
+import Layout from '@/components/layouts/main-layout';
+import { authOptions } from './api/auth/[...nextauth]';
+import PostList from '@/components/post/post-list';
 
 const Bookmarks = () => {
   const { data, isSuccess, fetchNextPage, hasNextPage } =
@@ -42,7 +42,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   if (!session) {
     return {
       redirect: {
-        destination: "/api/auth/signin",
+        destination: '/api/auth/signin',
         permanent: false,
       },
     };

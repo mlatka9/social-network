@@ -1,12 +1,12 @@
-import { useForm } from "react-hook-form";
-import { uploadImage } from "src/utils/cloudinary";
-import { useState, useEffect } from "react";
-import { useCurrentUserProfileQuery } from "src/hooks/query";
-import { useProfileMutation } from "src/hooks/mutation";
-import FormInput from "./form-input";
-import FormTextarea from "./form-textarea";
-import FormImages from "./form-images";
-import Button from "./button";
+import { useForm } from 'react-hook-form';
+import { uploadImage } from 'src/utils/cloudinary';
+import { useState, useEffect } from 'react';
+import { useCurrentUserProfileQuery } from 'src/hooks/query';
+import { useProfileMutation } from 'src/hooks/mutation';
+import FormInput from './form-input';
+import FormTextarea from './form-textarea';
+import FormImages from './form-images';
+import Button from './button';
 
 export interface ProfileSettingsFormType {
   name: string;
@@ -25,8 +25,8 @@ const ProfileSettings = () => {
     formState: { errors },
   } = useForm<ProfileSettingsFormType>({
     defaultValues: {
-      bio: "",
-      name: "",
+      bio: '',
+      name: '',
       bannerImages: [],
       images: [],
     },
@@ -37,20 +37,20 @@ const ProfileSettings = () => {
 
   useEffect(() => {
     if (!isSuccess) return;
-    setValue("name", profileData?.name || "");
-    setValue("bio", profileData?.bio || "");
+    setValue('name', profileData?.name || '');
+    setValue('bio', profileData?.bio || '');
   }, [profileData?.name, profileData?.bio, setValue, isSuccess]);
 
-  const draftImageFile = watch("images")[0];
-  const draftBannerImageFile = watch("bannerImages")[0];
+  const draftImageFile = watch('images')[0];
+  const draftBannerImageFile = watch('bannerImages')[0];
 
   const onSubmit = async (data: ProfileSettingsFormType) => {
     const { name, bio, bannerImages, images } = data;
     setIsUpdating(true);
 
     const imagesToUpload = [
-      { name: "image", file: images[0] },
-      { name: "bannerImage", file: bannerImages[0] },
+      { name: 'image', file: images[0] },
+      { name: 'bannerImage', file: bannerImages[0] },
     ];
 
     const [imageUrl, bannerUrl] = await Promise.all(
@@ -63,11 +63,11 @@ const ProfileSettings = () => {
   };
 
   const setImage = (file: File[]) => {
-    setValue("images", file);
+    setValue('images', file);
   };
 
   const setBanner = (file: File[]) => {
-    setValue("bannerImages", file);
+    setValue('bannerImages', file);
   };
 
   if (!profileData) return <div>loading...</div>;
@@ -91,10 +91,10 @@ const ProfileSettings = () => {
             rules={{
               required: {
                 value: true,
-                message: "Name is required",
+                message: 'Name is required',
               },
               minLength: {
-                message: "Name must be at least 3 characters long",
+                message: 'Name must be at least 3 characters long',
                 value: 3,
               },
             }}
@@ -108,17 +108,17 @@ const ProfileSettings = () => {
             register={register}
             rules={{
               maxLength: {
-                message: "Bio can be up to 300 characters long",
+                message: 'Bio can be up to 300 characters long',
                 value: 300,
               },
             }}
           />
         </div>
-        <input type="file" {...register("images")} className="hidden" />
-        <input type="file" {...register("bannerImages")} className="hidden" />
+        <input type="file" {...register('images')} className="hidden" />
+        <input type="file" {...register('bannerImages')} className="hidden" />
 
         <Button className="mt-3">
-          {isUpdating ? "Updating..." : "Submit"}
+          {isUpdating ? 'Updating...' : 'Submit'}
         </Button>
       </form>
     </div>

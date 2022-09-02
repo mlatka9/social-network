@@ -1,6 +1,6 @@
-import { useTheme } from "next-themes";
-import * as React from "react";
-import { SVGProps } from "react";
+import { useTheme } from 'next-themes';
+import * as React from 'react';
+import { SVGProps } from 'react';
 
 const LogOutIcon = (props: SVGProps<SVGSVGElement>) => {
   const { resolvedTheme } = useTheme();
@@ -9,7 +9,7 @@ const LogOutIcon = (props: SVGProps<SVGSVGElement>) => {
     <svg
       width={20}
       height={16}
-      fill={resolvedTheme === "dark" ? "white" : "black"}
+      fill={resolvedTheme === 'dark' ? 'white' : 'black'}
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 384 512"
       {...props}

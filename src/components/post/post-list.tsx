@@ -1,8 +1,8 @@
-import PostCard from "@/components/post-card/post-card";
-import { useInView } from "react-intersection-observer";
-import { useEffect, Fragment } from "react";
-import { InfiniteData } from "@tanstack/react-query";
-import { PostDetailsType } from "@/types/db";
+import { useInView } from 'react-intersection-observer';
+import { useEffect, Fragment } from 'react';
+import { InfiniteData } from '@tanstack/react-query';
+import PostCard from '@/components/post-card/post-card';
+import { PostDetailsType } from '@/types/db';
 
 interface PostInfinityData {
   posts: PostDetailsType[];
@@ -16,9 +16,7 @@ interface PostListProps {
 }
 
 const PostList = ({ data, fetchNextPage, hasNextPage }: PostListProps) => {
-  const { ref, inView } = useInView({
-    // rootMargin: "300px",
-  });
+  const { ref, inView } = useInView();
 
   useEffect(() => {
     if (inView && hasNextPage) {
@@ -31,7 +29,7 @@ const PostList = ({ data, fetchNextPage, hasNextPage }: PostListProps) => {
   return (
     <div className="space-y-5 mb-10">
       {data.pages.map((page) => (
-        <Fragment key={page.nextCursor || "page"}>
+        <Fragment key={page.nextCursor || 'page'}>
           {page.posts.map((post) => (
             <PostCard key={post.id} post={post} />
           ))}

@@ -1,11 +1,11 @@
-import { useDropzone } from "react-dropzone";
+import { useDropzone } from 'react-dropzone';
 
-const useSettingsDropZone = (setFormValue: (files: File[]) => void) => {
-  return useDropzone({
+const useSettingsDropZone = (setFormValue: (files: File[]) => void) =>
+  useDropzone({
     noClick: true,
     multiple: false,
     accept: {
-      "image/*": [".png", ".gif", ".jpeg", ".jpg"],
+      'image/*': ['.png', '.gif', '.jpeg', '.jpg'],
     },
     onDrop: (files: File[]) => {
       if (files[0]) {
@@ -13,6 +13,5 @@ const useSettingsDropZone = (setFormValue: (files: File[]) => void) => {
       }
     },
   });
-};
 
 export default useSettingsDropZone;

@@ -1,7 +1,7 @@
-import { useSession } from "next-auth/react";
-import { useToggleFollowUserMutation } from "src/hooks/mutation";
-import { useUserQuery } from "src/hooks/query";
-import Button from "./button";
+import { useSession } from 'next-auth/react';
+import { useToggleFollowUserMutation } from 'src/hooks/mutation';
+import { useUserQuery } from 'src/hooks/query';
+import Button from './button';
 
 interface ButtonFollowProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -11,7 +11,7 @@ interface ButtonFollowProps
 
 const ButtonFollow = ({
   userId,
-  isSmall,
+  isSmall = false,
   ...buttonProps
 }: ButtonFollowProps) => {
   const { data: session } = useSession();
@@ -30,7 +30,7 @@ const ButtonFollow = ({
       {...buttonProps}
       isSmall={isSmall}
     >
-      {user?.followedByMe ? "Unfollow" : "Follow"}
+      {user?.followedByMe ? 'Unfollow' : 'Follow'}
     </Button>
   );
 };

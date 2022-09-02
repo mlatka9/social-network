@@ -1,10 +1,10 @@
-import type { GetServerSidePropsContext } from "next";
-import { unstable_getServerSession } from "next-auth/next";
-import { useRouter } from "next/router";
-import { authOptions } from "src/pages/api/auth/[...nextauth]";
-import { usePostsWithTagQuery } from "src/hooks/query";
-import Layout from "@/components/layouts/main-layout";
-import PostList from "@/components/post/post-list";
+import type { GetServerSidePropsContext } from 'next';
+import { unstable_getServerSession } from 'next-auth/next';
+import { useRouter } from 'next/router';
+import { authOptions } from 'src/pages/api/auth/[...nextauth]';
+import { usePostsWithTagQuery } from 'src/hooks/query';
+import Layout from '@/components/layouts/main-layout';
+import PostList from '@/components/post/post-list';
 
 const TagPage = () => {
   const { query } = useRouter();
@@ -44,7 +44,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   if (!session) {
     return {
       redirect: {
-        destination: "/api/auth/signin",
+        destination: '/api/auth/signin',
         permanent: false,
       },
     };

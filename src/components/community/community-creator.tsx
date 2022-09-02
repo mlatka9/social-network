@@ -1,9 +1,9 @@
-import { useForm } from "react-hook-form";
-import { useAddCommunity } from "src/hooks/mutation";
-import FormInput from "@/components/common/form-input";
-import Button from "../common/button";
-import FormSelect from "../common/form-select";
-import { useCategoryQuery } from "src/hooks/query";
+import { useForm } from 'react-hook-form';
+import { useAddCommunity } from 'src/hooks/mutation';
+import { useCategoryQuery } from 'src/hooks/query';
+import FormInput from '@/components/common/form-input';
+import Button from '../common/button';
+import FormSelect from '../common/form-select';
 
 interface FormInputType {
   name: string;
@@ -17,7 +17,7 @@ interface CommunityCreatorProps {
 const CommunityCreator = ({ handleCloseCreator }: CommunityCreatorProps) => {
   const addCommunity = useAddCommunity(handleCloseCreator);
 
-  const { data, isSuccess } = useCategoryQuery();
+  const { data: categories, isSuccess } = useCategoryQuery();
 
   const {
     register,
@@ -26,8 +26,8 @@ const CommunityCreator = ({ handleCloseCreator }: CommunityCreatorProps) => {
     formState: { errors },
   } = useForm<FormInputType>({
     defaultValues: {
-      name: "",
-      category: "",
+      name: '',
+      category: '',
     },
   });
 
@@ -47,10 +47,10 @@ const CommunityCreator = ({ handleCloseCreator }: CommunityCreatorProps) => {
         rules={{
           required: {
             value: true,
-            message: "Name is required",
+            message: 'Name is required',
           },
           minLength: {
-            message: "Name must be at least 3 characters long",
+            message: 'Name must be at least 3 characters long',
             value: 3,
           },
         }}
@@ -61,7 +61,7 @@ const CommunityCreator = ({ handleCloseCreator }: CommunityCreatorProps) => {
         error={errors.category}
         name="category"
         register={register}
-        options={data}
+        options={categories}
         watch={watch}
       />
       <Button className="mt-3">Submit</Button>

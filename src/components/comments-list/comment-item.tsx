@@ -1,10 +1,10 @@
-import CommentInput from "./comment-input";
-import { CommentDetailsType } from "@/types/db";
-import useComment from "@/components/comments-list/use-comment";
-import Author from "../post-card/author";
-import CommentFooter from "./comment-footer";
-import CommentContent from "./comment-content";
-import DeletedCommenFallback from "./deleted-comment-fallback";
+import CommentInput from './comment-input';
+import { CommentDetailsType } from '@/types/db';
+import useComment from '@/components/comments-list/use-comment';
+import Author from '../post-card/author';
+import CommentFooter from './comment-footer';
+import CommentContent from './comment-content';
+import DeletedCommenFallback from './deleted-comment-fallback';
 
 export interface CommentitemProps {
   comment: CommentDetailsType;

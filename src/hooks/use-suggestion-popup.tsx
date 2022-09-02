@@ -1,6 +1,6 @@
-import { useRouter } from "next/router";
-import { useState, useRef, useEffect } from "react";
-import { useOnClickOutside } from "usehooks-ts";
+import { useRouter } from 'next/router';
+import { useState, useRef, useEffect } from 'react';
+import { useOnClickOutside } from 'usehooks-ts';
 
 interface UseSuggestionListProps<T> {
   data?: T[];
@@ -58,13 +58,13 @@ const useSuggestionList = <T,>({
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLElement>) => {
-    if (e.key === "ArrowDown") {
+    if (e.key === 'ArrowDown') {
       setNextItem();
     }
-    if (e.key === "ArrowUp") {
+    if (e.key === 'ArrowUp') {
       setPrevItem();
     }
-    if (e.key === "Enter") {
+    if (e.key === 'Enter') {
       if (data && selectedItemIndex !== undefined) {
         const selectedItem = data[selectedItemIndex];
         if (selectedItem) {
@@ -74,10 +74,10 @@ const useSuggestionList = <T,>({
         }
       }
     }
-    if (e.key === "Escape") {
+    if (e.key === 'Escape') {
       setIsSuggestionShow(false);
     }
-    if (e.key === "Tab") {
+    if (e.key === 'Tab') {
       setIsSuggestionShow(false);
     }
   };
@@ -86,7 +86,7 @@ const useSuggestionList = <T,>({
     setIsSuggestionShow(true);
   };
 
-  const suggestionData = isSuggestionShow ? (data.length ? data : []) : [];
+  const suggestionData = isSuggestionShow ? data : [];
 
   return {
     selectedItemIndex,

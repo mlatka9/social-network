@@ -1,4 +1,4 @@
-import { env } from "./src/env/server.mjs";
+import { env } from './src/env/server.mjs';
 
 /**
  * Don't be scared of the generics here.
@@ -16,6 +16,6 @@ export default defineNextConfig({
   reactStrictMode: true,
   swcMinify: true,
   images: {
-    domains: ["lh3.googleusercontent.com", "res.cloudinary.com"],
+    domains: ['lh3.googleusercontent.com', 'res.cloudinary.com'],
   },
 });

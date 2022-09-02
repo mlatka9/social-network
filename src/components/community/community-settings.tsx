@@ -1,14 +1,14 @@
-import { useForm } from "react-hook-form";
-import { uploadImage } from "src/utils/cloudinary";
-import { useState } from "react";
-import { useCommunityMutation } from "src/hooks/mutation";
-import { CommunityDetailsType } from "@/types/db";
-import FormImages from "../common/form-images";
-import FormTextarea from "../common/form-textarea";
-import FormInput from "../common/form-input";
-import Button from "../common/button";
-import FormSelect from "../common/form-select";
-import { useCategoryQuery } from "src/hooks/query";
+import { useForm } from 'react-hook-form';
+import { uploadImage } from 'src/utils/cloudinary';
+import { useState } from 'react';
+import { useCommunityMutation } from 'src/hooks/mutation';
+import { useCategoryQuery } from 'src/hooks/query';
+import { CommunityDetailsType } from '@/types/db';
+import FormImages from '../common/form-images';
+import FormTextarea from '../common/form-textarea';
+import FormInput from '../common/form-input';
+import Button from '../common/button';
+import FormSelect from '../common/form-select';
 
 export interface CommunitySettingsFormType {
   name: string;
@@ -40,10 +40,10 @@ const CommunitySettings = ({ communityDetails }: CommunitySettingsProps) => {
     },
   });
 
-  const { data, isSuccess: isCategorySuccess } = useCategoryQuery();
+  const { data: categories, isSuccess: isCategorySuccess } = useCategoryQuery();
 
-  const draftImageFile = watch("images")[0];
-  const draftBannerImageFile = watch("bannerImages")[0];
+  const draftImageFile = watch('images')[0];
+  const draftBannerImageFile = watch('bannerImages')[0];
 
   const updateCommunity = useCommunityMutation();
 
@@ -51,8 +51,8 @@ const CommunitySettings = ({ communityDetails }: CommunitySettingsProps) => {
     const { name, description, bannerImages, images, category } = data;
 
     const imagesToUpload = [
-      { name: "image", file: images[0] },
-      { name: "bannerImage", file: bannerImages[0] },
+      { name: 'image', file: images[0] },
+      { name: 'bannerImage', file: bannerImages[0] },
     ];
 
     setIsUpdating(true);
@@ -75,11 +75,11 @@ const CommunitySettings = ({ communityDetails }: CommunitySettingsProps) => {
   };
 
   const setImage = (file: File[]) => {
-    setValue("images", file);
+    setValue('images', file);
   };
 
   const setBanner = (file: File[]) => {
-    setValue("bannerImages", file);
+    setValue('bannerImages', file);
   };
 
   if (!isCategorySuccess) return <>Loading..</>;
@@ -104,10 +104,10 @@ const CommunitySettings = ({ communityDetails }: CommunitySettingsProps) => {
             rules={{
               required: {
                 value: true,
-                message: "Name is required",
+                message: 'Name is required',
               },
               minLength: {
-                message: "Name must be at least 3 characters long",
+                message: 'Name must be at least 3 characters long',
                 value: 3,
               },
             }}
@@ -121,7 +121,7 @@ const CommunitySettings = ({ communityDetails }: CommunitySettingsProps) => {
             register={register}
             rules={{
               maxLength: {
-                message: "Bio can be up to 300 characters long",
+                message: 'Bio can be up to 300 characters long',
                 value: 300,
               },
             }}
@@ -132,16 +132,16 @@ const CommunitySettings = ({ communityDetails }: CommunitySettingsProps) => {
             error={errors.category}
             name="category"
             register={register}
-            options={data}
+            options={categories}
             watch={watch}
           />
         </div>
 
-        <input type="file" {...register("images")} className="hidden" />
-        <input type="file" {...register("bannerImages")} className="hidden" />
+        <input type="file" {...register('images')} className="hidden" />
+        <input type="file" {...register('bannerImages')} className="hidden" />
 
         <Button className="mt-3">
-          {isUpdating ? "Updating..." : "Submit"}
+          {isUpdating ? 'Updating...' : 'Submit'}
         </Button>
       </form>
     </>

@@ -1,5 +1,5 @@
-import { useFollowingQuery } from "src/hooks/query";
-import UserCard from "./user-card";
+import { useFollowingQuery } from 'src/hooks/query';
+import UserCard from './user-card';
 
 interface FollowingListProps {
   userId: string;
