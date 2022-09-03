@@ -22,7 +22,7 @@ const UserProfileHero = ({ userDetails }: UserProfileHeroProps) => {
 
   return (
     <>
-      <div className="w-full h-80 relative">
+      <div className="w-full h-60 md:h-80 relative">
         <Image
           alt=""
           layout="fill"
@@ -31,8 +31,8 @@ const UserProfileHero = ({ userDetails }: UserProfileHeroProps) => {
         />
       </div>
 
-      <div className="flex p-6 min-h-[160px] rounded-xl bg-primary-0 dark:bg-primary-dark-100 mb-10 relative -mt-10">
-        <div className="relative -mt-20 p-1 bg-primary-0 dark:bg-primary-dark-100 rounded-lg shrink-0">
+      <div className="flex p-6 min-h-[160px] rounded-xl bg-primary-0 dark:bg-primary-dark-100 mb-10 relative -mt-10 flex-col md:flex-row items-center md:items-start">
+        <div className="relative -mt-20 p-1 bg-primary-0 dark:bg-primary-dark-100 rounded-lg shrink-0 w-fit">
           <Image
             src={userDetails?.image || '/images/fallback.svg'}
             width="150"
@@ -43,13 +43,13 @@ const UserProfileHero = ({ userDetails }: UserProfileHeroProps) => {
           />
         </div>
 
-        <div className="ml-4 w-full">
-          <div className="flex items-baseline justify-between">
-            <h1 className="font-poppins font-semibold text-2xl max-w-[150px]">
+        <div className="md:ml-4 md:w-full">
+          <div className="flex justify-between flex-col md:flex-row ">
+            <h1 className="font-poppins font-semibold text-2xl  md:max-w-[150px] text-center md:text-left">
               {userDetails?.name}
             </h1>
 
-            <div className="text-xs  text-neutral-500 tracking-wide font-medium flex space-x-4 ">
+            <div className="text-xs  text-neutral-500 tracking-wide font-medium flex space-x-4 mx-auto md:mx-0 mt-3 mb-5">
               <Link href={`${router.asPath}/following`} shallow>
                 <a className="hover:underline">
                   <p className="cursor-pointer dark:text-primary-dark-700">
@@ -71,16 +71,18 @@ const UserProfileHero = ({ userDetails }: UserProfileHeroProps) => {
                 </a>
               </Link>
             </div>
-            <div className="">
+            <div className="mx-auto md:mx-0 ml-auto">
               <UserProfileButton
                 userId={userDetails.id}
                 followedByMe={userDetails.followedByMe}
               />
             </div>
           </div>
-          <p className="font-medium text-neutral-600 dark:text-primary-dark-700 mt-6 max-w-sm">
-            {userDetails.bio}
-          </p>
+          {userDetails.bio && (
+            <p className="text-center md:text-left font-medium text-neutral-600 dark:text-primary-dark-700 mt-6 max-w-sm">
+              {userDetails.bio}
+            </p>
+          )}
         </div>
       </div>
     </>

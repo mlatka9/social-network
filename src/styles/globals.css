@@ -35,3 +35,13 @@ body {
   border-radius: 10px;
   border: 2px solid #ffffff;
 }
+
+@layer {
+  .scroll-hide {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+  .scroll-hide::-webkit-scrollbar {
+    display: none;
+  }
+}

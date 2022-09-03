@@ -31,7 +31,7 @@ const ModalWrapper = ({
   if (!isMounted) return null;
 
   return createPortal(
-    <div className="z-1">
+    <div className="z-1 mx-2">
       <div
         aria-label="Close modal"
         className="bg-neutral-800 opacity-80 fixed inset-0 z-10"
@@ -44,11 +44,11 @@ const ModalWrapper = ({
         onClick={(e) => e.stopPropagation()}
         className={clsx(
           [
-            'fixed p-10 bg-white z-[10] inset-0  m-auto rounded-lg overflow-y-scroll dark:bg-primary-dark-100 min-h-[80vh]',
+            'fixed p-4 lg:p-10 bg-white z-[10] inset-0 mx-2 lg:mx-auto m-auto rounded-lg overflow-y-scroll dark:bg-primary-dark-100 min-h-[80vh]',
           ],
-          !isBig && 'h-fit max-w-2xl max-h-[90vh]',
+          !isBig && 'h-fit lg:max-w-2xl max-h-[90vh]',
           isBig &&
-            'max-w-[800px] mx-auto mt-10 inset-0 rounded-b-none max-h-[1000px]'
+            'lg:max-w-[800px] mx-auto mt-10 inset-0 rounded-b-none max-h-[1000px]'
         )}
       >
         <div className="flex justify-between items-center ">

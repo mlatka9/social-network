@@ -12,6 +12,7 @@ import CategoryList from '@/components/community/categories-list';
 import ModalWrapper from '@/components/common/modal-wrapper';
 import CommunityCreator from '@/components/community/community-creator';
 import Loading from '@/components/common/loading';
+import CategoriesListHorizontal from '@/components/community/categories-list-horizontal';
 
 const CommunitiesPage = () => {
   const router = useRouter();
@@ -37,17 +38,24 @@ const CommunitiesPage = () => {
 
   return (
     <CommunityLayout>
-      <div className="sticky h-fit top-[92px] space-y-5">
+      <div className="hidden lg:block sticky h-fit top-[92px] space-y-5">
         <Button className="w-full" onClick={handleOpenCreator}>
           Create community
         </Button>
         <CategoryList />
       </div>
 
-      <div>
+      <div className="">
+        <div className="lg:hidden">
+          <Button className="w-full mb-2" onClick={handleOpenCreator}>
+            Create community
+          </Button>
+          <CategoriesListHorizontal />
+          <div className="mb-2" />
+        </div>
         <CommunityFilter />
         {isSuccess ? (
-          <div className="space-y-3">
+          <main className="space-y-3">
             {data.map((community) => (
               <div
                 role="link"
@@ -75,7 +83,7 @@ const CommunitiesPage = () => {
                 />
               </div>
             ))}
-          </div>
+          </main>
         ) : (
           <div className="space-y-3">
             <Loading height={600} />

@@ -70,7 +70,7 @@ const PostCard = ({ post }: PostCardProps) => {
           postCreatedAt={post.createdAt}
         />
       </div>
-      <div className="ml-14">
+      <div className="md:ml-14">
         <TagsList tags={post.tags} />
 
         <div className="relative">

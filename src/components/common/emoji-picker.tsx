@@ -28,7 +28,7 @@ const EmojiPicker = ({ appendEmoji }: EmojiPickerProps) => {
   };
 
   return (
-    <div className="relative inline-block mr-1" ref={ref}>
+    <div className="relative inline-block mr-1 " ref={ref}>
       <button
         className="cursor-pointer self-start h-6 w-6 mr-auto mb-2"
         onClick={toggleIsPickerOpen}
@@ -37,7 +37,7 @@ const EmojiPicker = ({ appendEmoji }: EmojiPickerProps) => {
         <EmojiIcon />
       </button>
       {isPickerOpen && (
-        <div className="absolute top-full z-10 shadow-lg">
+        <div className="absolute top-full z-10 shadow-lg -translate-x-24 sm:translate-x-0">
           <Picker
             data={async () => {
               const response = await fetch(

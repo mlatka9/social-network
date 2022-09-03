@@ -11,7 +11,7 @@ const SuggestedUsersList = () => {
       <h2 className="font-poppins text-lg font-medium text-primary-600 mb-3">
         Users to follow
       </h2>
-      <div className="grid grid-cols-2 gap-5">
+      <div className="grid md:grid-cols-2 gap-5">
         {isSuccess ? (
           data.map((user) => (
             <div key={user.id} className="bg-primary-0 px-5 py-3 rounded-md">

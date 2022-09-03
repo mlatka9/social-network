@@ -41,20 +41,20 @@ const SearchBar = () => {
   };
 
   return (
-    <div className="relative z-[200]" {...wrapperProps}>
+    <div className="relative mx-5" {...wrapperProps}>
       <div className="relative">
-        <div className="absolute top-[15px] left-3 pointer-events-none">
+        <div className="absolute top-[10px] md:top-[15px] left-2 md:left-3 pointer-events-none">
           <SearchIcon />
         </div>
         <input
           {...inputProps}
           value={searchPhrase}
           onChange={handleOnChange}
-          className="pl-10 p-3 bg-primary-100 dark:bg-primary-dark-200 rounded-full focus:outline-blue-500 outline-2"
+          className="w-full  pl-8 p-2 md:p-3 md:pl-10 bg-primary-100 dark:bg-primary-dark-200 rounded-full focus:outline-blue-500 outline-2"
         />
       </div>
 
-      <div className="absolute top-[calc(100%_+_10px)] bg-white  dark:bg-primary-dark-100 w-full rounded-lg shadow-lg overflow-hidden">
+      <div className="fixed md:absolute left-0 top-14 bg-white  dark:bg-primary-dark-100 md:w-full rounded-lg shadow-lg overflow-hidden w-screen">
         {suggestionData.map((searchEntry, index) => (
           <SearchCard
             searchEntry={searchEntry}

@@ -10,7 +10,7 @@ const SuggestedCommunitiesList = () => {
       <h2 className="font-poppins text-lg font-medium text-primary-600 mb-3">
         Communities to join
       </h2>
-      <div className="grid grid-cols-2 gap-5">
+      <div className="grid md:grid-cols-2 gap-5">
         {isSuccess ? (
           data.map((community) => (
             <div key={community.id} className="bg-primary-0 rounded-md">
