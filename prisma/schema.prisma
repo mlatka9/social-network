@@ -71,7 +71,7 @@ model VerificationToken {
 
 model Post {
   id            String     @id @default(cuid())
-  content       String     @db.Text
+  content       String     @db.VarChar(280)
   user          User       @relation(name: "createdPosts", fields: [userId], references: [id], onDelete: Cascade)
   userId        String     @db.Text
   comments      Comment[]

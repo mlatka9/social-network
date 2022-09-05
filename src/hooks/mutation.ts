@@ -36,11 +36,13 @@ export const useAddCommentMutation = (postId: string) => {
   };
 };
 
-export const useAddPostMutation = (onSuccessCb: () => void) => {
+export const useAddPostMutation = (onSuccessCb?: () => void) => {
   const utils = trpc.useContext();
   const mutation = trpc.useMutation('post.addPost', {
     onSuccess() {
-      onSuccessCb();
+      if (onSuccessCb) {
+        onSuccessCb();
+      }
       invalidateAll(utils);
     },
   });

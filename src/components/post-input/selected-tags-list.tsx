@@ -1,30 +1,41 @@
-import { Tag } from '@prisma/client';
 import Image from 'next/image';
+import { Control, useWatch, UseFormSetValue } from 'react-hook-form';
+import { PostInputFormType } from './types';
 
 interface SelectedTagsListProps {
-  tags: Tag[];
-  handleRemoveTag: (tagName: string) => void;
+  control: Control<PostInputFormType>;
+  setValue: UseFormSetValue<PostInputFormType>;
 }
 
-const SelectedTagsList = ({ tags, handleRemoveTag }: SelectedTagsListProps) => (
-  <div className="w-fit flex">
-    {tags.map((tag) => (
-      <div
-        className=" text-white rounded-md p-1 mr-2 flex items-center"
-        style={{ backgroundColor: tag.color }}
-        key={tag.name}
-      >
-        <span>#{tag.name}</span>
-        <button
-          type="button"
-          onClick={() => handleRemoveTag(tag.name)}
-          className="ml-1 justify-center flex items-center shrink-0 w-4 h-4"
+const SelectedTagsList = ({ control, setValue }: SelectedTagsListProps) => {
+  const tags = useWatch({ control, name: 'tags', defaultValue: [] });
+
+  const handleRemoveTag = (name: string) => {
+    setValue(
+      'tags',
+      tags.filter((tag) => tag !== name)
+    );
+  };
+
+  return (
+    <>
+      {tags.map((tag) => (
+        <div
+          className=" text-white rounded-md p-1 mr-2 flex items-center bg-blue-400"
+          key={tag}
         >
-          <Image src="/icons/close.png" height="16" width="16" alt="" />
-        </button>
-      </div>
-    ))}
-  </div>
-);
+          <span>#{tag}</span>
+          <button
+            type="button"
+            onClick={() => handleRemoveTag(tag)}
+            className="ml-1 justify-center flex items-center shrink-0 w-4 h-4"
+          >
+            <Image src="/icons/close.png" height="16" width="16" alt="" />
+          </button>
+        </div>
+      ))}
+    </>
+  );
+};
 
 export default SelectedTagsList;

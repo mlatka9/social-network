@@ -12,16 +12,14 @@ const useSuggestionList = <T,>({
   onSelect,
 }: UseSuggestionListProps<T>) => {
   const router = useRouter();
-  const [selectedItemIndex, setSelectedItem] = useState<number | undefined>(
-    undefined
-  );
+  const [selectedItemIndex, setSelectedItem] = useState<number>(0);
 
   const [isSuggestionShow, setIsSuggestionShow] = useState(false);
   const containerRef = useRef<HTMLInputElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    setSelectedItem(undefined);
+    setSelectedItem(0);
   }, [data.length]);
 
   useEffect(() => {
@@ -29,7 +27,7 @@ const useSuggestionList = <T,>({
   }, [router.asPath]);
 
   const handleClickOutside = () => {
-    setSelectedItem(undefined);
+    setSelectedItem(0);
     setIsSuggestionShow(false);
   };
 
@@ -37,9 +35,9 @@ const useSuggestionList = <T,>({
 
   const setNextItem = () => {
     if (!data?.length) return;
-    if (selectedItemIndex === undefined) {
-      setSelectedItem(0);
-    } else if (selectedItemIndex + 1 === data.length) {
+    // if (selectedItemIndex === 0) {
+    //   setSelectedItem(0);
+    if (selectedItemIndex + 1 === data.length) {
       setSelectedItem(0);
     } else {
       setSelectedItem(selectedItemIndex + 1);
@@ -69,8 +67,6 @@ const useSuggestionList = <T,>({
         const selectedItem = data[selectedItemIndex];
         if (selectedItem) {
           onSelect(selectedItem);
-          setIsSuggestionShow(false);
-          inputRef.current?.blur();
         }
       }
     }

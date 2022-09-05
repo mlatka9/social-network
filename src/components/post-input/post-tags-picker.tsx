@@ -1,23 +1,18 @@
-import { Tag } from '@prisma/client';
+import { Control, UseFormSetValue } from 'react-hook-form';
 import PostTagsInput from './post-tags-input';
 import SelectedTagsList from './selected-tags-list';
+import { PostInputFormType } from './types';
 
 interface PostTagInputProps {
-  tags: Tag[];
-  setTags: (tag: Tag[]) => void;
+  control: Control<PostInputFormType>;
+  setValue: UseFormSetValue<PostInputFormType>;
 }
 
-const PostTagPicker = ({ setTags, tags }: PostTagInputProps) => {
-  const handleRemoveTag = (name: string) => {
-    setTags(tags.filter((tag) => tag.name !== name));
-  };
-
-  return (
-    <div className="flex relative mb-3 items-center">
-      <SelectedTagsList tags={tags} handleRemoveTag={handleRemoveTag} />
-      <PostTagsInput tags={tags} setTags={setTags} />
-    </div>
-  );
-};
+const PostTagPicker = ({ control, setValue }: PostTagInputProps) => (
+  <div className="flex relative mb-2 items-center flex-wrap ">
+    <SelectedTagsList control={control} setValue={setValue} />
+    <PostTagsInput control={control} setValue={setValue} />
+  </div>
+);
 
 export default PostTagPicker;

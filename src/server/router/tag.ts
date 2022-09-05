@@ -13,14 +13,18 @@ const tagRouter = createProtectedRouter()
       if (!input.searchPhrase) {
         return [];
       }
-      return prisma.tag.findMany({
+      const tags = await prisma.tag.findMany({
         where: {
           name: {
             contains: input.searchPhrase,
           },
         },
+        orderBy: {
+          name: 'asc',
+        },
         take: 5,
       });
+      return tags.map((tag) => tag.name);
     },
   })
   .query('trending', {

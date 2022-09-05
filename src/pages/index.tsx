@@ -3,6 +3,8 @@ import { unstable_getServerSession } from 'next-auth/next';
 import React from 'react';
 import { useRouter } from 'next/router';
 import { useInfiniteFeedQuery } from 'src/hooks/query';
+import { toast } from 'react-toastify';
+
 import { authOptions } from './api/auth/[...nextauth]';
 import PostInput from '@/components/post-input/post-input';
 
@@ -39,13 +41,19 @@ const Home: NextPage = () => {
     time,
   });
 
+  const addPostCallback = () => {
+    toast('Your post was added successfully', {
+      type: 'success',
+    });
+  };
+
   return (
     <>
       <Layout>
-        <div className="bg-primary-0 dark:bg-primary-dark-100 px-5 py-3 rounded-lg mt-5">
+        <div className="bg-primary-0 dark:bg-primary-dark-100 px-5 py-3 rounded-lg">
           <TextHeader className="pb-3">Post something</TextHeader>
           <hr className="mb-3" />
-          <PostInput />
+          <PostInput submitCallback={addPostCallback} />
         </div>
 
         <div className="mb-5" />

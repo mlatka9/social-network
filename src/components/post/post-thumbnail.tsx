@@ -39,7 +39,7 @@ const PostThumbnail = ({
           goToSharedPost();
         }
       }}
-      className="ring-2 ring-inset ring-blue-400/30 rounded-lg overflow-hidden"
+      className="ring-2 ring-blue-400/30 rounded-md"
       onClick={(e) => {
         e.stopPropagation();
         goToSharedPost();
@@ -64,13 +64,14 @@ const PostThumbnail = ({
       <p className="mx-2 mb-2">{sharedPost.content}</p>
 
       {firstImage && (
-        <div
-          className={clsx([
-            'w-full h-96 relative overflow-hidden',
-            isSmall && '!h-',
-          ])}
-        >
-          <Image src={firstImage} alt="" layout="fill" objectFit="cover" />
+        <div className={clsx(['w-full h-96 relative  ', isSmall && '!h-'])}>
+          <Image
+            src={firstImage}
+            alt=""
+            layout="fill"
+            objectFit="cover"
+            className="rounded-lg"
+          />
         </div>
       )}
     </div>

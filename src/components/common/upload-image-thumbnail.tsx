@@ -5,14 +5,12 @@ interface UploadImageThumbnailProps {
   imageWidthRatio: number;
   imageHeightRatio: number;
   image: File;
-  imageUploadProgress: number;
   className: string;
   removeFile: (imageName: string) => void;
 }
 
 const UploadImageThumbnail = ({
   image,
-  imageUploadProgress,
   removeFile,
   className,
   imageHeightRatio,
@@ -35,8 +33,6 @@ const UploadImageThumbnail = ({
           className="flex"
         />
       </button>
-
-      {/* <div className="w-full h-full relative "> */}
       <div>
         <Image
           src={imageSrc}
@@ -46,15 +42,6 @@ const UploadImageThumbnail = ({
           alt=""
           width={imageWidthRatio}
           height={imageHeightRatio}
-        />
-      </div>
-
-      <div className="w-full h-1 rounded-sm overflow-hidden">
-        <div
-          className="bg-blue-500 w-full h-full"
-          style={{
-            transform: `translateX(-${100 - imageUploadProgress}%)`,
-          }}
         />
       </div>
     </div>

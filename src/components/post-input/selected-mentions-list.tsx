@@ -3,7 +3,7 @@ import { SearchUserType } from '@/types/db';
 
 interface SelectedTagsListProps {
   mentions: SearchUserType[];
-  handleRemoveMention: (tagName: string) => void;
+  handleRemoveMention: (mentionId: string) => void;
 }
 
 const SelectedMentionsList = ({
@@ -13,7 +13,7 @@ const SelectedMentionsList = ({
   <div className="w-fit flex shrink-0">
     {mentions.map((mention) => (
       <div
-        className="rounded-md p-1 mr-2 flex items-center bg-blue-400 text-white"
+        className="rounded-md p-1 mr-2 flex items-center bg-blue-400 text-white "
         key={mention.id}
       >
         <span>@{mention.name}</span>

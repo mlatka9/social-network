@@ -4,7 +4,7 @@ const CLOUDINARY_UPLOAD_PRESET = 'uvm9hyxi';
 const CLOUDINARY_UPLOAD_LINK =
   'https://api.cloudinary.com/v1_1/dw6bikqwf/image/upload';
 
-export const uploadImage = async (
+const uploadImage = async (
   selectedImage: File,
   uploadProgressCalback?: (progress: number) => void
 ): Promise<string> => {

@@ -3,17 +3,22 @@
 import Picker from '@emoji-mart/react';
 import { useTheme } from 'next-themes';
 import { useRef, useState } from 'react';
+import { Control, UseFormSetValue, useWatch } from 'react-hook-form';
 import { useOnClickOutside } from 'usehooks-ts';
+import { PostInputFormType } from '../post-input/types';
 import EmojiIcon from './icons/emoji';
 
 interface EmojiPickerProps {
-  appendEmoji: (emoji: string) => void;
+  setValue: UseFormSetValue<PostInputFormType>;
+  control: Control<PostInputFormType>;
 }
 
-const EmojiPicker = ({ appendEmoji }: EmojiPickerProps) => {
+const EmojiPicker = ({ setValue, control }: EmojiPickerProps) => {
   const { resolvedTheme } = useTheme();
   const [isPickerOpen, setIsPickerOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
+
+  const content = useWatch({ control, name: 'content', defaultValue: '' });
 
   const toggleIsPickerOpen = () => setIsPickerOpen(!isPickerOpen);
 
@@ -23,8 +28,8 @@ const EmojiPicker = ({ appendEmoji }: EmojiPickerProps) => {
 
   useOnClickOutside(ref, () => closePicker());
 
-  const handleSelectEmoji = (emoji: any) => {
-    appendEmoji(emoji.native || '');
+  const appendEmojiToContent = (emoji: any) => {
+    setValue('content', content + emoji.native || '');
   };
 
   return (
@@ -46,7 +51,7 @@ const EmojiPicker = ({ appendEmoji }: EmojiPickerProps) => {
 
               return response.json();
             }}
-            onEmojiSelect={handleSelectEmoji}
+            onEmojiSelect={appendEmojiToContent}
             theme={resolvedTheme}
           />
         </div>

@@ -199,22 +199,19 @@ const postRouter = createProtectedRouter()
           })
         )
         .nullable(),
-      tags: z
-        .array(
-          z.object({
-            name: z.string(),
-
-            color: z.string(),
-          })
-        )
-        .nullable(),
+      tags: z.array(z.string()).nullable(),
       mentions: z.array(z.string()).nullable(),
       shareParentId: z.string().optional(),
       communityId: z.string().optional(),
     }),
     async resolve({ input, ctx }) {
-      if (input.content.trim().length === 0) {
+      const trimmedContent = input.content.trim();
+      if (trimmedContent.length === 0) {
         throw new Error('Post must have content text');
+      }
+
+      if (trimmedContent.length > 280) {
+        throw new Error('Post content must be up to 280 characters');
       }
 
       let formattedLink = input.link;
@@ -259,7 +256,7 @@ const postRouter = createProtectedRouter()
         const tagsAlreadyInDB = await prisma.tag.findMany({
           where: {
             name: {
-              in: input.tags.map((tag) => tag.name),
+              in: input.tags.map((tag) => tag),
             },
           },
         });
@@ -268,9 +265,9 @@ const postRouter = createProtectedRouter()
 
         await prisma.tag.createMany({
           data: input.tags
-            .filter((tag) => !tagsNameAlreadyInDB.includes(tag.name))
+            .filter((tag) => !tagsNameAlreadyInDB.includes(tag))
             .map((tag) => ({
-              name: tag.name,
+              name: tag,
               color: getRandomColor(),
             })),
         });
@@ -278,7 +275,7 @@ const postRouter = createProtectedRouter()
         const tags = await prisma.tag.findMany({
           where: {
             name: {
-              in: input.tags.map((tag) => tag.name),
+              in: input.tags.map((tag) => tag),
             },
           },
         });

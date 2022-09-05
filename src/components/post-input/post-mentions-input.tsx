@@ -52,16 +52,16 @@ const PostMentionsInput = ({ setMentions, mentions }: PostTagsInputProps) => {
   };
 
   return (
-    <div className="relative w-full" {...wrapperProps}>
+    <div className="relative flex-grow flex " {...wrapperProps}>
       <input
-        className="text-md  dark:bg-primary-dark-100 w-full"
+        className="text-md w-[100px] flex-grow dark:bg-primary-dark-100 h-8"
         placeholder={mentions.length ? 'Add another...' : 'Add mention'}
         value={mentionInputValue}
         onChange={onChange}
         onKeyDown={onKeyDown}
         {...inputProps}
       />
-      <div className="absolute top-full left-0 z-[5] w-full rounded-br-md rounded-bl-md overflow-hidden shadow-lg">
+      <div className="absolute top-full left-0 z-[10] w-full rounded-br-md rounded-bl-md overflow-hidden shadow-lg">
         {suggestionData.map((mention, index) => (
           <div
             onClick={() => addMention(mention)}

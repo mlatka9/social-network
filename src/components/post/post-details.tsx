@@ -36,7 +36,7 @@ const PostDetails = ({ postId }: PostDetailsProps) => {
   };
 
   if (isError) {
-    return <ErrorFallback message="This user does't exists" />;
+    return <ErrorFallback message="This post does't exists" />;
   }
 
   return (

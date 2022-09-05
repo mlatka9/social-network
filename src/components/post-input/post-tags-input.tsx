@@ -4,35 +4,43 @@ import useSuggestionList from 'src/hooks/use-suggestion-popup';
 import clsx from 'clsx';
 import { ChangeEvent, useState } from 'react';
 import { useSearchTagQuery } from 'src/hooks/query';
-import { Tag } from '@prisma/client';
-
-const DEFAULT_TAG_COLOR = '#c1d0e3';
+import { Control, UseFormSetValue, useWatch } from 'react-hook-form';
+import { PostInputFormType } from './types';
 
 interface PostTagsInputProps {
-  tags: Tag[];
-  setTags: (tag: Tag[]) => void;
+  control: Control<PostInputFormType>;
+  setValue: UseFormSetValue<PostInputFormType>;
 }
 
-const PostTagsInput = ({ setTags, tags }: PostTagsInputProps) => {
+const PostTagsInput = ({ control, setValue }: PostTagsInputProps) => {
   const [tagInputValue, setTagInputValue] = useState('');
 
-  const addTag = (tag: Tag) => {
-    const tagName = tag.name;
-    const formattedTagName = tagName.trim().toLowerCase();
-    const isAlreadyInState = tags.some((t) => t.name === formattedTagName);
+  const tags = useWatch({ control, name: 'tags', defaultValue: [] });
+
+  const setTags = (newTags: string[]) => {
+    setValue('tags', newTags);
+  };
+
+  const addTag = (tag: string) => {
+    const formattedTagName = tag.trim().toLowerCase();
+    const isAlreadyInState = tags.some((t) => t === formattedTagName);
     if (isAlreadyInState || !formattedTagName) {
       setTagInputValue('');
       return;
     }
-    const newTag = { ...tag, name: formattedTagName };
-    setTags([...tags, newTag]);
+    setTags([...tags, formattedTagName]);
     setTagInputValue('');
   };
 
   const { data: hintTags } = useSearchTagQuery(tagInputValue);
 
+  const filteredTags = hintTags?.filter((tag) => tag !== tagInputValue) || [];
+
+  const hintTagsWithInputValue =
+    hintTags && tagInputValue ? [tagInputValue, ...filteredTags] : hintTags;
+
   const { inputProps, selectedItemIndex, suggestionData, wrapperProps } =
-    useSuggestionList({ data: hintTags, onSelect: addTag });
+    useSuggestionList({ data: hintTagsWithInputValue, onSelect: addTag });
 
   const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     switch (e.key) {
@@ -42,10 +50,7 @@ const PostTagsInput = ({ setTags, tags }: PostTagsInputProps) => {
         e.preventDefault();
         break;
       case ' ':
-        addTag({
-          name: tagInputValue,
-          color: DEFAULT_TAG_COLOR,
-        });
+        addTag(tagInputValue);
         break;
       case 'Backspace':
         if (!tagInputValue.length && tags.length) {
@@ -62,9 +67,9 @@ const PostTagsInput = ({ setTags, tags }: PostTagsInputProps) => {
   };
 
   return (
-    <div className="relative w-full" {...wrapperProps}>
+    <div className="relative flex-grow flex" {...wrapperProps}>
       <input
-        className="text-md  dark:bg-primary-dark-100 w-full"
+        className="text-md w-[100px] flex-grow dark:bg-primary-dark-100 h-8"
         placeholder={tags.length ? 'Add another...' : 'Add tag'}
         value={tagInputValue}
         onChange={onChange}
@@ -73,22 +78,22 @@ const PostTagsInput = ({ setTags, tags }: PostTagsInputProps) => {
       />
       {tagInputValue && (
         <div className="absolute right-1 top-1 font-medium text-xs text-gray-400">
-          space to add
+          Enter to add
         </div>
       )}
 
-      <div className="absolute top-full left-0 z-[5] w-full rounded-br-md rounded-bl-md overflow-hidden shadow-lg">
+      <div className="absolute top-full left-0 z-[10] w-full rounded-br-md rounded-bl-md overflow-hidden shadow-lg">
         {suggestionData.map((tag, index) => (
           <div
             onClick={() => addTag(tag)}
-            key={tag.name}
+            key={tag}
             className={clsx([
               'p-3 bg-white fle flex-col cursor-pointer hover:bg-blue-50 dark:bg-primary-dark-200 hover:dark:bg-primary-dark-300',
               selectedItemIndex === index &&
                 'bg-primary-100 dark:bg-primary-dark-300',
             ])}
           >
-            {tag.name}
+            {tag}
           </div>
         ))}
       </div>
