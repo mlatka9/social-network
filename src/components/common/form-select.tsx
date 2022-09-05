@@ -2,6 +2,7 @@ import clsx from 'clsx';
 import React from 'react';
 import {
   FieldError,
+  FieldValues,
   Path,
   RegisterOptions,
   UseFormRegister,
@@ -11,7 +12,7 @@ import FormErrorMessage from './form-error-message';
 
 type FormSelectOptionType = { id: string; name: string };
 
-export type FormSelectProps<TFormValues> = {
+export type FormSelectProps<TFormValues extends FieldValues> = {
   label: string;
   name: Path<TFormValues>;
   rules?: RegisterOptions;
@@ -21,7 +22,7 @@ export type FormSelectProps<TFormValues> = {
   watch: UseFormWatch<TFormValues>;
 } & React.ComponentProps<'select'>;
 
-const FormSelect = <TFormValues,>({
+const FormSelect = <TFormValues extends FieldValues>({
   register,
   rules,
   label,

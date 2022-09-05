@@ -1,5 +1,5 @@
 import { useForm } from 'react-hook-form';
-import { uploadImage } from 'src/utils/cloudinary';
+import uploadImage from 'src/utils/cloudinary';
 import { useState } from 'react';
 import { useCommunityMutation } from 'src/hooks/mutation';
 import { useCategoryQuery } from 'src/hooks/query';

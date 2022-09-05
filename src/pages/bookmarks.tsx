@@ -2,7 +2,7 @@ import { useUserBookmarkedPostsQuery } from 'src/hooks/query';
 import { unstable_getServerSession } from 'next-auth';
 import { GetServerSidePropsContext } from 'next';
 import Layout from '@/components/layouts/main-layout';
-import { authOptions } from './api/auth/[...nextauth]';
+import { authOptions } from 'src/pages/api/auth/[...nextauth]';
 import PostList from '@/components/post/post-list';
 
 const Bookmarks = () => {

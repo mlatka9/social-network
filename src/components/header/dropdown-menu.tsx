@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { signOut } from 'next-auth/react';
-import ThemeSwitch from '../common/theme-switch';
 
+import ThemeSwitch from '@/components/common/theme-switch';
 import ProfileIcon from '@/components/common/icons/profile';
 import BookmarkIcon from '@/components/common/icons/bookmark-empty';
 import LogOutIcon from '@/components/common/icons/log-out';

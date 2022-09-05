@@ -1,9 +1,9 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
+import { UserDetailsType } from '@/types/db';
 import UserProfileButton from './user-profile-button';
 import Loading from '../common/loading';
-import { UserDetailsType } from '@/types/db';
 
 interface UserProfileHeroProps {
   userDetails: UserDetailsType | undefined;

@@ -1,14 +1,15 @@
 import { useSession } from 'next-auth/react';
 import clsx from 'clsx';
 import { ToastContainer } from 'react-toastify';
-import PostTagPicker from './post-tags-picker';
+import { PostDetailsType } from '@/types/db';
+import PostTagPicker from '@/components/post-input/post-tags-picker';
 import PostFileInput from './post-file-input';
 import UserProfilePicture from '../common/user-profile-image';
 import EmojiPicker from '../common/emoji-picker';
 import Button from '../common/button';
 import PostThumbnail from '../post/post-thumbnail';
 import PostMentionsPicker from './post-mentions-picker';
-import { PostDetailsType } from '@/types/db';
+
 import 'react-toastify/dist/ReactToastify.css';
 import PostLinkInput from './post-link-input';
 import usePostInput from './use-post-input';

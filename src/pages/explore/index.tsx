@@ -1,9 +1,9 @@
 import { unstable_getServerSession } from 'next-auth';
 import { GetServerSidePropsContext } from 'next/types';
-import { authOptions } from '../api/auth/[...nextauth]';
 import MainLayout from '@/components/layouts/main-layout';
 import SuggestedUsersList from '@/components/explore/suggested-users-list';
 import SuggestedCommunitiesList from '@/components/explore/suggested-communities-list';
+import { authOptions } from '../api/auth/[...nextauth]';
 
 const ExplorePage = () => (
   <MainLayout>

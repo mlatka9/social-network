@@ -2,12 +2,12 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import ModalWrapper from '../common/modal-wrapper';
+import { CommunityDetailsType } from '@/types/db';
+import ModalWrapper from '@/components/common/modal-wrapper';
 import Members from './members-list';
 import JoinCommunityButton from './join-community-button';
 import CommunitySettingsButton from './community-settings-button';
 import CommunitySettings from './community-settings';
-import { CommunityDetailsType } from '@/types/db';
 import CommunityFavouriteIcon from './community-favourite-icon';
 
 interface CommunityProfileHeroProps {

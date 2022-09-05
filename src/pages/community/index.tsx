@@ -2,7 +2,6 @@ import { GetServerSidePropsContext } from 'next';
 import { unstable_getServerSession } from 'next-auth';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import { authOptions } from '../api/auth/[...nextauth]';
 import CommunityLayout from '@/components/layouts/community-layout';
 import { useCommunitiesQuery } from '@/hooks/query';
 import CommunityFilter from '@/components/community/community-filter';
@@ -13,6 +12,7 @@ import ModalWrapper from '@/components/common/modal-wrapper';
 import CommunityCreator from '@/components/community/community-creator';
 import Loading from '@/components/common/loading';
 import CategoriesListHorizontal from '@/components/community/categories-list-horizontal';
+import { authOptions } from '../api/auth/[...nextauth]';
 
 const CommunitiesPage = () => {
   const router = useRouter();

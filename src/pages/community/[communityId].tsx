@@ -5,7 +5,7 @@ import {
   useCommunityDetailsQuery,
   useCommunityPostsQuery,
 } from 'src/hooks/query';
-import { authOptions } from '../api/auth/[...nextauth]';
+
 import PostInput from '@/components/post-input/post-input';
 import PostList from '@/components/post/post-list';
 
@@ -15,6 +15,7 @@ import TextHeader from '@/components/common/text-header';
 import PostsSortPanel from '@/components/common/posts-sort-panel';
 import Loading from '@/components/common/loading';
 import ErrorFallback from '@/components/common/error-fallback';
+import { authOptions } from '../api/auth/[...nextauth]';
 
 const Community = () => {
   const router = useRouter();

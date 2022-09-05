@@ -1,13 +1,14 @@
 import React from 'react';
 import {
   FieldError,
+  FieldValues,
   Path,
   RegisterOptions,
   UseFormRegister,
 } from 'react-hook-form';
 import FormErrorMessage from './form-error-message';
 
-export type FormInputProps<TFormValues> = {
+export type FormInputProps<TFormValues extends FieldValues> = {
   label: string;
   name: Path<TFormValues>;
   rules?: RegisterOptions;
@@ -15,7 +16,7 @@ export type FormInputProps<TFormValues> = {
   error: FieldError | undefined;
 } & React.ComponentProps<'input'>;
 
-const FormInput = <TFormValues,>({
+const FormInput = <TFormValues extends FieldValues>({
   register,
   rules,
   label,

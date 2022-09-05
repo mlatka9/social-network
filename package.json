@@ -16,6 +16,7 @@
   "dependencies": {
     "@emoji-mart/data": "^1.0.5",
     "@emoji-mart/react": "^1.0.1",
+    "@faker-js/faker": "^7.5.0",
     "@next-auth/prisma-adapter": "^1.0.4",
     "@next/bundle-analyzer": "^12.2.5",
     "@prisma/client": "^4.1.1",

@@ -7,8 +7,8 @@ import {
 } from 'src/hooks/mutation';
 import React, { useState } from 'react';
 import { PostDetailsType } from '@/types/db';
-import ModalWrapper from '../common/modal-wrapper';
-import PostInput from '../post-input/post-input';
+import ModalWrapper from '@/components/common/modal-wrapper';
+import PostInput from '@/components/post-input/post-input';
 import BookmarkIcon from '@/components/common/icons/bookmark-empty';
 import BookmarkEmptyIcon from '@/components/common/icons/bookmark';
 import ShareIcon from '@/components/common/icons/share';

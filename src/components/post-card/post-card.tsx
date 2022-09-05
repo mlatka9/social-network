@@ -1,13 +1,12 @@
 import React from 'react';
 import { useRouter } from 'next/router';
-import { useElementSize } from 'usehooks-ts';
+// import { useElementSize } from 'usehooks-ts';
+import { PostDetailsType } from '@/types/db';
 import Author from './author';
 import TagsList from './tags-list';
 import ImagesGrid from './images-grid';
-import { PostDetailsType } from '@/types/db';
 import PostCardFooter from './post-card-footer';
 import PostThumbnail from '../post/post-thumbnail';
-
 import CommunityBadge from './community-badge';
 import MentionsList from './mentions-list';
 import PostCardLink from './post-card-link';
@@ -39,7 +38,7 @@ const PostCard = ({ post }: PostCardProps) => {
     );
   };
 
-  const [postContentRef, { height }] = useElementSize();
+  // const [postContentRef, { height }] = useElementSize();
 
   return (
     <div
@@ -83,9 +82,9 @@ const PostCard = ({ post }: PostCardProps) => {
             </>
           )}
 
-          {height === 500 && (
+          {/* {height === 500 && (
             <div className="bg-gradient-to-t from-white  dark:from-primary-dark-100 to-white/0 absolute h-5 w-full bottom-0 flex items-center justify-center text-white" />
-          )}
+          )} */}
         </div>
         <MentionsList mentions={post.mentions} />
         <PostCardFooter post={post} />

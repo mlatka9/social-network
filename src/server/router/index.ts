@@ -1,7 +1,5 @@
 // src/server/router/index.ts
 import superjson from 'superjson';
-import { createRouter } from './context';
-
 import postRouter from '@/server/router/posts';
 import commentRouter from '@/server/router/comment';
 import userRouter from '@/server/router/user';
@@ -10,6 +8,7 @@ import tagRouter from '@/server/router/tag';
 import communityRouter from '@/server/router/community';
 import searchRouter from '@/server/router/search';
 import exploreRouter from '@/server/router/explore';
+import { createRouter } from './context';
 
 export const appRouter = createRouter()
   .transformer(superjson)

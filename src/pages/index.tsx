@@ -4,17 +4,14 @@ import React from 'react';
 import { useRouter } from 'next/router';
 import { useInfiniteFeedQuery } from 'src/hooks/query';
 import { toast } from 'react-toastify';
-
-import { authOptions } from './api/auth/[...nextauth]';
 import PostInput from '@/components/post-input/post-input';
-
 import Layout from '@/components/layouts/main-layout';
 import PostList from '@/components/post/post-list';
-
 import ModalWrapper from '@/components/common/modal-wrapper';
 import PostDetails from '@/components/post/post-details';
 import TextHeader from '@/components/common/text-header';
 import PostsSortPanel from '@/components/common/posts-sort-panel';
+import { authOptions } from './api/auth/[...nextauth]';
 
 const Home: NextPage = () => {
   const router = useRouter();

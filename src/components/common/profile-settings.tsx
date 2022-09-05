@@ -1,5 +1,5 @@
 import { useForm } from 'react-hook-form';
-import { uploadImage } from 'src/utils/cloudinary';
+import uploadImage from 'src/utils/cloudinary';
 import { useState, useEffect } from 'react';
 import { useCurrentUserProfileQuery } from 'src/hooks/query';
 import { useProfileMutation } from 'src/hooks/mutation';

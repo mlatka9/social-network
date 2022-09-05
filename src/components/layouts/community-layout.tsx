@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 import PopularCommunitiesList from '@/components/community/popular-communities-list';
-import Header from '../header/header';
+import Header from '@/components/header/header';
 import TrendingTagsList from '@/components/common/trending-tags-list';
 
 interface LayoutProps {
