@@ -10,6 +10,7 @@ import PostThumbnail from '../post/post-thumbnail';
 import CommunityBadge from './community-badge';
 import MentionsList from './mentions-list';
 import PostCardLink from './post-card-link';
+import RepostBadge from './repost-badge';
 
 export interface PostCardProps {
   post: PostDetailsType;
@@ -19,7 +20,6 @@ const PostCard = ({ post }: PostCardProps) => {
   const router = useRouter();
 
   const basePath = router.asPath.split('?')[0];
-
   const showModalOnClick = basePath === '/';
 
   const goToPostDetails = () => {
@@ -38,8 +38,6 @@ const PostCard = ({ post }: PostCardProps) => {
     );
   };
 
-  // const [postContentRef, { height }] = useElementSize();
-
   return (
     <div
       role="link"
@@ -53,14 +51,22 @@ const PostCard = ({ post }: PostCardProps) => {
       className="bg-primary-0 dark:bg-primary-dark-100 w-full p-5 shadow-sm rounded-lg cursor-pointer"
       onClick={goToPostDetails}
     >
-      {post.communityId && post.communityName && (
-        <div className="ml-14">
-          <CommunityBadge
-            communityId={post.communityId}
-            communityName={post.communityName}
-          />
-        </div>
-      )}
+      <div className="flex">
+        {post.communityId && post.communityName && (
+          <div className="ml-14">
+            <CommunityBadge
+              communityId={post.communityId}
+              communityName={post.communityName}
+            />
+          </div>
+        )}
+        {post.sharedBy.length > 0 && (
+          <div className="ml-14">
+            <RepostBadge users={post.sharedBy} />
+          </div>
+        )}
+      </div>
+
       <div className="flex mt-2">
         <Author
           authorId={post.user.id}
@@ -81,10 +87,6 @@ const PostCard = ({ post }: PostCardProps) => {
               <PostThumbnail sharedPost={post.shareParent} />
             </>
           )}
-
-          {/* {height === 500 && (
-            <div className="bg-gradient-to-t from-white  dark:from-primary-dark-100 to-white/0 absolute h-5 w-full bottom-0 flex items-center justify-center text-white" />
-          )} */}
         </div>
         <MentionsList mentions={post.mentions} />
         <PostCardFooter post={post} />

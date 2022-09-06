@@ -10,18 +10,35 @@ import ModalWrapper from '@/components/common/modal-wrapper';
 import Layout from '@/components/layouts/main-layout';
 import UserProfileHero from '@/components/user-profile/user-profile-hero';
 import ErrorFallback from '@/components/common/error-fallback';
+import ProfileFilters from '@/components/user-profile/profile-filters';
 
 const User = () => {
   const router = useRouter();
 
-  const userId = router.query.params?.[0]!;
-  const section = router.query.params?.[1];
+  const userId = router.query.userId as string;
+  const section = router.query?.section as string | undefined;
+  const filter = router.query?.filter as string | undefined;
 
   const { data: userDetails, isError: isUserError } = useUserQuery(userId);
-  const { data, fetchNextPage, hasNextPage } = useUserPostsQuery(userId);
+  const { data, fetchNextPage, hasNextPage } = useUserPostsQuery(
+    userId,
+    filter
+  );
 
   const closeModal = () => {
-    router.push(`/user/${userId}`, undefined, { shallow: true });
+    // eslint-disable-next-line @typescript-eslint/no-shadow
+    const { section, userId, ...restParams } = router.query;
+    router.push(
+      {
+        pathname: `/user/${userId}`,
+        query: { ...restParams },
+      },
+      undefined,
+      {
+        shallow: true,
+        scroll: false,
+      }
+    );
   };
 
   if (isUserError) {
@@ -35,6 +52,7 @@ const User = () => {
   return (
     <Layout>
       <UserProfileHero userDetails={userDetails} />
+      <ProfileFilters />
       <PostList
         data={data}
         fetchNextPage={fetchNextPage}

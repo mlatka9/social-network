@@ -59,6 +59,7 @@ model User {
   communities          UserCommunity[]
   mentions             Mention[]
   favouriteCommunities FavouriteCommunity[]
+  sharedPost           UserShare[]
 }
 
 model VerificationToken {
@@ -70,28 +71,38 @@ model VerificationToken {
 }
 
 model Post {
-  id            String     @id @default(cuid())
-  content       String     @db.VarChar(280)
-  user          User       @relation(name: "createdPosts", fields: [userId], references: [id], onDelete: Cascade)
-  userId        String     @db.Text
+  id            String      @id @default(cuid())
+  content       String?     @db.VarChar(280)
+  user          User        @relation(name: "createdPosts", fields: [userId], references: [id], onDelete: Cascade)
+  userId        String      @db.Text
   comments      Comment[]
   likes         PostLike[]
   bookmarkedBy  Bookmark[]
-  createdAt     DateTime   @default(now())
-  updatedAt     DateTime   @updatedAt
-  images        Image[]    @relation(name: "addedImages")
-  isDeleted     Boolean    @default(false)
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  images        Image[]     @relation(name: "addedImages")
+  isDeleted     Boolean     @default(false)
   tags          PostTag[]
-  shareParentId String?    @db.Text
-  shareParent   Post?      @relation("Share", fields: [shareParentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  shares        Post[]     @relation("Share")
-  community     Community? @relation(fields: [communityId], references: [id], onDelete: Cascade)
-  communityId   String?    @db.Text
+  shareParentId String?     @db.Text
+  shareParent   Post?       @relation("Share", fields: [shareParentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  shares        Post[]      @relation("Share")
+  community     Community?  @relation(fields: [communityId], references: [id], onDelete: Cascade)
+  communityId   String?     @db.Text
   mentions      Mention[]
-  link          String? 
+  link          String?
+  sharedBy      UserShare[]
 }
 
 model Mention {
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  postId String
+  post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@id([userId, postId])
+}
+
+model UserShare {
   userId String
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   postId String

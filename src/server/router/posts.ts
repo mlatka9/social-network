@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import { z } from 'zod';
+import { boolean, string, z } from 'zod';
 import { TRPCError } from '@trpc/server';
 import {
   populatePost,
@@ -28,7 +28,6 @@ const postRouter = createProtectedRouter()
           message: 'Post was deleted',
         });
       }
-
       return populatePost(post, ctx.session.user.id);
     },
   })
@@ -61,6 +60,19 @@ const postRouter = createProtectedRouter()
                 members: {
                   some: {
                     userId: ctx.session.user.id,
+                  },
+                },
+              },
+            },
+            {
+              sharedBy: {
+                some: {
+                  user: {
+                    followedBy: {
+                      some: {
+                        id: ctx.session.user.id,
+                      },
+                    },
                   },
                 },
               },
@@ -113,37 +125,54 @@ const postRouter = createProtectedRouter()
     input: z.object({
       limit: z.number().min(1).max(100).nullish(),
       cursor: z.string().nullish(),
+
       userId: z.string().optional(),
       tagName: z.string().optional(),
       communityId: z.string().optional(),
+
       sort: z.enum(['top']).optional(),
       time: z.enum(['day', 'week']).optional(),
+      withImage: boolean().optional(),
+      likedByUsedId: string().optional(),
     }),
     async resolve({ ctx, input }) {
-      // await prisma.user.findUniqueOrThrow({
-      //   where: {
-      //     id : input.userId
-      //   }
-      // })
-
       const { cursor } = input;
       const limit = input.limit ?? 10;
+
+      const getCreatedAtCondition = (time: 'day' | 'week') => {
+        if (time === 'day') return getDateXDaysAgo(1, new Date());
+        if (time === 'week') return getDateXDaysAgo(7, new Date());
+        throw new Error('wrong time');
+      };
 
       const posts = await prisma.post.findMany({
         take: limit + 1,
         where: {
           createdAt:
-            input.sort === 'top'
+            input.sort === 'top' &&
+            (input.time === 'day' || input.time === 'week')
               ? {
-                  gte:
-                    input.time === 'day'
-                      ? getDateXDaysAgo(1, new Date())
-                      : getDateXDaysAgo(7, new Date()),
+                  gte: getCreatedAtCondition(input.time),
                 }
               : undefined,
-          user: {
-            id: input.userId,
-          },
+          OR: input.userId
+            ? [
+                {
+                  user: {
+                    id: input.userId,
+                  },
+                },
+                {
+                  sharedBy: input.userId
+                    ? {
+                        some: {
+                          userId: input.userId,
+                        },
+                      }
+                    : undefined,
+                },
+              ]
+            : undefined,
           community: {
             id: input.communityId,
           },
@@ -155,6 +184,18 @@ const postRouter = createProtectedRouter()
               }
             : undefined,
           isDeleted: false,
+          images: input.withImage
+            ? {
+                some: {},
+              }
+            : undefined,
+          likes: input.likedByUsedId
+            ? {
+                some: {
+                  userId: input.likedByUsedId,
+                },
+              }
+            : undefined,
         },
         include: postDetailsInclude,
         cursor: cursor ? { id: cursor } : undefined,
@@ -189,6 +230,7 @@ const postRouter = createProtectedRouter()
   })
   .mutation('addPost', {
     input: z.object({
+      isQuoteShare: z.boolean().optional(),
       content: z.string(),
       link: z.string().optional(),
       images: z
@@ -205,7 +247,12 @@ const postRouter = createProtectedRouter()
       communityId: z.string().optional(),
     }),
     async resolve({ input, ctx }) {
+      if (!input.content) {
+        throw new Error('Post must have content text');
+      }
+
       const trimmedContent = input.content.trim();
+
       if (trimmedContent.length === 0) {
         throw new Error('Post must have content text');
       }
@@ -282,6 +329,32 @@ const postRouter = createProtectedRouter()
 
         await prisma.postTag.createMany({
           data: tags.map((tag) => ({ tagName: tag.name, postId: post.id })),
+        });
+      }
+    },
+  })
+  .mutation('toggleShare', {
+    input: z.object({
+      postId: z.string(),
+    }),
+    async resolve({ input, ctx }) {
+      const data = {
+        postId: input.postId,
+        userId: ctx.session.user.id,
+      };
+      const userShare = await prisma.userShare.findUnique({
+        where: {
+          userId_postId: data,
+        },
+      });
+
+      if (userShare === null) {
+        await prisma.userShare.create({ data });
+      } else {
+        await prisma.userShare.delete({
+          where: {
+            userId_postId: data,
+          },
         });
       }
     },

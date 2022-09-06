@@ -31,7 +31,7 @@ const PostsSortPanel = ({ pathname }: PostsSortPanelProps) => {
           <Link
             href={{
               pathname,
-              query: { sort: 'top', time: 'day' },
+              query: { sort: 'top', time: 'all' },
             }}
             shallow
           >
@@ -48,6 +48,22 @@ const PostsSortPanel = ({ pathname }: PostsSortPanelProps) => {
       </ul>
       {sort === 'top' && (
         <ul className="ml-auto flex">
+          <Link
+            href={{
+              pathname,
+              query: { sort: 'top', time: 'all' },
+            }}
+            shallow
+          >
+            <a
+              className={clsx(
+                'text-lg p-3 block',
+                time === 'all' && 'font-bold'
+              )}
+            >
+              All time
+            </a>
+          </Link>
           <Link
             href={{
               pathname,

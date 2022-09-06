@@ -7,13 +7,12 @@ import {
 } from 'src/hooks/mutation';
 import React, { useState } from 'react';
 import { PostDetailsType } from '@/types/db';
-import ModalWrapper from '@/components/common/modal-wrapper';
-import PostInput from '@/components/post-input/post-input';
 import BookmarkIcon from '@/components/common/icons/bookmark-empty';
 import BookmarkEmptyIcon from '@/components/common/icons/bookmark';
 import ShareIcon from '@/components/common/icons/share';
 import HeartIcon from '@/components/common/icons/heart';
 import HeartEmptyIcon from '@/components/common/icons/heart-empty';
+import PostSharingModal from './post-sharing-modal';
 
 interface PostCardFooterProps {
   post: PostDetailsType;
@@ -71,10 +70,13 @@ const PostCardFooter = ({ post }: PostCardFooterProps) => {
         </button>
         <button
           type="button"
-          className="flex items-center cursor-pointer w-fit opacity-80 ml-5 hover:opacity-50 transition-opacity"
+          className={clsx(
+            'flex items-center cursor-pointer w-fit opacity-80 ml-5 hover:opacity-50 transition-opacity',
+            post.sharedByMe && 'text-green-600'
+          )}
           onClick={toggleIsSharing}
         >
-          <ShareIcon />
+          <ShareIcon className={clsx(post.sharedByMe && 'fill-green-600')} />
           <p className="ml-2">{post.sharesCount}</p>
         </button>
         <button
@@ -97,10 +99,12 @@ const PostCardFooter = ({ post }: PostCardFooterProps) => {
           </button>
         )}
       </div>
+
       {isSharing && (
-        <ModalWrapper handleCloseModal={closeSharingModal} title="Share">
-          <PostInput sharedPost={post} submitCallback={closeSharingModal} />
-        </ModalWrapper>
+        <PostSharingModal
+          closeSharingModal={closeSharingModal}
+          sharedPost={post}
+        />
       )}
     </>
   );

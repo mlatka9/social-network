@@ -12,6 +12,7 @@ import ModalWrapper from '@/components/common/modal-wrapper';
 import CommunityCreator from '@/components/community/community-creator';
 import Loading from '@/components/common/loading';
 import CategoriesListHorizontal from '@/components/community/categories-list-horizontal';
+import BackButton from '@/components/common/back-button';
 import { authOptions } from '../api/auth/[...nextauth]';
 
 const CommunitiesPage = () => {
@@ -39,10 +40,11 @@ const CommunitiesPage = () => {
   return (
     <CommunityLayout>
       <div className="hidden lg:block sticky h-fit top-[92px] space-y-5">
+        <BackButton />
+        <CategoryList />
         <Button className="w-full" onClick={handleOpenCreator}>
           Create community
         </Button>
-        <CategoryList />
       </div>
 
       <div className="">

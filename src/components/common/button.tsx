@@ -17,7 +17,7 @@ const Button: React.FC<ButtonProps> = ({
       className,
       'bg-blue-500 hover:bg-blue-400 rounded px-6 py-2 text-white font-medium transition-colors',
       isSmall && 'text-xs px-4',
-      props.disabled && 'bg-blue-300'
+      props.disabled && 'bg-blue-300 hover:bg-blue-300'
     )}
     {...props}
   >

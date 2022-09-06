@@ -7,7 +7,6 @@ import PostFileInput from './post-file-input';
 import UserProfilePicture from '../common/user-profile-image';
 import EmojiPicker from '../common/emoji-picker';
 import Button from '../common/button';
-import PostThumbnail from '../post/post-thumbnail';
 import PostMentionsPicker from './post-mentions-picker';
 
 import 'react-toastify/dist/ReactToastify.css';
@@ -83,14 +82,10 @@ const PostInput = ({
               />
             </div>
           )}
-          <div className="mt-5" />
-          {sharedPost && (
-            <PostThumbnail sharedPost={sharedPost} isSmall disableLink />
-          )}
         </div>
       </div>
 
-      <div className="flex items-center ml-[50px]">
+      <div className="flex items-center ml-[50px] mt-5">
         <Button
           type="submit"
           disabled={!isSubmitButtonEnabled}

@@ -27,13 +27,15 @@ export const useInfiniteFeedQuery = ({
     }
   );
 
-export const useUserPostsQuery = (useId: string) =>
+export const useUserPostsQuery = (userId: string, filter?: string) =>
   trpc.useInfiniteQuery(
     [
       'post.getAll',
       {
         limit: 5,
-        userId: useId,
+        userId: filter === 'likes' ? undefined : userId,
+        withImage: filter === 'images',
+        likedByUsedId: filter === 'likes' ? userId : undefined,
       },
     ],
     {

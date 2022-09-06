@@ -67,28 +67,31 @@ const CommunityProfileHero = ({ community }: CommunityProfileHeroProps) => {
 
         <div className="md:ml-4 md:w-full">
           <div className="flex items-start justify-between flex-col md:flex-row">
-            <div className="mx-auto md:mx-0 flex flex-col items-center md:items-start">
-              <Link href={`/community?category=${community.categoryId}`}>
-                <a className="hover:underline text-center md:text-left">
-                  {community.category.name}
-                </a>
-              </Link>
-              <h1 className="font-poppins font-semibold text-2xl">
-                {community.name}
-              </h1>
-            </div>
+            <div className="flex flex-col items-center mx-auto md:items-start md:mx-0">
+              <div className="mx-auto md:mx-0 flex flex-col items-center md:items-start">
+                <Link href={`/community?category=${community.categoryId}`}>
+                  <a className="hover:underline text-center md:text-left">
+                    {community.category.name}
+                  </a>
+                </Link>
 
-            <div className="text-xs  text-neutral-500 tracking-wide font-medium flex space-x-4 mx-auto  mt-3 md:mt-[6px] mb-5">
-              <Link href={getMembersHref()} shallow>
-                <a className="hover:underline">
-                  <p className="cursor-pointer dark:text-primary-dark-700">
-                    <span className="text-neutral-800 dark:text-primary-dark-700 font-semibold mr-1 font-poppins">
-                      {community.membersCount}
-                    </span>
-                    Members
-                  </p>
-                </a>
-              </Link>
+                <h1 className="font-poppins font-semibold text-2xl">
+                  {community.name}
+                </h1>
+              </div>
+
+              <div className="text-xs  text-neutral-500 tracking-wide font-medium flex space-x-4   mt-3 md:mt-[6px] mb-5 md:mb-0">
+                <Link href={getMembersHref()} shallow>
+                  <a className="hover:underline">
+                    <p className="cursor-pointer dark:text-primary-dark-700">
+                      <span className="text-neutral-800 dark:text-primary-dark-700 font-semibold mr-1 font-poppins">
+                        {community.membersCount}
+                      </span>
+                      Members
+                    </p>
+                  </a>
+                </Link>
+              </div>
             </div>
 
             <div className="flex itmes-center ml-auto space-x-3 mx-auto md:mx-0 md:ml-auto">

@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import { Prisma } from '@prisma/client';
+// import { prisma } from '../db/client';
 
 export const postDetailsInclude = {
   images: true,
@@ -19,6 +20,16 @@ export const postDetailsInclude = {
   community: {
     select: {
       name: true,
+    },
+  },
+  sharedBy: {
+    select: {
+      user: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
     },
   },
   mentions: {
@@ -146,6 +157,7 @@ export const populatePost = (post: PostCardProps, userId: string) => {
     community,
     comments,
     mentions,
+    sharedBy,
     user: { bio, email, emailVerified, ...userData },
     ...postData
   } = post;
@@ -155,16 +167,33 @@ export const populatePost = (post: PostCardProps, userId: string) => {
     user: {
       ...userData,
     },
+    sharedBy: sharedBy.map((userShare) => userShare.user),
     mentions: mentions.map((mention) => mention.user),
     communityName: community?.name || null,
     tags: post.tags.map((tag) => tag.tag),
     likesCount: _count.likes,
     commentsCount: comments.filter((comment) => !comment.isDeleted).length,
-    sharesCount: _count.shares,
+    sharesCount: _count.shares + sharedBy.length,
+    sharedByMe: sharedBy.some((userShare) => userShare.user.id === userId),
     likedByMe: likes.some((postLike) => postLike.userId === userId),
     bookmarkedByMe: bookmarkedBy.some((bookmark) => bookmark.userId === userId),
   };
 };
+
+// export const swapRepostWithOriginal = async (post: PostCardProps) => {
+//   if (post.isQuoteShare !== false) return { ...post, rePostedBy: null };
+
+//   const parentPost = await prisma.post.findUnique({
+//     where: {
+//       id: post.shareParentId!,
+//     },
+//     include: postDetailsInclude,
+//   });
+
+//   return parentPost
+//     ? { ...parentPost, rePostedBy: null }
+//     : { ...post, rePostedBy: post.user };
+// };
 
 export const getDateXDaysAgo = (numOfDays: number, date = new Date()) => {
   const daysAgo = new Date(date.getTime());

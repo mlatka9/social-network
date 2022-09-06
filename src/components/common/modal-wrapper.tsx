@@ -61,7 +61,7 @@ const ModalWrapper = ({
             <CloseIcon />
           </button>
         </div>
-        <hr className="mt-3 mb-10" />
+        <hr className="mt-3 mb-5" />
         <div className="">{children}</div>
       </div>
     </div>,

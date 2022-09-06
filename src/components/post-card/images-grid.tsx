@@ -42,7 +42,7 @@ export const getImageHeightRatio = (
 };
 
 const ImagesGrid = ({ images }: ImagesGridProps) => (
-  <div className="grid gap-2 md:grid-cols-2">
+  <div className="grid gap-2 md:grid-cols-fill">
     {images.length > 0 &&
       images.map((image, index) => {
         const widthRatio = getImageWidthRatio(images.length, index);

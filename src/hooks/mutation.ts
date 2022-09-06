@@ -181,3 +181,15 @@ export const useToggleMarkFavouriteCommunityMutation = () => {
 
   return mutation.mutate;
 };
+
+export const useToggleUserShareMutation = (onSuccessCb: () => void) => {
+  const utils = trpc.useContext();
+  const mutation = trpc.useMutation(['post.toggleShare'], {
+    onSuccess() {
+      invalidateAll(utils);
+      onSuccessCb();
+    },
+  });
+
+  return mutation.mutate;
+};

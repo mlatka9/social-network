@@ -20,6 +20,16 @@ const UserProfileHero = ({ userDetails }: UserProfileHeroProps) => {
     );
   }
 
+  const basePath = router.asPath.split('?')[0]!;
+
+  const getSectionHref = (sectionName: 'following' | 'followers') => {
+    const { userId, ...restParams } = router.query;
+    return {
+      pathname: basePath,
+      query: { ...restParams, section: sectionName },
+    };
+  };
+
   return (
     <>
       <div className="w-full h-60 md:h-80 relative">
@@ -45,31 +55,33 @@ const UserProfileHero = ({ userDetails }: UserProfileHeroProps) => {
 
         <div className="md:ml-4 md:w-full">
           <div className="flex justify-between flex-col md:flex-row ">
-            <h1 className="font-poppins font-semibold text-2xl  md:max-w-[150px] text-center md:text-left">
-              {userDetails?.name}
-            </h1>
+            <div className="flex flex-col">
+              <h1 className="font-poppins font-semibold text-2xl  text-center md:text-left">
+                {userDetails?.name}
+              </h1>
 
-            <div className="text-xs  text-neutral-500 tracking-wide font-medium flex space-x-4 mx-auto md:mx-0 mt-3 mb-5">
-              <Link href={`${router.asPath}/following`} shallow>
-                <a className="hover:underline">
-                  <p className="cursor-pointer dark:text-primary-dark-700">
-                    <span className="text-neutral-800 dark:text-primary-dark-700 font-semibold mr-1 font-poppins">
-                      {userDetails.followingCount}
-                    </span>
-                    Following
-                  </p>
-                </a>
-              </Link>
-              <Link href={`${router.asPath}/followers`} shallow>
-                <a className="hover:underline">
-                  <p className="cursor-pointer dark:text-primary-dark-700">
-                    <span className="text-neutral-800 dark:text-primary-dark-700 font-semibold mr-1 font-poppins">
-                      {userDetails.followedByCount}
-                    </span>
-                    Followers
-                  </p>
-                </a>
-              </Link>
+              <div className="text-xs text-neutral-500 tracking-wide font-medium flex space-x-4 mx-auto md:mx-0 mt-3 mb-5 md:mb-0">
+                <Link href={getSectionHref('following')} shallow>
+                  <a className="hover:underline">
+                    <p className="cursor-pointer dark:text-primary-dark-700">
+                      <span className="text-neutral-800 dark:text-primary-dark-700 font-semibold mr-1 font-poppins">
+                        {userDetails.followingCount}
+                      </span>
+                      Following
+                    </p>
+                  </a>
+                </Link>
+                <Link href={getSectionHref('followers')} shallow>
+                  <a className="hover:underline">
+                    <p className="cursor-pointer dark:text-primary-dark-700">
+                      <span className="text-neutral-800 dark:text-primary-dark-700 font-semibold mr-1 font-poppins">
+                        {userDetails.followedByCount}
+                      </span>
+                      Followers
+                    </p>
+                  </a>
+                </Link>
+              </div>
             </div>
             <div className="mx-auto md:mx-0 ml-auto">
               <UserProfileButton
