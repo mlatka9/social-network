@@ -10,7 +10,7 @@ const ProfileFilters = () => {
     <div className="relative flex w-full bg-primary-0 font-poppins font-semibold text-primary-500 tracking-wide text-sm rounded-lg mb-3">
       <div
         className={clsx(
-          'h-1 absolute left-0 top-0 w-1/3 transition-transform',
+          'h-1 absolute left-0 top-0 w-1/3 transition-transform ite',
           selectedFilter === 'images' && 'translate-x-full',
           selectedFilter === 'likes' && 'translate-x-[200%]'
         )}

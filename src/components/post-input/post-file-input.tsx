@@ -41,7 +41,12 @@ const PostFileInput = ({
         <PhotoIcon />
       </button>
 
-      <div className="grid gap-2 grid-cols-fill">
+      <div
+        className={clsx(
+          'grid gap-2',
+          selectedImages.length > 1 && '!grid-cols-2'
+        )}
+      >
         {selectedImages.length > 0 &&
           selectedImages.map((image, index) => {
             const widthRatio = getImageWidthRatio(selectedImages.length, index);

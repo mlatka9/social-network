@@ -76,11 +76,6 @@ const PostTagsInput = ({ control, setValue }: PostTagsInputProps) => {
         onKeyDown={onKeyDown}
         {...inputProps}
       />
-      {tagInputValue && (
-        <div className="absolute right-1 top-1 font-medium text-xs text-gray-400">
-          Enter to add
-        </div>
-      )}
 
       <div className="absolute top-full left-0 z-[10] w-full rounded-br-md rounded-bl-md overflow-hidden shadow-lg">
         {suggestionData.map((tag, index) => (
