@@ -39,6 +39,7 @@ const PostInput = ({
     isSubmitButtonEnabled,
     errors,
     content,
+    getInputProps,
   } = usePostInput({
     sharedPostId: sharedPost?.id,
     submitCallback,
@@ -70,6 +71,7 @@ const PostInput = ({
             control={control}
             setValue={setValue}
           />
+          <input {...getInputProps()} />
           {finalUploadProgress !== 0 && (
             <div className="w-full h-1 rounded-sm overflow-hidden">
               <div
