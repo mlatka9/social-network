@@ -31,8 +31,6 @@ async function main() {
     IMAGES.push(createRandomImage(randomPostId));
   });
 
-  console.log(IMAGES);
-
   await prisma.user.createMany({
     data: USERS.map((user) => ({
       id: user.id,
@@ -58,17 +56,17 @@ async function main() {
       url: image.url,
       postId: image.postId,
       alt: '',
+      width: 100,
+      height: 100,
     })),
   });
 }
 
 main()
   .then(async () => {
-    console.log('success');
     await prisma.$disconnect();
   })
-  .catch(async (e) => {
-    console.log(e);
+  .catch(async () => {
     await prisma.$disconnect();
     process.exit(1);
   });

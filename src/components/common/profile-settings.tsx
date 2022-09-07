@@ -72,7 +72,12 @@ const ProfileSettings = ({ handleCloseModal }: ProfileSettingsProps) => {
         entry.file ? uploadImage(entry.file) : undefined
       )
     );
-    updateProfile({ name, bio, image: imageUrl, bannerImage: bannerUrl });
+    updateProfile({
+      name,
+      bio,
+      image: imageUrl?.url,
+      bannerImage: bannerUrl?.url,
+    });
     setIsUpdating(false);
   };
 

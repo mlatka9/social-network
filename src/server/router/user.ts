@@ -188,6 +188,7 @@ const userRouter = createProtectedRouter()
         data: {
           name: input.name,
           bio: input.bio,
+
           image: input.image,
           bannerImage: input.bannerImage,
         },

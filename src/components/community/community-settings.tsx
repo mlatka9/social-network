@@ -79,8 +79,8 @@ const CommunitySettings = ({
       communityId: communityDetails.id,
       name,
       description,
-      image: imageUrl,
-      bannerImage: bannerUrl,
+      image: imageUrl?.url,
+      bannerImage: bannerUrl?.url,
       category,
     });
     setIsUpdating(false);
