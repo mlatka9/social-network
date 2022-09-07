@@ -1,5 +1,6 @@
 /* eslint-disable arrow-body-style */
 import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/router';
 import { trpc } from '../utils/trpc';
 
 export const useInfiniteFeedQuery = ({
@@ -13,7 +14,6 @@ export const useInfiniteFeedQuery = ({
     [
       'post.getInfiniteFeed',
       {
-        limit: 5,
         sort: sort === 'top' ? sort : undefined,
         time:
           time === 'day' || time === 'week'
@@ -101,8 +101,14 @@ export const useCurrentUserProfileQuery = () => {
   );
 };
 
-export const usePostQuery = (postId?: string) =>
-  trpc.useQuery(
+export const usePostQuery = (postId?: string) => {
+  const utils = trpc.useContext();
+  const router = useRouter();
+
+  const sort = router.query.sort as string | undefined;
+  const time = router.query.time as string | undefined;
+
+  return trpc.useQuery(
     [
       'post.getById',
       {
@@ -112,16 +118,43 @@ export const usePostQuery = (postId?: string) =>
     {
       enabled: !!postId,
       retry: false,
+
+      initialData: () => {
+        let initialPost;
+
+        utils
+          .getInfiniteQueryData([
+            'post.getInfiniteFeed',
+            {
+              sort: sort === 'top' ? sort : undefined,
+              time:
+                time === 'day' || time === 'week'
+                  ? (time as 'day' | 'week')
+                  : undefined,
+            },
+          ])
+          ?.pages.forEach((page) =>
+            page.posts.forEach((post) => {
+              if (post.id === postId) {
+                initialPost = post;
+              }
+            })
+          );
+
+        return initialPost;
+      },
     }
   );
+};
 
-export const usePostCommentsQuery = (postId: string) =>
-  trpc.useQuery([
+export const usePostCommentsQuery = (postId: string) => {
+  return trpc.useQuery([
     'comment.getAllByPostId',
     {
       postId,
     },
   ]);
+};
 
 export const useSearchQuery = (searchPhrase: string) =>
   trpc.useQuery(['search.getBySearchPhrase', { searchPhrase }], {
@@ -143,7 +176,12 @@ export const useFollowersQuery = (userId: string) =>
   trpc.useQuery(['user.getFollowers', { userId }]);
 
 export const useCommunitiesQuery = (category?: string, filter?: string) =>
-  trpc.useQuery(['community.getAll', { categoryId: category, filter }]);
+  trpc.useInfiniteQuery(
+    ['community.getAll', { categoryId: category, filter }],
+    {
+      getNextPageParam: (lastPage) => lastPage.nextCursor,
+    }
+  );
 
 export const useCommunityPostsQuery = ({
   communityId,

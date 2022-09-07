@@ -21,6 +21,7 @@ const PostsSortPanel = ({ pathname }: PostsSortPanelProps) => {
               pathname,
             }}
             shallow
+            replace
           >
             <a className={clsx('text-lg p-3 block', !sort && 'font-bold')}>
               Latest
@@ -34,6 +35,7 @@ const PostsSortPanel = ({ pathname }: PostsSortPanelProps) => {
               query: { sort: 'top', time: 'all' },
             }}
             shallow
+            replace
           >
             <a
               className={clsx(
@@ -54,6 +56,7 @@ const PostsSortPanel = ({ pathname }: PostsSortPanelProps) => {
               query: { sort: 'top', time: 'all' },
             }}
             shallow
+            replace
           >
             <a
               className={clsx(
@@ -70,6 +73,7 @@ const PostsSortPanel = ({ pathname }: PostsSortPanelProps) => {
               query: { sort: 'top', time: 'day' },
             }}
             shallow
+            replace
           >
             <a
               className={clsx(
@@ -86,6 +90,7 @@ const PostsSortPanel = ({ pathname }: PostsSortPanelProps) => {
               query: { sort: 'top', time: 'week' },
             }}
             shallow
+            replace
           >
             <a
               className={clsx(

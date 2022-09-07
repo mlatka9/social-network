@@ -1,33 +1,18 @@
 import { GetServerSidePropsContext } from 'next';
 import { unstable_getServerSession } from 'next-auth';
-import { useRouter } from 'next/router';
 import { useState } from 'react';
 import CommunityLayout from '@/components/layouts/community-layout';
-import { useCommunitiesQuery } from '@/hooks/query';
 import CommunityFilter from '@/components/community/community-filter';
-import CommunityCard from '@/components/community/community-card';
 import Button from '@/components/common/button';
 import CategoryList from '@/components/community/categories-list';
 import ModalWrapper from '@/components/common/modal-wrapper';
 import CommunityCreator from '@/components/community/community-creator';
-import Loading from '@/components/common/loading';
-import CategoriesListHorizontal from '@/components/community/categories-list-horizontal';
 import BackButton from '@/components/common/back-button';
+import CommunityList from '@/components/community/community-list';
 import { authOptions } from '../api/auth/[...nextauth]';
 
 const CommunitiesPage = () => {
-  const router = useRouter();
-
   const [isCommunityCreatorOpen, setIsCommunityCreatorOpen] = useState(false);
-
-  const category = router.query.category as string | undefined;
-  const filter = router.query.filter as string | undefined;
-
-  const { data, isSuccess } = useCommunitiesQuery(category, filter);
-
-  const goToCommunity = (communityId: string) => {
-    router.push(`/community/${communityId}`);
-  };
 
   const handleCloseCreator = () => {
     setIsCommunityCreatorOpen(false);
@@ -47,50 +32,16 @@ const CommunitiesPage = () => {
         </Button>
       </div>
 
-      <div className="">
-        <div className="lg:hidden">
+      <div className="max-w-[680px] mx-auto lg:mx-0 w-full">
+        <div className="lg:hidden ">
           <Button className="w-full mb-2" onClick={handleOpenCreator}>
             Create community
           </Button>
-          <CategoriesListHorizontal />
+          <CategoryList />
           <div className="mb-2" />
         </div>
         <CommunityFilter />
-        {isSuccess ? (
-          <main className="space-y-3">
-            {data.map((community) => (
-              <div
-                role="link"
-                tabIndex={0}
-                onKeyDown={(e) => {
-                  if (e.target !== e.currentTarget) return;
-                  if (e.code === 'Enter') {
-                    goToCommunity(community.id);
-                  }
-                }}
-                onClick={() => goToCommunity(community.id)}
-                key={community.id}
-                className="cursor-pointer"
-              >
-                <CommunityCard
-                  isMyfavourite={community.isMyfavourite}
-                  id={community.id}
-                  isOwner={community.isOwner}
-                  joinedByMe={community.joinedByMe}
-                  categoryName={community.category.name}
-                  description={community.description}
-                  image={community.image}
-                  membersCount={community.membersCount}
-                  name={community.name}
-                />
-              </div>
-            ))}
-          </main>
-        ) : (
-          <div className="space-y-3">
-            <Loading height={600} />
-          </div>
-        )}
+        <CommunityList />
       </div>
 
       {isCommunityCreatorOpen && (

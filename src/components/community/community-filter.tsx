@@ -23,6 +23,7 @@ const CommunityFilter = () => {
           }}
           shallow
           scroll={false}
+          replace
         >
           <a
             className={clsx(
@@ -42,6 +43,7 @@ const CommunityFilter = () => {
           }}
           shallow
           scroll={false}
+          replace
         >
           <a
             className={clsx(
@@ -62,6 +64,7 @@ const CommunityFilter = () => {
           }}
           shallow
           scroll={false}
+          replace
         >
           <a
             className={clsx(
@@ -82,6 +85,7 @@ const CommunityFilter = () => {
           }}
           shallow
           scroll={false}
+          replace
         >
           <a
             className={clsx(

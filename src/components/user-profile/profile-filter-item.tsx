@@ -18,7 +18,7 @@ const ProfileFilterItem = ({
   const href = filterName ? `${basePath}?filter=${filterName}` : `${basePath}`;
 
   return (
-    <Link href={href} shallow scroll={false}>
+    <Link href={href} shallow scroll={false} replace>
       <a
         className={clsx(
           'block p-5 hover:text-primary-700 relative w-1/3 text-center',

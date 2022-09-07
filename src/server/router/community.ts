@@ -12,13 +12,17 @@ import {
 
 const communityRouter = createProtectedRouter()
   .query('getAll', {
-    input: z
-      .object({
-        categoryId: z.string().optional(),
-        filter: z.string().optional(),
-      })
-      .optional(),
+    input: z.object({
+      limit: z.number().min(1).max(100).nullish(),
+      cursor: z.string().nullish(),
+
+      categoryId: z.string().optional(),
+      filter: z.string().optional(),
+    }),
     async resolve({ input, ctx }) {
+      const { cursor } = input;
+      const limit = 10;
+
       let membersFilter: Prisma.UserCommunityListRelationFilter | undefined;
 
       if (input?.filter === 'joined') {
@@ -39,6 +43,7 @@ const communityRouter = createProtectedRouter()
       }
 
       const communities = await prisma.community.findMany({
+        take: limit + 1,
         where: {
           category: {
             id: input?.categoryId,
@@ -54,9 +59,29 @@ const communityRouter = createProtectedRouter()
           members: membersFilter,
         },
         include: communityListInclude,
+        cursor: cursor ? { id: cursor } : undefined,
+        orderBy: {
+          members: {
+            _count: 'desc',
+          },
+        },
       });
 
-      return populateCommunitiesList(communities, ctx.session.user.id);
+      const populatedList = populateCommunitiesList(
+        communities,
+        ctx.session.user.id
+      );
+
+      let nextCursor: typeof cursor | undefined;
+
+      if (populatedList.length > limit) {
+        const nextItem = populatedList.pop();
+        nextCursor = nextItem!.id;
+      }
+      return {
+        posts: populatedList,
+        nextCursor,
+      };
     },
   })
   .query('getById', {
@@ -140,7 +165,11 @@ const communityRouter = createProtectedRouter()
       return prisma.community.create({
         data: {
           name: input.name,
-          categoryId: input.categoryId,
+          category: {
+            connect: {
+              id: input.categoryId,
+            },
+          },
           members: {
             create: {
               role: 'ADMIN',

@@ -4,13 +4,13 @@ import CommentsList from '@/components/comments-list/comments-list';
 import CommentInput from '@/components/comments-list/comment-input';
 import Author from '../post-card/author';
 import TagsList from '../post-card/tags-list';
-import ImagesGrid from '../post-card/images-grid';
 import PostCardFooter from '../post-card/post-card-footer';
 import PostThumbnail from './post-thumbnail';
 import CommunityBadge from '../post-card/community-badge';
 import PostCardLink from '../post-card/post-card-link';
 import ErrorFallback from '../common/error-fallback';
 import Loading from '../common/loading';
+import ImageGallery from './image-gallery';
 
 interface PostDetailsProps {
   postId: string;
@@ -59,7 +59,7 @@ const PostDetails = ({ postId }: PostDetailsProps) => {
             <TagsList tags={post.tags} />
             <p className="mb-3">{post.content}</p>
             {post.link && <PostCardLink link={post.link} />}
-            <ImagesGrid images={post.images} />
+            {post.images.length && <ImageGallery images={post.images} />}
             {post.shareParent && (
               <>
                 <div className="mt-3 h-1" />

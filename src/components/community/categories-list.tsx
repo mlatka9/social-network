@@ -1,9 +1,8 @@
 import Loading from '../common/loading';
-import TextHeader from '../common/text-header';
 import CategoriesListItem from './categories-list-item';
 import useCategoryList from './use-category-list';
 
-const CategoryList = () => {
+const CategoriesList = () => {
   const {
     allCommunitiesCounter,
     currentCategory,
@@ -15,31 +14,39 @@ const CategoryList = () => {
 
   return (
     <aside className=" bg-white rounded-xl dark:bg-primary-dark-100">
-      <TextHeader className=" py-3 px-5 ">Categories</TextHeader>
-      <hr className=" px-5 " />
-      {isCategoriesSuccess ? (
-        <>
-          <CategoriesListItem
-            communitiesCounter={allCommunitiesCounter}
-            isSelected={!currentCategory}
-            label="all"
-            onClick={setAllCategories}
-          />
-          {filteredCategories.map((category) => (
+      <div className="flex overflow-x-scroll lg:overflow-visible scroll-hide lg:flex-col">
+        {isCategoriesSuccess ? (
+          <>
             <CategoriesListItem
-              communitiesCounter={category.communitiesCount}
-              key={category.id}
-              isSelected={currentCategory === category.id}
-              label={category.name}
-              onClick={() => handleChangeCategory(category.id)}
+              communitiesCounter={allCommunitiesCounter}
+              isSelected={!currentCategory}
+              label="All"
+              onClick={setAllCategories}
             />
-          ))}
-        </>
-      ) : (
-        <Loading height={360} />
-      )}
+
+            {filteredCategories.map((category) => (
+              <CategoriesListItem
+                communitiesCounter={category.communitiesCount}
+                key={category.id}
+                isSelected={currentCategory === category.id}
+                label={category.name}
+                onClick={() => handleChangeCategory(category.id)}
+              />
+            ))}
+          </>
+        ) : (
+          <>
+            <div className="hidden lg:block w-full">
+              <Loading height={500} />
+            </div>
+            <div className="lg:hidden  w-full">
+              <Loading height={76} />
+            </div>
+          </>
+        )}
+      </div>
     </aside>
   );
 };
 
-export default CategoryList;
+export default CategoriesList;

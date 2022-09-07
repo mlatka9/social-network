@@ -11,7 +11,7 @@ const useCategoryList = () => {
   const currentCategory = router.query.category as string | undefined;
 
   const handleChangeCategory = (categoryId: string) => {
-    router.push(
+    router.replace(
       {
         pathname: '/community',
         query: { ...router.query, category: categoryId },
@@ -26,7 +26,7 @@ const useCategoryList = () => {
 
   const setAllCategories = () => {
     const { category, ...restParams } = router.query;
-    router.push(
+    router.replace(
       {
         pathname: '/community',
         query: { ...restParams },

@@ -1,6 +1,5 @@
 import { useSession } from 'next-auth/react';
 import clsx from 'clsx';
-import { ToastContainer } from 'react-toastify';
 import { PostDetailsType } from '@/types/db';
 import PostTagPicker from '@/components/post-input/post-tags-picker';
 import PostFileInput from './post-file-input';
@@ -48,7 +47,6 @@ const PostInput = ({
 
   return (
     <form onSubmit={handleFormSubmit}>
-      <ToastContainer autoClose={3000} position="bottom-right" />
       <div className="flex">
         <UserProfilePicture imageUrl={me.image} userID={me.id} />
         <div

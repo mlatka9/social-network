@@ -44,7 +44,7 @@ const CommunityCard = ({
           {membersCount} Members
         </p>
       </div>
-      <div className="flex ml-auto space-x-1 flex-col-reverse items-end justify-end sm:flex-row">
+      <div className="flex ml-auto space-x-1 flex-col-reverse items-end justify-end sm:flex-row sm:items-baseline">
         {isOwner && (
           <div className="text-sm  bg-yellow-200 text-yellow-800 px-1 py-[2px] rounded-md mb-1">
             onwer
@@ -66,6 +66,7 @@ const CommunityCard = ({
       <CommunityFavouriteIcon isMyfavourite={isMyfavourite} communityId={id} />
       {!isOwner && (
         <JoinCommunityButton
+          communityName={name}
           joinedByMe={joinedByMe}
           communityId={id}
           isSmall

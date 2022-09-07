@@ -3,6 +3,7 @@ import uploadImage from 'src/utils/cloudinary';
 import { useState, useEffect } from 'react';
 import { useCurrentUserProfileQuery } from 'src/hooks/query';
 import { useProfileMutation } from 'src/hooks/mutation';
+import { toast } from 'react-toastify';
 import FormInput from './form-input';
 import FormTextarea from './form-textarea';
 import FormImages from './form-images';
@@ -16,7 +17,11 @@ export interface ProfileSettingsFormType {
   bannerImages: File[];
 }
 
-const ProfileSettings = () => {
+interface ProfileSettingsProps {
+  handleCloseModal: () => void;
+}
+
+const ProfileSettings = ({ handleCloseModal }: ProfileSettingsProps) => {
   const [isUpdating, setIsUpdating] = useState(false);
   const {
     register,
@@ -35,7 +40,14 @@ const ProfileSettings = () => {
 
   const { data: profileData, isSuccess } = useCurrentUserProfileQuery();
 
-  const updateProfile = useProfileMutation();
+  const onSuccess = () => {
+    handleCloseModal();
+    toast('Your profile was updated', {
+      type: 'success',
+    });
+  };
+
+  const updateProfile = useProfileMutation(onSuccess);
 
   useEffect(() => {
     if (!isSuccess) return;

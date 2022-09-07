@@ -9,6 +9,12 @@ import {
 import createProtectedRouter from './protected-router';
 import { prisma } from '../db/client';
 
+const getCreatedAtCondition = (time: 'day' | 'week') => {
+  if (time === 'day') return getDateXDaysAgo(1, new Date());
+  if (time === 'week') return getDateXDaysAgo(7, new Date());
+  throw new Error('wrong time');
+};
+
 const postRouter = createProtectedRouter()
   .query('getById', {
     input: z.object({
@@ -33,14 +39,13 @@ const postRouter = createProtectedRouter()
   })
   .query('getInfiniteFeed', {
     input: z.object({
-      limit: z.number().min(1).max(100).nullish(),
       cursor: z.string().nullish(),
       sort: z.enum(['top']).optional(),
       time: z.enum(['day', 'week']).optional(),
     }),
     async resolve({ ctx, input }) {
       const { cursor } = input;
-      const limit = input.limit ?? 10;
+      const limit = 5;
 
       const posts = await prisma.post.findMany({
         take: limit + 1,
@@ -79,12 +84,10 @@ const postRouter = createProtectedRouter()
             },
           ],
           createdAt:
-            input.sort === 'top'
+            input.sort === 'top' &&
+            (input.time === 'day' || input.time === 'week')
               ? {
-                  gte:
-                    input.time === 'day'
-                      ? getDateXDaysAgo(1, new Date())
-                      : getDateXDaysAgo(7, new Date()),
+                  gte: getCreatedAtCondition(input.time),
                 }
               : undefined,
           isDeleted: false,
@@ -138,12 +141,6 @@ const postRouter = createProtectedRouter()
     async resolve({ ctx, input }) {
       const { cursor } = input;
       const limit = input.limit ?? 10;
-
-      const getCreatedAtCondition = (time: 'day' | 'week') => {
-        if (time === 'day') return getDateXDaysAgo(1, new Date());
-        if (time === 'week') return getDateXDaysAgo(7, new Date());
-        throw new Error('wrong time');
-      };
 
       const posts = await prisma.post.findMany({
         take: limit + 1,
@@ -238,6 +235,8 @@ const postRouter = createProtectedRouter()
           z.object({
             imageUrl: z.string(),
             imageAlt: z.string(),
+            width: z.number(),
+            height: z.number(),
           })
         )
         .nullable(),
@@ -291,6 +290,8 @@ const postRouter = createProtectedRouter()
             alt: image.imageAlt,
             url: image.imageUrl,
             postId: post.id,
+            width: image.width,
+            height: image.height,
           })),
         });
       }

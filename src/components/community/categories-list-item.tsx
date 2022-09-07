@@ -13,32 +13,39 @@ const CategoriesListItem = ({
   label,
   communitiesCounter,
 }: CategoriesListItemProps) => (
-  <div
-    role="button"
-    tabIndex={0}
-    onKeyDown={(e) => {
-      if (e.code === 'Enter') {
-        onClick();
-      }
-    }}
-    className={clsx(
-      'cursor-pointer hover:bg-primary-50  dark:hover:bg-primary-dark-150 py-2 px-3 lg:px-5 lg:py-3 flex flex-col w-[130px] lg:w-full shrink-0',
-      isSelected && 'bg-primary-50'
-    )}
+  <button
+    type="button"
     onClick={onClick}
+    className={clsx(
+      'block  hover:text-primary-700 relative text-center w-[200px] lg:w-full shrink-0',
+      isSelected && '!text-blue-500'
+    )}
   >
-    <p
+    <div
       className={clsx(
-        'font-bold text-neutral-500 text-md mb-2 dark:text-white',
-        isSelected && 'bg-primary-50 text-primary-900'
+        'transition-opacity w-24 h-1 rounded-b-md left-1/2 -translate-x-1/2 bg-blue-500 absolute opacity-0 lg:h-14 lg:w-1 lg:left-0 lg:translate-x-0 lg:top-1/2 lg:-translate-y-1/2 lg:rounded-none lg:rounded-br-md lg:rounded-tr-md',
+        isSelected && 'opacity-100'
       )}
-    >
-      {label}
-    </p>
-    <p className="font-medium text-xs text-gray-400 dark:text-white mt-auto">
-      {communitiesCounter} communities
-    </p>
-  </div>
+    />
+    <div className="p-5 lg:text-left">
+      <p
+        className={clsx(
+          'font-poppins font-semibold text-primary-500 tracking-wide text-sm lg:mb-2',
+          isSelected && '!text-blue-500'
+        )}
+      >
+        {label}
+      </p>
+      <p
+        className={clsx(
+          'font-medium text-xs text-gray-400',
+          isSelected && '!text-blue-400'
+        )}
+      >
+        {communitiesCounter} communities
+      </p>
+    </div>
+  </button>
 );
 
 export default CategoriesListItem;

@@ -25,20 +25,18 @@ const Menu = () => {
 
   useOnClickOutside(ref, () => hideDropdown());
 
-  const openDropDown = () => {
-    if (isDropdownShow) return;
-    setIsDropdownShown(true);
+  const toggleDropDown = () => {
+    setIsDropdownShown(!isDropdownShow);
   };
 
   if (!me) return <div>Loading</div>;
 
   return (
-    // <div ref={ref} onClick={toggleDropdownShow}>
     <div ref={ref}>
       <button
         type="button"
         className="w-10 h-10 rounded-full relative overflow-hidden block"
-        onClick={openDropDown}
+        onClick={toggleDropDown}
       >
         <Image
           layout="fixed"

@@ -21,7 +21,7 @@ const CommunityProfileHero = ({ community }: CommunityProfileHeroProps) => {
 
   const closeModal = () => {
     const { section, communityId, ...restParams } = router.query;
-    router.push(
+    router.replace(
       {
         pathname: `/community/${communityId}`,
         query: { ...restParams },
@@ -103,6 +103,7 @@ const CommunityProfileHero = ({ community }: CommunityProfileHeroProps) => {
                 <CommunitySettingsButton />
               ) : (
                 <JoinCommunityButton
+                  communityName={community.name}
                   communityId={community.id}
                   joinedByMe={community.joinedByMe}
                 />
@@ -121,7 +122,10 @@ const CommunityProfileHero = ({ community }: CommunityProfileHeroProps) => {
       )}
       {section === 'settings' && (
         <ModalWrapper title="Settings" handleCloseModal={closeModal}>
-          <CommunitySettings communityDetails={community} />
+          <CommunitySettings
+            communityDetails={community}
+            handleCloseModal={closeModal}
+          />
         </ModalWrapper>
       )}
     </>

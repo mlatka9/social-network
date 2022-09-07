@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useCommunityMutation } from 'src/hooks/mutation';
 import { useCategoryQuery } from 'src/hooks/query';
 import { CommunityDetailsType } from '@/types/db';
+import { toast } from 'react-toastify';
 import FormImages from '../common/form-images';
 import FormTextarea from '../common/form-textarea';
 import FormInput from '../common/form-input';
@@ -20,9 +21,13 @@ export interface CommunitySettingsFormType {
 
 interface CommunitySettingsProps {
   communityDetails: CommunityDetailsType;
+  handleCloseModal: () => void;
 }
 
-const CommunitySettings = ({ communityDetails }: CommunitySettingsProps) => {
+const CommunitySettings = ({
+  communityDetails,
+  handleCloseModal,
+}: CommunitySettingsProps) => {
   const [isUpdating, setIsUpdating] = useState(false);
   const {
     register,
@@ -45,7 +50,14 @@ const CommunitySettings = ({ communityDetails }: CommunitySettingsProps) => {
   const draftImageFile = watch('images')[0];
   const draftBannerImageFile = watch('bannerImages')[0];
 
-  const updateCommunity = useCommunityMutation();
+  const onSuccess = () => {
+    handleCloseModal();
+    toast('Your community profile was updated', {
+      type: 'success',
+    });
+  };
+
+  const updateCommunity = useCommunityMutation(onSuccess);
 
   const onSubmit = async (data: CommunitySettingsFormType) => {
     const { name, description, bannerImages, images, category } = data;

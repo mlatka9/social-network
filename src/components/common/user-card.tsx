@@ -40,6 +40,7 @@ const UserCard = ({
           </p>
         </div>
         <ButtonFollow
+          userName={name || ''}
           userId={id}
           isSmall
           className="ml-auto mb-auto"

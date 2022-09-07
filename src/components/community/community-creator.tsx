@@ -2,6 +2,7 @@ import { useForm } from 'react-hook-form';
 import { useAddCommunity } from 'src/hooks/mutation';
 import { useCategoryQuery } from 'src/hooks/query';
 import FormInput from '@/components/common/form-input';
+import { toast } from 'react-toastify';
 import Button from '../common/button';
 import FormSelect from '../common/form-select';
 
@@ -15,7 +16,12 @@ interface CommunityCreatorProps {
 }
 
 const CommunityCreator = ({ handleCloseCreator }: CommunityCreatorProps) => {
-  const addCommunity = useAddCommunity(handleCloseCreator);
+  const onSuccessCb = () => {
+    toast('Community created', { type: 'success' });
+    handleCloseCreator();
+  };
+
+  const addCommunity = useAddCommunity(onSuccessCb);
 
   const { data: categories, isSuccess } = useCategoryQuery();
 
@@ -63,6 +69,12 @@ const CommunityCreator = ({ handleCloseCreator }: CommunityCreatorProps) => {
         register={register}
         options={categories}
         watch={watch}
+        rules={{
+          required: {
+            value: true,
+            message: 'Category is required',
+          },
+        }}
       />
       <Button className="mt-3">Submit</Button>
     </form>

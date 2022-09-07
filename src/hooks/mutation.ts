@@ -8,13 +8,14 @@ const invalidateAll = (utils: any) => {
   utils.invalidateQueries(['bookmarks.getAll']);
 };
 
-export const useProfileMutation = () => {
+export const useProfileMutation = (onSuccessCb: () => void) => {
   const utils = trpc.useContext();
   const mutation = trpc.useMutation(['user.update'], {
     onSuccess() {
       invalidateAll(utils);
       utils.invalidateQueries(['user.getById']);
       reloadSession();
+      onSuccessCb();
     },
   });
 
@@ -83,7 +84,10 @@ export const useUpdateCommentMutation = (postId: string) => {
   return mutation.mutate;
 };
 
-export const useToggleFollowUserMutation = (userId: string) => {
+export const useToggleFollowUserMutation = (
+  userId: string,
+  onSuccessCb: () => void
+) => {
   const utils = trpc.useContext();
   const mutation = trpc.useMutation('user.followUser', {
     onSuccess() {
@@ -93,6 +97,7 @@ export const useToggleFollowUserMutation = (userId: string) => {
       utils.invalidateQueries(['user.getFollowing']);
       utils.invalidateQueries(['community.getMembers']);
       utils.invalidateQueries(['explore.getSuggestedUsers']);
+      onSuccessCb();
     },
   });
 
@@ -135,8 +140,10 @@ export const useRemovePostMutation = () => {
 };
 
 export const useAddCommunity = (onSuccessCb: () => void) => {
+  const utils = trpc.useContext();
   const mutation = trpc.useMutation('community.addCommunity', {
     onSuccess() {
+      utils.invalidateQueries(['community.getAll']);
       onSuccessCb();
     },
   });
@@ -144,10 +151,13 @@ export const useAddCommunity = (onSuccessCb: () => void) => {
   return mutation.mutate;
 };
 
-export const useToggleCommunityMembershipMutation = () => {
+export const useToggleCommunityMembershipMutation = (
+  onSuccessCb: () => void
+) => {
   const utils = trpc.useContext();
   const mutation = trpc.useMutation(['community.toggleMembership'], {
     onSuccess() {
+      onSuccessCb();
       utils.invalidateQueries(['community.getById']);
       utils.invalidateQueries(['community.getAll']);
       utils.invalidateQueries(['community.popular']);
@@ -158,11 +168,12 @@ export const useToggleCommunityMembershipMutation = () => {
   return mutation.mutate;
 };
 
-export const useCommunityMutation = () => {
+export const useCommunityMutation = (onSuccessCb: () => void) => {
   const utils = trpc.useContext();
   const mutation = trpc.useMutation(['community.update'], {
     onSuccess() {
       utils.invalidateQueries(['community.getById']);
+      onSuccessCb();
     },
   });
 

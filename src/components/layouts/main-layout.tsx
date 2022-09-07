@@ -1,6 +1,8 @@
 import { ReactNode } from 'react';
 import PopularCommunitiesList from '@/components/community/popular-communities-list';
 import TrendingTagsList from '@/components/common/trending-tags-list';
+import { ToastContainer } from 'react-toastify';
+
 import Header from '../header/header';
 import BackButton from '../common/back-button';
 
@@ -21,6 +23,7 @@ const MainLayout = ({ children }: LayoutProps) => (
         <PopularCommunitiesList />
       </div>
     </div>
+    <ToastContainer autoClose={3000} position="bottom-right" />
   </div>
 );
 

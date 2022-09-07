@@ -5,7 +5,6 @@ import uploadImage from 'src/utils/cloudinary';
 import { useAddPostMutation } from '@/hooks/mutation';
 import { PostInputFormType } from './types';
 
-const MAX_FILE_SIZE = 2097152;
 const MAX_FILES_NUMBER = 4;
 
 interface UsePostInputProps {
@@ -53,23 +52,9 @@ const usePostInput = ({
       });
     }
 
-    let imagesToVerify = files.slice(
+    const imagesToVerify = files.slice(
       0,
       MAX_FILES_NUMBER - currentImages.length
-    );
-
-    const isSomeImageSizeToBig = imagesToVerify.some(
-      (image) => image.size > MAX_FILE_SIZE
-    );
-
-    if (isSomeImageSizeToBig) {
-      toast('Image size cant exceed 2 Mb', {
-        type: 'error',
-      });
-    }
-
-    imagesToVerify = imagesToVerify.filter(
-      (image) => image.size <= MAX_FILE_SIZE
     );
 
     setValue('images', [...getValues('images'), ...imagesToVerify]);
@@ -130,7 +115,12 @@ const usePostInput = ({
     addPost({
       content,
       images: imageUrls.length
-        ? imageUrls.map((url) => ({ imageAlt: 'alt', imageUrl: url }))
+        ? imageUrls.map((image) => ({
+            imageAlt: 'alt',
+            imageUrl: image.url,
+            width: image.width,
+            height: image.height,
+          }))
         : null,
       tags,
       mentions: mentions.map((mention) => mention.id),

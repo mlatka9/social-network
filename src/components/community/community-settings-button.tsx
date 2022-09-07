@@ -6,7 +6,7 @@ const CommunitySettingsButton = () => {
   const openCommuntiSettingsModal = () => {
     const { section, communityId, ...restParams } = router.query;
 
-    router.push(
+    router.replace(
       {
         pathname: `/community/${communityId}`,
         query: { ...restParams, section: 'settings' },

@@ -28,7 +28,8 @@ const User = () => {
   const closeModal = () => {
     // eslint-disable-next-line @typescript-eslint/no-shadow
     const { section, userId, ...restParams } = router.query;
-    router.push(
+
+    router.replace(
       {
         pathname: `/user/${userId}`,
         query: { ...restParams },
@@ -66,7 +67,7 @@ const User = () => {
 
       {section === 'settings' && (
         <ModalWrapper title="Settings" handleCloseModal={closeModal}>
-          <ProfileSettings />
+          <ProfileSettings handleCloseModal={closeModal} />
         </ModalWrapper>
       )}
     </Layout>

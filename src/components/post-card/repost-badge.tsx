@@ -16,7 +16,7 @@ const RepostBadge = ({ users }: RepostBadgeProps) => (
     />
     <div className="ml-2 font-medium text-sm text-primary-400 dark:text-primary-dark-200 flex">
       {users.map((user) => (
-        <Link href={`/user/${user.id}`}>
+        <Link href={`/user/${user.id}`} key={user.id}>
           <a
             onClick={(e) => e.stopPropagation()}
             className="flex items-center hover:underline w-fit"

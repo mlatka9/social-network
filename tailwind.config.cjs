@@ -9,6 +9,7 @@ module.exports = {
       },
       gridTemplateColumns: {
         fill: 'repeat(auto-fit, minmax(250px, 1fr))',
+        'fill-sm': 'repeat(auto-fit, minmax(160px, 1fr))',
       },
       colors: {
         primary: {
