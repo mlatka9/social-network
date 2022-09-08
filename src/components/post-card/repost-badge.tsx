@@ -12,9 +12,9 @@ const RepostBadge = ({ users }: RepostBadgeProps) => (
     <ShareIcon
       width={16}
       height={16}
-      className="fill-primary-400 dark:fill-primary-dark-200"
+      className="fill-primary-400 dark:fill-primary-dark-600"
     />
-    <div className="ml-2 font-medium text-sm text-primary-400 dark:text-primary-dark-200 flex">
+    <div className="ml-2 font-medium text-sm text-primary-400 dark:text-primary-dark-600 flex">
       {users.map((user) => (
         <Link href={`/user/${user.id}`} key={user.id}>
           <a

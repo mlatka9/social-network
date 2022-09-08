@@ -20,9 +20,9 @@ const CommunityBadge = ({
       <GraphIcon
         width={16}
         height={16}
-        className="fill-primary-400 dark:fill-primary-dark-200"
+        className="fill-primary-400 dark:fill-primary-dark-600"
       />
-      <p className="ml-2 font-medium text-sm text-primary-400 dark:text-primary-dark-200 ">
+      <p className="ml-2 font-medium text-sm text-primary-400 dark:text-primary-dark-600 ">
         {communityName}
       </p>
     </a>
