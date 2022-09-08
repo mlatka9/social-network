@@ -29,7 +29,7 @@ const CommunityList = () => {
 
   if (!isSuccess) {
     return (
-      <div className="space-y-3">
+      <div className="space-y-3 bg-primary-0 dark:bg-primary-dark-200">
         <Loading height={600} />
       </div>
     );
@@ -51,7 +51,7 @@ const CommunityList = () => {
                 }}
                 onClick={() => goToCommunity(community.id)}
                 key={community.id}
-                className="cursor-pointer"
+                className="cursor-pointer bg-primary-0 dark:bg-primary-dark-200 px-5 py-3 rounded-md"
               >
                 <CommunityCard
                   isMyfavourite={community.isMyfavourite}

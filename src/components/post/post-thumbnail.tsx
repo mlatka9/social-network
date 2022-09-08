@@ -22,7 +22,7 @@ const PostThumbnail = ({
 
   if (sharedPost.isDeleted) {
     return (
-      <div className="bg-neutral-100 p-1 text-sm text-neutral-700 ring-2 ring-inset ring-blue-400/30 rounded-lg mb-5">
+      <div className="bg-neutral-100 dark:bg-primary-dark-200 p-1 text-sm text-neutral-700 ring-2 ring-inset ring-blue-400/30 rounded-lg mb-5">
         post removed
       </div>
     );
@@ -39,7 +39,7 @@ const PostThumbnail = ({
           goToSharedPost();
         }
       }}
-      className="ring-2 ring-blue-400/30 rounded-md"
+      className="ring-2 ring-blue-400/30 rounded-md dark:bg-primary-dark-200 bg-primary-0"
       onClick={(e) => {
         e.stopPropagation();
         goToSharedPost();

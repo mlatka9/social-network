@@ -39,7 +39,7 @@ const SearchCard = ({ searchEntry, isSelected }: SearchCardProps) => (
 
         <div className="">
           <p className="p-1 block font-medium pb-0">{searchEntry.title}</p>
-          <p className="p-1 block font-medium text-xs text-gray-400 pt-0">
+          <p className="p-1 block font-medium text-xs text-gray-400 dark:text-primary-dark-600 pt-0">
             {searchEntry.type === SearchType.USER
               ? `${searchEntry.followersCount} followers`
               : `${searchEntry.followersCount} members`}

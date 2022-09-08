@@ -39,7 +39,7 @@ const PostLinkInput = ({
               validate: (value) => isLinkInputValid(value),
             })}
             className={clsx(
-              'block  w-full text-md h-8',
+              'block  w-full text-md h-8 dark:bg-primary-dark-200 dark:placeholder:text-primary-dark-600',
               isLinkError && 'text-red-500'
             )}
             placeholder="Add link"
@@ -47,7 +47,10 @@ const PostLinkInput = ({
         </div>
       )}
 
-      <label htmlFor="link-toggle" className="inline-block mr-2 cursor-pointer">
+      <label
+        htmlFor="link-toggle"
+        className="inline-block mr-2 cursor-pointer "
+      >
         <input
           id="link-toggle"
           type="checkbox"

@@ -29,7 +29,7 @@ const Author = ({
           {authorName}
         </a>
       </Link>
-      <p className="font-medium text-xs text-gray-400">
+      <p className="font-medium text-xs text-gray-400 dark:text-primary-dark-600">
         <ReactTimeAgo date={postCreatedAt} />
       </p>
     </div>

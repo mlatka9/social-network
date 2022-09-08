@@ -54,7 +54,7 @@ const PostMentionsInput = ({ setMentions, mentions }: PostTagsInputProps) => {
   return (
     <div className="relative flex-grow flex " {...wrapperProps}>
       <input
-        className="text-md w-[100px] flex-grow dark:bg-primary-dark-100 h-8"
+        className="text-md w-[100px] flex-grow dark:bg-primary-dark-200 h-8 dark:placeholder:text-primary-dark-600"
         placeholder={mentions.length ? 'Add another...' : 'Add mention'}
         value={mentionInputValue}
         onChange={onChange}

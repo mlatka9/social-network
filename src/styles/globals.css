@@ -7,7 +7,7 @@ html {
 }
 
 body {
-  @apply dark:bg-primary-dark-300 min-h-screen bg-primary-100;
+  @apply dark:bg-primary-dark-100 min-h-screen bg-primary-100 dark:text-primary-dark-800;
 }
 
 *:focus-visible {

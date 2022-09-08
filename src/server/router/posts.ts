@@ -82,6 +82,19 @@ const postRouter = createProtectedRouter()
                 },
               },
             },
+            {
+              likes: {
+                some: {
+                  user: {
+                    followedBy: {
+                      some: {
+                        id: ctx.session.user.id,
+                      },
+                    },
+                  },
+                },
+              },
+            },
           ],
           createdAt:
             input.sort === 'top' &&

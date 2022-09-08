@@ -234,9 +234,9 @@ export const useSearchUsersQuery = (searchPhrase: string) => {
 export const useCategoryQuery = () =>
   trpc.useQuery(['community.getAllCategories']);
 
-export const useSuggestedUsersQuery = () =>
-  trpc.useQuery(['explore.getSuggestedUsers']);
+export const useSuggestedUsersQuery = (limit?: number) =>
+  trpc.useQuery(['explore.getSuggestedUsers', { limit }]);
 
-export const useSuggestedCommunitiesQuery = () => {
-  return trpc.useQuery(['explore.getSuggestedCommunities']);
+export const useSuggestedCommunitiesQuery = (limit?: number) => {
+  return trpc.useQuery(['explore.getSuggestedCommunities', { limit }]);
 };

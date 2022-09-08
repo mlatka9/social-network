@@ -27,10 +27,16 @@ const PostList = ({ data, fetchNextPage, hasNextPage }: PostListProps) => {
 
   if (!data)
     return (
-      <div className="space-y-5">
-        <Loading height={300} />
-        <Loading height={200} />
-        <Loading height={250} />
+      <div className="space-y-5 ">
+        <div className="dark:bg-primary-dark-200 bg-primary-0">
+          <Loading height={300} />
+        </div>
+        <div className="dark:bg-primary-dark-200 bg-primary-0">
+          <Loading height={200} />
+        </div>
+        <div className="dark:bg-primary-dark-200 bg-primary-0">
+          <Loading height={250} />
+        </div>
       </div>
     );
 

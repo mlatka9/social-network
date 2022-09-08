@@ -51,15 +51,15 @@ const Community = () => {
         <>
           <CommunityProfileHero community={community} />
           {community.joinedByMe && (
-            <div className="bg-primary-0 dark:bg-primary-dark-100 px-5 py-3 rounded-lg mb-5">
+            <div className="bg-primary-0 dark:bg-primary-dark-200 px-5 py-3 rounded-lg mb-5">
               <TextHeader className="pb-3">Post something</TextHeader>
-              <hr className="mb-3" />
+              <hr className="mb-3 dark:border-primary-700" />
               <PostInput communityId={communityId} />
             </div>
           )}
         </>
       ) : (
-        <div className="space-y-10">
+        <div className="space-y-10 bg-primary-0 dark:bg-primary-dark-200">
           <Loading height={440} />
         </div>
       )}

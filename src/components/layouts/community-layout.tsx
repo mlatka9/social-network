@@ -1,8 +1,8 @@
 import { ReactNode } from 'react';
-import PopularCommunitiesList from '@/components/community/popular-communities-list';
 import Header from '@/components/header/header';
 import TrendingTagsList from '@/components/common/trending-tags-list';
 import { ToastContainer } from 'react-toastify';
+import SuggestionList from '../community/suggestion-list';
 
 interface LayoutProps {
   children: ReactNode;
@@ -15,7 +15,8 @@ const MainLayout = ({ children }: LayoutProps) => (
       {children}
       <aside className="hidden xl:block sticky h-fit top-[92px] space-y-5">
         <TrendingTagsList />
-        <PopularCommunitiesList />
+        {/* <PopularCommunitiesList /> */}
+        <SuggestionList />
       </aside>
     </div>
     <ToastContainer autoClose={3000} position="bottom-right" />

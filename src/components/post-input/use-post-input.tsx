@@ -3,6 +3,7 @@ import { SubmitErrorHandler, useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import uploadImage from 'src/utils/cloudinary';
 import { useAddPostMutation } from '@/hooks/mutation';
+import { useState } from 'react';
 import { PostInputFormType } from './types';
 
 const MAX_FILES_NUMBER = 4;
@@ -18,6 +19,7 @@ const usePostInput = ({
   communityId,
   sharedPostId,
 }: UsePostInputProps) => {
+  const [isUploading, setIsUploading] = useState(false);
   const {
     register,
     handleSubmit,
@@ -98,6 +100,7 @@ const usePostInput = ({
   const finalUploadProgress = sumOfCurrentUploaded / selectedImages.length || 0;
 
   const onSubmit = async (data: PostInputFormType) => {
+    setIsUploading(true);
     const { content, images, link, mentions, tags } = data;
 
     const imageUrls = await Promise.all(
@@ -130,6 +133,7 @@ const usePostInput = ({
     });
 
     reset();
+    setIsUploading(false);
   };
 
   const onError: SubmitErrorHandler<PostInputFormType> = (e) => {
@@ -146,7 +150,8 @@ const usePostInput = ({
 
   const contentLength = content.trim().length;
 
-  const isSubmitButtonEnabled = contentLength > 0 && contentLength <= 280;
+  const isSubmitButtonEnabled =
+    !isUploading && contentLength > 0 && contentLength <= 280;
 
   return {
     control,

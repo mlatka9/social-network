@@ -45,7 +45,12 @@ const PostSharingModal = ({
         </span>
       </label>
       {isQuoteShare ? (
-        <PostInput sharedPost={sharedPost} submitCallback={closeSharingModal} />
+        <div className="bg-primary-0 dark:bg-primary-dark-200 px-5 py-3 rounded-lg">
+          <PostInput
+            sharedPost={sharedPost}
+            submitCallback={closeSharingModal}
+          />
+        </div>
       ) : (
         <>
           {sharedPost.sharedByMe && <p>You already sharing this post </p>}
@@ -59,7 +64,7 @@ const PostSharingModal = ({
         </>
       )}
       {sharedPost && (
-        <div className="mt-5">
+        <div className="mt-5 ">
           <PostThumbnail sharedPost={sharedPost} isSmall disableLink />
         </div>
       )}

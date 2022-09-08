@@ -1,3 +1,4 @@
+import { z } from 'zod';
 import createProtectedRouter from './protected-router';
 import { prisma } from '../db/client';
 import {
@@ -9,7 +10,13 @@ import {
 
 const exploreRouter = createProtectedRouter()
   .query('getSuggestedUsers', {
-    async resolve({ ctx }) {
+    input: z
+      .object({
+        limit: z.number().min(1).optional(),
+      })
+      .optional(),
+    async resolve({ ctx, input }) {
+      const limit = input?.limit || 6;
       const myFollowing = await prisma.user.findMany({
         where: {
           followedBy: {
@@ -38,11 +45,58 @@ const exploreRouter = createProtectedRouter()
         include: getUsersListInclude(myFollowingIds),
       });
 
-      return populateUsersList(suggestedUsers, myFollowingIds);
+      const suggestedUsersIds = suggestedUsers.map((user) => user.id);
+
+      const popularUsers = await prisma.user.findMany({
+        where: {
+          id: {
+            notIn: [
+              ...myFollowingIds,
+              ...suggestedUsersIds,
+              ctx.session.user.id,
+            ],
+          },
+        },
+        include: {
+          followedBy: true,
+          _count: {
+            select: {
+              followedBy: true,
+            },
+          },
+        },
+        orderBy: {
+          followedBy: {
+            _count: 'desc',
+          },
+        },
+        take: limit,
+      });
+
+      const populatedPopularUsers = populateUsersList(
+        popularUsers,
+        myFollowingIds
+      );
+
+      const populatedSuggestedUsers = populateUsersList(
+        suggestedUsers,
+        myFollowingIds
+      );
+
+      return [...populatedSuggestedUsers, ...populatedPopularUsers].slice(
+        0,
+        limit
+      );
     },
   })
   .query('getSuggestedCommunities', {
-    async resolve({ ctx }) {
+    input: z
+      .object({
+        limit: z.number().min(1).optional(),
+      })
+      .optional(),
+    async resolve({ ctx, input }) {
+      const limit = input?.limit || 6;
       const userCommunities = await prisma.community.findMany({
         where: {
           members: {
@@ -69,7 +123,35 @@ const exploreRouter = createProtectedRouter()
         },
         include: communityListInclude,
       });
-      return populateCommunitiesList(suggestedCommunities, ctx.session.user.id);
+
+      const suggestedCommunitiesIds = suggestedCommunities.map(
+        (community) => community.id
+      );
+
+      const popularCommunities = await prisma.community.findMany({
+        where: {
+          id: {
+            notIn: [...userCommunitiesIds, ...suggestedCommunitiesIds],
+          },
+        },
+        include: communityListInclude,
+        take: limit,
+      });
+
+      const populatedSuggestedCommunities = populateCommunitiesList(
+        suggestedCommunities,
+        ctx.session.user.id
+      );
+
+      const populatedPopularCommunitiesList = populateCommunitiesList(
+        popularCommunities,
+        ctx.session.user.id
+      );
+
+      return [
+        ...populatedSuggestedCommunities,
+        ...populatedPopularCommunitiesList,
+      ].slice(0, limit);
     },
   });
 

@@ -14,7 +14,7 @@ const UserProfileHero = ({ userDetails }: UserProfileHeroProps) => {
 
   if (!userDetails) {
     return (
-      <div className="mb-10">
+      <div className="mb-10 dark:bg-primary-dark-200 bg-primary-0">
         <Loading height={440} />
       </div>
     );
@@ -41,8 +41,8 @@ const UserProfileHero = ({ userDetails }: UserProfileHeroProps) => {
         />
       </div>
 
-      <div className="flex p-6 min-h-[160px] rounded-xl bg-primary-0 dark:bg-primary-dark-100 mb-10 relative -mt-10 flex-col md:flex-row items-center md:items-start">
-        <div className="relative -mt-20 p-1 bg-primary-0 dark:bg-primary-dark-100 rounded-lg shrink-0 w-fit">
+      <div className="flex p-6 min-h-[160px] rounded-xl bg-primary-0 dark:bg-primary-dark-200 mb-10 relative -mt-10 flex-col md:flex-row items-center md:items-start">
+        <div className="relative -mt-20 p-1 bg-primary-0 dark:bg-primary-dark-200 rounded-lg shrink-0 w-fit">
           <Image
             src={userDetails?.image || '/images/fallback.svg'}
             width="150"

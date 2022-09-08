@@ -15,9 +15,9 @@ interface DropdownMenuProps {
 const DropdownMenu = ({ userId }: DropdownMenuProps) => (
   <nav className="fixed inset-0 top-14 left-14 md:inset-[unset] md:right-5 md:top-[72px] md:min-w-[300px] md:absolute z-[100] bg-primary-0 dark:bg-primary-dark-100  p-3 md:rounded-xl shadow-2xl select-none">
     <ThemeSwitch />
-    <hr className="my-4" />
+    <hr className="my-4 dark:border-primary-700" />
     <ul className="">
-      <li className="hover:bg-slate-100  dark:hover:bg-primary-dark-150 rounded-lg flex items-center">
+      <li className="hover:bg-slate-100  dark:hover:bg-primary-dark-200 rounded-lg flex items-center">
         <Link href={`/user/${userId}`}>
           <a className="px-3 py-3 w-full rounded-lg flex">
             <ProfileIcon />
@@ -25,7 +25,7 @@ const DropdownMenu = ({ userId }: DropdownMenuProps) => (
           </a>
         </Link>
       </li>
-      <li className="hover:bg-slate-100 dark:hover:bg-primary-dark-150  rounded-lg flex items-center w-full   ">
+      <li className="hover:bg-slate-100 dark:hover:bg-primary-dark-200  rounded-lg flex items-center w-full   ">
         <Link href="/bookmarks">
           <a className="px-3 py-3 w-full rounded-lg flex">
             <BookmarkIcon />
@@ -33,7 +33,7 @@ const DropdownMenu = ({ userId }: DropdownMenuProps) => (
           </a>
         </Link>
       </li>
-      <li className="hover:bg-slate-100 dark:hover:bg-primary-dark-150  rounded-lg flex items-center w-full   ">
+      <li className="hover:bg-slate-100 dark:hover:bg-primary-dark-200  rounded-lg flex items-center w-full   ">
         <Link href="/community">
           <a className="px-3 py-3 w-full rounded-lg flex">
             <GraphIcon />
@@ -41,7 +41,7 @@ const DropdownMenu = ({ userId }: DropdownMenuProps) => (
           </a>
         </Link>
       </li>
-      <li className="hover:bg-slate-100 dark:hover:bg-primary-dark-150  rounded-lg flex items-center w-full   ">
+      <li className="hover:bg-slate-100  dark:hover:bg-primary-dark-200  rounded-lg flex items-center w-full   ">
         <Link href="/explore">
           <a className="px-3 py-3 w-full rounded-lg flex">
             <HashIcon />
@@ -49,7 +49,7 @@ const DropdownMenu = ({ userId }: DropdownMenuProps) => (
           </a>
         </Link>
       </li>
-      <li className="hover:bg-slate-100  dark:hover:bg-primary-dark-150 rounded-lg ">
+      <li className="hover:bg-slate-100 dark:hover:bg-primary-dark-200 rounded-lg ">
         <button
           type="button"
           onClick={() => signOut()}

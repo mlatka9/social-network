@@ -41,7 +41,7 @@ const SearchBar = () => {
   };
 
   return (
-    <div className="relative mx-5" {...wrapperProps}>
+    <div className="relative mx-5 w-[350px]" {...wrapperProps}>
       <div className="relative">
         <div className="absolute top-[10px] md:top-[15px] left-2 md:left-3 pointer-events-none">
           <SearchIcon />

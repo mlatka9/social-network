@@ -1,10 +1,10 @@
 import { ReactNode } from 'react';
-import PopularCommunitiesList from '@/components/community/popular-communities-list';
 import TrendingTagsList from '@/components/common/trending-tags-list';
 import { ToastContainer } from 'react-toastify';
 
 import Header from '../header/header';
 import BackButton from '../common/back-button';
+import SuggestionList from '../community/suggestion-list';
 
 interface LayoutProps {
   children: ReactNode;
@@ -20,7 +20,8 @@ const MainLayout = ({ children }: LayoutProps) => (
       </main>
       <div className="sticky h-fit top-[92px] space-y-5 lg:block hidden">
         <TrendingTagsList />
-        <PopularCommunitiesList />
+        {/* <PopularCommunitiesList /> */}
+        <SuggestionList />
       </div>
     </div>
     <ToastContainer autoClose={3000} position="bottom-right" />

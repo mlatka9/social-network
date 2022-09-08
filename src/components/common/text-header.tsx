@@ -6,12 +6,7 @@ interface TextHeaderProps extends React.HTMLAttributes<HTMLHeadElement> {
 
 const TextHeader = ({ children, className, ...props }: TextHeaderProps) => (
   <h2
-    className={clsx(
-      [
-        'font-poppins font-semibold text-primary-800 text-sm dark:text-primary-dark-800',
-      ],
-      className
-    )}
+    className={clsx(['font-poppins font-semibold text-sm '], className)}
     {...props}
   >
     {children}

@@ -5,10 +5,7 @@ interface LoadingProps {
 }
 
 const Loading = ({ height }: LoadingProps) => (
-  <div
-    className="w-full bg-primary-0 flex justify-center items-center"
-    style={{ height }}
-  >
+  <div className="w-full  flex justify-center items-center" style={{ height }}>
     <Spinner />
   </div>
 );

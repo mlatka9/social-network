@@ -13,7 +13,7 @@ const CategoriesList = () => {
   } = useCategoryList();
 
   return (
-    <aside className=" bg-white rounded-xl dark:bg-primary-dark-100">
+    <aside className=" bg-white rounded-xl dark:bg-primary-dark-200">
       <div className="flex overflow-x-scroll lg:overflow-visible scroll-hide lg:flex-col">
         {isCategoriesSuccess ? (
           <>

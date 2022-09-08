@@ -4,7 +4,7 @@ import { SVGProps } from 'react';
 
 const Spinner = (props: SVGProps<SVGSVGElement>) => {
   const { resolvedTheme } = useTheme();
-  const fill = resolvedTheme === 'dark' ? 'white' : '#0b1475';
+  const fill = resolvedTheme === 'dark' ? 'white' : '#3b82f6';
 
   return (
     <svg

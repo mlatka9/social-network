@@ -48,7 +48,7 @@ const PostCard = ({ post }: PostCardProps) => {
           goToPostDetails();
         }
       }}
-      className="bg-primary-0 dark:bg-primary-dark-100 w-full p-5 shadow-sm rounded-lg cursor-pointer"
+      className="bg-primary-0 dark:bg-primary-dark-200 w-full p-5 shadow-sm rounded-lg cursor-pointer"
       onClick={goToPostDetails}
     >
       <div className="flex">

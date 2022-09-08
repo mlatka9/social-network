@@ -1,12 +1,13 @@
 import clsx from 'clsx';
 import { useSession } from 'next-auth/react';
-import Image from 'next/image';
-
 import {
   useDeleteCommentMutation,
   useToggleCommentLikeMutation,
 } from 'src/hooks/mutation';
 import { CommentDetailsType } from '@/types/db';
+import HeartIcon from '../common/icons/heart';
+import HeartEmptyIcon from '../common/icons/heart-empty';
+import CommentIcon from '../common/icons/comment';
 
 interface CommentFooterProps {
   comment: CommentDetailsType;
@@ -33,7 +34,7 @@ const CommentFooter = ({
   };
 
   return (
-    <div className="flex">
+    <div className="flex ml-14 mr-3">
       <button
         type="button"
         className={clsx([
@@ -42,23 +43,15 @@ const CommentFooter = ({
         ])}
         onClick={handleToggleLike}
       >
-        <Image
-          src="/icons/hart.png"
-          width="20"
-          height="20"
-          layout="fixed"
-          alt=""
-        />
+        {comment.likedByMe ? (
+          <HeartIcon width={16} height={16} />
+        ) : (
+          <HeartEmptyIcon width={16} height={16} />
+        )}
         <p className="ml-2">{comment.likeCount}</p>
       </button>
-      <div className={clsx(['flex items-center w-fit ml-5'])}>
-        <Image
-          src="/icons/replay.png"
-          width="20"
-          height="20"
-          layout="fixed"
-          alt=""
-        />
+      <div className="flex items-center w-fit ml-3">
+        <CommentIcon width={16} height={16} />
         <p className="ml-2">{comment.repliesCount}</p>
       </div>
       <button

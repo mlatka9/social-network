@@ -33,9 +33,11 @@ const UserCard = ({
         <UserProfilePicture imageUrl={image} userID={id} />
         <div className="ml-3">
           <Link href={`/user/${id}`}>
-            <a className="font-poppins font-medium hover:underline">{name}</a>
+            <a className="font-poppins font-medium hover:underline dark:text-primary-dark-800">
+              {name}
+            </a>
           </Link>
-          <p className=" text-neutral-500 text-xs font-medium">
+          <p className=" text-neutral-500 text-xs font-medium dark:text-primary-dark-600">
             {followersCount} followers
           </p>
         </div>
@@ -50,7 +52,7 @@ const UserCard = ({
       {bio && <p className="text-sm text-neutral-900  mb-3">{bio}</p>}
 
       {myId !== id && mutualUserNumber > 0 && (
-        <div className=" text-sm text-neutral-600">
+        <div className=" text-sm text-neutral-600 dark:text-primary-dark-500">
           Followed by
           {mutualUsers.slice(0, 1).map((user) => (
             <Link key={user.id} href={`/user/${user.id}`}>

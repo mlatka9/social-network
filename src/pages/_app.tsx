@@ -20,7 +20,7 @@ const MyApp: AppType = ({
   pageProps: { session, ...pageProps },
 }) => (
   <SessionProvider session={session}>
-    <ThemeProvider attribute="class" enableSystem>
+    <ThemeProvider attribute="class" enableSystem defaultTheme="system">
       <Component {...pageProps} />
     </ThemeProvider>
     <ReactQueryDevtools initialIsOpen={false} />

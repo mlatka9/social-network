@@ -7,13 +7,16 @@ const SuggestedCommunitiesList = () => {
 
   return (
     <>
-      <h2 className="font-poppins text-lg font-medium text-primary-600 mb-3">
+      <h2 className="font-poppins text-lg font-medium text-primary-600 mb-3 dark:text-primary-dark-600">
         Communities to join
       </h2>
       <div className="grid md:grid-cols-2 gap-5">
         {isSuccess ? (
           data.map((community) => (
-            <div key={community.id} className="bg-primary-0 rounded-md">
+            <div
+              key={community.id}
+              className="bg-primary-0 dark:bg-primary-dark-200 px-5 py-3 rounded-md"
+            >
               <CommunityCard
                 isMyfavourite={community.isMyfavourite}
                 id={community.id}
@@ -29,8 +32,12 @@ const SuggestedCommunitiesList = () => {
           ))
         ) : (
           <>
-            <Loading height={120} />
-            <Loading height={120} />
+            <div className="dark:bg-primary-dark-200">
+              <Loading height={120} />
+            </div>
+            <div className="dark:bg-primary-dark-200">
+              <Loading height={120} />
+            </div>
           </>
         )}
       </div>

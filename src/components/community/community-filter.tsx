@@ -14,7 +14,7 @@ const CommunityFilter = () => {
   };
 
   return (
-    <ul className="grid grid-cols-4 bg-primary-0  p-1 rounded-lg mb-5">
+    <ul className="grid grid-cols-4 bg-primary-0 dark:bg-primary-dark-200 p-1 rounded-lg mb-5">
       <li>
         <Link
           href={{
@@ -28,7 +28,8 @@ const CommunityFilter = () => {
           <a
             className={clsx(
               'flex items-center justify-center py-1 rounded-md transition-colors text-primary-400',
-              !selectedFilter && 'bg-slate-100 !text-primary-900 font-medium'
+              !selectedFilter &&
+                'bg-slate-100 !text-primary-900 font-medium dark:bg-primary-dark-300 dark:!text-primary-dark-800'
             )}
           >
             all
@@ -49,7 +50,7 @@ const CommunityFilter = () => {
             className={clsx(
               'flex items-center justify-center py-1 rounded-md transition-colors text-primary-400',
               selectedFilter === CommunityFilterType.JOINED &&
-                'bg-slate-100 !text-primary-900 font-medium'
+                'bg-slate-100 !text-primary-900 font-medium dark:bg-primary-dark-300 dark:!text-primary-dark-800'
             )}
           >
             joined
@@ -68,9 +69,9 @@ const CommunityFilter = () => {
         >
           <a
             className={clsx(
-              'flex items-center justify-center py-1 rounded-md bg-primary-0 transition-colors text-primary-400',
+              'flex items-center justify-center py-1 rounded-md transition-colors text-primary-400',
               selectedFilter === CommunityFilterType.OWNED &&
-                'bg-slate-100 !text-primary-900 font-medium'
+                'bg-slate-100 !text-primary-900 font-medium dark:bg-primary-dark-300 dark:!text-primary-dark-800'
             )}
           >
             owned
@@ -91,7 +92,7 @@ const CommunityFilter = () => {
             className={clsx(
               'flex items-center justify-center py-1 rounded-md transition-colors text-primary-400',
               selectedFilter === CommunityFilterType.FAVOURITE &&
-                'bg-slate-100 !text-primary-900 font-medium'
+                'bg-slate-100 !text-primary-900 font-medium dark:bg-primary-dark-300 dark:!text-primary-dark-800'
             )}
           >
             favourite

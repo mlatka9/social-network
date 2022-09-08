@@ -34,7 +34,10 @@ const CommunitiesPage = () => {
 
       <div className="max-w-[680px] mx-auto lg:mx-0 w-full">
         <div className="lg:hidden ">
-          <Button className="w-full mb-2" onClick={handleOpenCreator}>
+          <Button
+            className=" fixed bottom-2 right-2 rounded-full w-min text-sm"
+            onClick={handleOpenCreator}
+          >
             Create community
           </Button>
           <CategoryList />

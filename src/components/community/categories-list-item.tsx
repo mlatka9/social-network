@@ -17,7 +17,7 @@ const CategoriesListItem = ({
     type="button"
     onClick={onClick}
     className={clsx(
-      'block  hover:text-primary-700 relative text-center w-[200px] lg:w-full shrink-0',
+      'block  hover:text-primary-700 hover:dark:bg-primary-dark-300 relative text-center w-[200px] lg:w-full shrink-0',
       isSelected && '!text-blue-500'
     )}
   >
@@ -30,7 +30,7 @@ const CategoriesListItem = ({
     <div className="p-5 lg:text-left">
       <p
         className={clsx(
-          'font-poppins font-semibold text-primary-500 tracking-wide text-sm lg:mb-2',
+          'font-poppins font-semibold text-primary-500 dark:text-primary-dark-800 tracking-wide text-sm lg:mb-2',
           isSelected && '!text-blue-500'
         )}
       >
@@ -38,7 +38,7 @@ const CategoriesListItem = ({
       </p>
       <p
         className={clsx(
-          'font-medium text-xs text-gray-400',
+          'font-medium text-xs text-gray-400 dark:text-primary-dark-600',
           isSelected && '!text-blue-400'
         )}
       >

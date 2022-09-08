@@ -86,7 +86,7 @@ const PostCardFooter = ({ post }: PostCardFooterProps) => {
         >
           {post.bookmarkedByMe ? <BookmarkEmptyIcon /> : <BookmarkIcon />}
         </button>
-        <div className="font-medium text-xs text-gray-400 ml-auto w-fit hover:underline">
+        <div className="font-medium text-xs text-gray-400 dark:text-primary-dark-600 ml-auto w-fit hover:underline">
           <p>{post.commentsCount} Comments</p>
         </div>
         {me.id === post.userId && (

@@ -7,7 +7,7 @@ const ProfileFilters = () => {
 
   const selectedFilter = router.query?.filter as string | undefined;
   return (
-    <div className="relative flex w-full bg-primary-0 font-poppins font-semibold text-primary-500 tracking-wide text-sm rounded-lg mb-3">
+    <div className="relative flex w-full bg-primary-0 dark:bg-primary-dark-200 font-poppins font-semibold text-primary-500 dark:text-primary-dark-600 tracking-wide text-sm rounded-lg mb-3">
       <div
         className={clsx(
           'h-1 absolute left-0 top-0 w-1/3 transition-transform ite',

@@ -47,9 +47,9 @@ const Home: NextPage = () => {
   return (
     <>
       <Layout>
-        <div className="bg-primary-0 dark:bg-primary-dark-100 px-5 py-3 rounded-lg mt-3 lg:mt-0">
+        <div className="bg-primary-0 dark:bg-primary-dark-200 px-5 py-3 rounded-lg mt-3 lg:mt-0">
           <TextHeader className="pb-3">Post something</TextHeader>
-          <hr className="mb-3" />
+          <hr className="mb-3 dark:border-primary-700" />
           <PostInput submitCallback={addPostCallback} />
         </div>
 
