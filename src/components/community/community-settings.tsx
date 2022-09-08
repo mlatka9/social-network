@@ -152,7 +152,7 @@ const CommunitySettings = ({
         <input type="file" {...register('images')} className="hidden" />
         <input type="file" {...register('bannerImages')} className="hidden" />
 
-        <Button className="mt-3">
+        <Button className="mt-3 ml-auto">
           {isUpdating ? 'Updating...' : 'Submit'}
         </Button>
       </form>

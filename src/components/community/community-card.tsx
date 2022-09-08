@@ -64,7 +64,11 @@ const CommunityCard = ({
         </p>
       </div>
     </div>
-    {description && <p className="text-sm text-neutral-600">{description}</p>}
+    {description && (
+      <p className="text-sm text-neutral-600 dark:text-primary-dark-600">
+        {description}
+      </p>
+    )}
 
     <div className="flex items-center ">
       <CommunityFavouriteIcon isMyfavourite={isMyfavourite} communityId={id} />

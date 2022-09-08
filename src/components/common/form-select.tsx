@@ -39,7 +39,7 @@ const FormSelect = <TFormValues extends FieldValues>({
       <div className="relative">
         <select
           id={label}
-          className="bg-primary-100 block px-2 pb-2.5 pt-4 w-full text-sm text-gray-900 rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600  focus:outline-none focus:ring-0  peer"
+          className="bg-primary-100 block px-2 pb-2.5 pt-4 w-full text-sm dark:bg-primary-dark-200 rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600  focus:outline-none focus:ring-0  peer"
           placeholder=" "
           {...(register && register(name, rules))}
           {...props}
@@ -53,7 +53,7 @@ const FormSelect = <TFormValues extends FieldValues>({
         <label
           htmlFor={label}
           className={clsx(
-            'pointer-events-none absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-5 scale-75 top-2 z-10 origin-[0] dark:bg-gray-900 px-2 peer-focus:px-2   peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-5 left-1',
+            'pointer-events-none absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-5 scale-75 top-2 z-10 origin-[0] px-2 peer-focus:px-2   peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-5 left-1',
             !selectedValue && 'scale-100 -translate-y-1/2 top-1/2 '
           )}
         >

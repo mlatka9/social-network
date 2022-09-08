@@ -40,7 +40,9 @@ const SuggestionList = () => {
               />
             </div>
           ))}
-          <hr className=" my-3 mx-5 dark:border-primary-700" />
+          {!!userData.length && !!communityData.length && (
+            <hr className=" my-3 mx-5 dark:border-primary-700" />
+          )}
           {communityData.map((community) => (
             <div className=" px-5 py-3 rounded-md" key={community.id}>
               <CommunityCard
