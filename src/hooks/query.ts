@@ -159,7 +159,7 @@ export const usePostCommentsQuery = (postId: string) => {
 export const useSearchQuery = (searchPhrase: string) =>
   trpc.useQuery(['search.getBySearchPhrase', { searchPhrase }], {
     keepPreviousData: true,
-    enabled: !!searchPhrase,
+    // enabled: !!searchPhrase,
   });
 
 export const useSearchTagQuery = (searchPhrase: string) =>

@@ -10,6 +10,9 @@ const searchRouter = createProtectedRouter().query('getBySearchPhrase', {
   }),
 
   async resolve({ input }) {
+    if (!input.searchPhrase.trim()) {
+      return [];
+    }
     const matchingUsers = await prisma.user.findMany({
       where: {
         name: {
@@ -61,7 +64,7 @@ const searchRouter = createProtectedRouter().query('getBySearchPhrase', {
     );
 
     return [...matchingUsersWithFollows, ...matchingCommunitiesWithFollows]
-      .sort((a, b) => a.followersCount - b.followersCount)
+      .sort((a, b) => b.followersCount - a.followersCount)
       .slice(0, 5);
   },
 });

@@ -24,6 +24,7 @@ const useSuggestionList = <T,>({
 
   useEffect(() => {
     setIsSuggestionShow(false);
+    inputRef.current?.blur();
   }, [router.asPath]);
 
   const handleClickOutside = () => {

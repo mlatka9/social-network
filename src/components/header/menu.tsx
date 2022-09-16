@@ -3,7 +3,9 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { useOnClickOutside } from 'usehooks-ts';
 import Image from 'next/image';
 import { useSession } from 'next-auth/react';
+import clsx from 'clsx';
 import DropdownMenu from './dropdown-menu';
+import CaretDownIcon from '../common/icons/caret-down';
 
 const Menu = () => {
   const router = useRouter();
@@ -35,9 +37,17 @@ const Menu = () => {
     <div ref={ref}>
       <button
         type="button"
-        className="w-10 h-10 rounded-full relative overflow-hidden block"
+        className=" relative overflow-hidden flex items-center"
         onClick={toggleDropDown}
       >
+        <div
+          className={clsx(
+            'transition-transform duration-200',
+            isDropdownShow && 'rotate-180'
+          )}
+        >
+          <CaretDownIcon />
+        </div>
         <Image
           layout="fixed"
           src={me.image || '/images/fallback.svg'}
@@ -45,6 +55,7 @@ const Menu = () => {
           objectFit="cover"
           width="40"
           height="40"
+          className="rounded-full"
         />
       </button>
 
