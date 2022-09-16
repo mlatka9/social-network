@@ -11,6 +11,7 @@ import PostCardLink from '../post-card/post-card-link';
 import ErrorFallback from '../common/error-fallback';
 import Loading from '../common/loading';
 import ImageGallery from './image-gallery';
+import RepostBadge from '../post-card/repost-badge';
 
 interface PostDetailsProps {
   postId: string;
@@ -43,12 +44,15 @@ const PostDetails = ({ postId }: PostDetailsProps) => {
     <>
       {isPostSuccess ? (
         <div className="mb-20">
-          {post.communityId && post.communityName && (
-            <CommunityBadge
-              communityId={post.communityId}
-              communityName={post.communityName}
-            />
-          )}
+          <div className="lg:flex space-y-2 lg:space-y-0 lg:space-x-5 items-baseline">
+            {post.communityId && post.communityName && (
+              <CommunityBadge
+                communityId={post.communityId}
+                communityName={post.communityName}
+              />
+            )}
+            {!!post.sharedBy.length && <RepostBadge users={post.sharedBy} />}
+          </div>
           <div className="bg-white w-full mb-5  rounded-lg dark:bg-primary-dark-100 mt-2">
             <Author
               authorId={post.user.id}
@@ -59,7 +63,7 @@ const PostDetails = ({ postId }: PostDetailsProps) => {
             <TagsList tags={post.tags} />
             <p className="mb-3">{post.content}</p>
             {post.link && <PostCardLink link={post.link} />}
-            {post.images.length && <ImageGallery images={post.images} />}
+            {!!post.images.length && <ImageGallery images={post.images} />}
             {post.shareParent && (
               <>
                 <div className="mt-3 h-1" />

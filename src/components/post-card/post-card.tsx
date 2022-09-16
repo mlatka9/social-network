@@ -51,20 +51,14 @@ const PostCard = ({ post }: PostCardProps) => {
       className="bg-primary-0 dark:bg-primary-dark-200 w-full p-5 shadow-sm rounded-lg cursor-pointer"
       onClick={goToPostDetails}
     >
-      <div className="flex">
+      <div className="lg:flex ml-14 space-y-2 lg:space-y-0 lg:space-x-5 items-baseline">
         {post.communityId && post.communityName && (
-          <div className="ml-14">
-            <CommunityBadge
-              communityId={post.communityId}
-              communityName={post.communityName}
-            />
-          </div>
+          <CommunityBadge
+            communityId={post.communityId}
+            communityName={post.communityName}
+          />
         )}
-        {post.sharedBy.length > 0 && (
-          <div className="ml-14">
-            <RepostBadge users={post.sharedBy} />
-          </div>
-        )}
+        {post.sharedBy.length > 0 && <RepostBadge users={post.sharedBy} />}
       </div>
 
       <div className="flex mt-2">

@@ -5,6 +5,7 @@ import {
   populatePost,
   postDetailsInclude,
   getDateXDaysAgo,
+  getMyFollowingIds,
 } from '@/server/router/utils';
 import createProtectedRouter from './protected-router';
 import { prisma } from '../db/client';
@@ -34,7 +35,8 @@ const postRouter = createProtectedRouter()
           message: 'Post was deleted',
         });
       }
-      return populatePost(post, ctx.session.user.id);
+      const myFollowingIds = await getMyFollowingIds(ctx.session.user.id);
+      return populatePost(post, ctx.session.user.id, myFollowingIds);
     },
   })
   .query('getInfiniteFeed', {
@@ -120,8 +122,10 @@ const postRouter = createProtectedRouter()
               },
       });
 
+      const myFollowingIds = await getMyFollowingIds(ctx.session.user.id);
+
       const populatedPosts = posts.map((post) =>
-        populatePost(post, ctx.session.user.id)
+        populatePost(post, ctx.session.user.id, myFollowingIds)
       );
 
       // eslint-disable-next-line no-undef-init
@@ -221,8 +225,9 @@ const postRouter = createProtectedRouter()
               },
       });
 
+      const myFollowingIds = await getMyFollowingIds(ctx.session.user.id);
       const populatedPosts = posts.map((post) =>
-        populatePost(post, ctx.session.user.id)
+        populatePost(post, ctx.session.user.id, myFollowingIds)
       );
 
       // eslint-disable-next-line no-undef-init

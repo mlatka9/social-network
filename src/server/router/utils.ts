@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import { Prisma } from '@prisma/client';
-// import { prisma } from '../db/client';
+import { prisma } from '../db/client';
 
 export const postDetailsInclude = {
   images: true,
@@ -148,7 +148,11 @@ export const populateCommunitiesList = (
       members.find((member) => member.role === 'ADMIN')?.userId === userId,
   }));
 
-export const populatePost = (post: PostCardProps, userId: string) => {
+export const populatePost = (
+  post: PostCardProps,
+  userId: string,
+  myFollowingIds: string[]
+) => {
   const {
     _count,
     likes,
@@ -167,7 +171,9 @@ export const populatePost = (post: PostCardProps, userId: string) => {
     user: {
       ...userData,
     },
-    sharedBy: sharedBy.map((userShare) => userShare.user),
+    sharedBy: sharedBy
+      .map((userShare) => userShare.user)
+      .filter((user) => myFollowingIds.includes(user.id)),
     mentions: mentions.map((mention) => mention.user),
     communityName: community?.name || null,
     tags: post.tags.map((tag) => tag.tag),
@@ -194,6 +200,20 @@ export const populatePost = (post: PostCardProps, userId: string) => {
 //     ? { ...parentPost, rePostedBy: null }
 //     : { ...post, rePostedBy: post.user };
 // };
+
+export const getMyFollowingIds = async (userId: string) => {
+  const myFollowing = await prisma.user.findMany({
+    where: {
+      followedBy: {
+        some: {
+          id: userId,
+        },
+      },
+    },
+  });
+
+  return myFollowing.map((user) => user.id);
+};
 
 export const getDateXDaysAgo = (numOfDays: number, date = new Date()) => {
   const daysAgo = new Date(date.getTime());

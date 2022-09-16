@@ -11,6 +11,8 @@ import ModalWrapper from '@/components/common/modal-wrapper';
 import PostDetails from '@/components/post/post-details';
 import TextHeader from '@/components/common/text-header';
 import PostsSortPanel from '@/components/common/posts-sort-panel';
+import Link from 'next/link';
+import HashIcon from '@/components/common/icons/hash';
 import { authOptions } from './api/auth/[...nextauth]';
 
 const Home: NextPage = () => {
@@ -44,6 +46,8 @@ const Home: NextPage = () => {
     });
   };
 
+  console.log(data?.pages[0]?.posts.length);
+
   return (
     <>
       <Layout>
@@ -61,6 +65,18 @@ const Home: NextPage = () => {
           fetchNextPage={fetchNextPage}
           hasNextPage={hasNextPage}
         />
+        {!data?.pages[0]?.posts.length && (
+          <div className="bg-primary-0 dark:bg-primary-dark-200 p-3 rounded-xl text-primary-500 dark:text-primary-dark-700 flex items-center min-h-[100px] text-lg">
+            <Link href="/explore">
+              <a className="text-blue-500 font-bold mr-1 group relative flex items-center font-poppins">
+                <HashIcon className="fill-blue-500" />
+                <span>Explore</span>
+                <div className="group-hover:opacity-100 opacity-0 w-full h-[3px] bg-blue-500 transition-opacity duration-100 absolute bottom-0" />
+              </a>
+            </Link>
+            and find something for you
+          </div>
+        )}
       </Layout>
       {showcasedPostId && (
         <ModalWrapper title="Post" handleCloseModal={closeShowcasedPost} isBig>

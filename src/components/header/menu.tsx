@@ -42,7 +42,7 @@ const Menu = () => {
       >
         <div
           className={clsx(
-            'transition-transform duration-200',
+            'transition-transform duration-200 mr-1',
             isDropdownShow && 'rotate-180'
           )}
         >

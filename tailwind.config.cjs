@@ -38,6 +38,16 @@ module.exports = {
           50: '#000000',
         },
       },
+      keyframes: {
+        pop: {
+          '25%': { transform: 'rotate(-5deg)' },
+          '50%': { transform: 'scale(1.2)' },
+          '75%': { transform: 'rotate(5deg) ' },
+        },
+      },
+      animation: {
+        pop: 'pop 1s ease-in-out',
+      },
     },
   },
   plugins: [],

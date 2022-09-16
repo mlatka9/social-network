@@ -40,6 +40,8 @@ const PostList = ({ data, fetchNextPage, hasNextPage }: PostListProps) => {
       </div>
     );
 
+  // console.log(data.pages);
+
   return (
     <div className="space-y-5 mb-10">
       {data.pages.map((page) => (
@@ -49,7 +51,7 @@ const PostList = ({ data, fetchNextPage, hasNextPage }: PostListProps) => {
           ))}
         </Fragment>
       ))}
-      <div ref={ref} className="w-full h-10 " />
+      {hasNextPage && <div ref={ref} className="w-full h-10 " />}
     </div>
   );
 };

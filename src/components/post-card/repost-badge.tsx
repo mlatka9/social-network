@@ -15,7 +15,7 @@ const RepostBadge = ({ users }: RepostBadgeProps) => (
       className="fill-primary-400 dark:fill-primary-dark-600"
     />
     <div className="ml-2 font-medium text-sm text-primary-400 dark:text-primary-dark-600 flex">
-      {users.map((user) => (
+      {users.slice(0, 1).map((user) => (
         <Link href={`/user/${user.id}`} key={user.id}>
           <a
             onClick={(e) => e.stopPropagation()}
