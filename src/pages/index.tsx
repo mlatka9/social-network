@@ -46,8 +46,6 @@ const Home: NextPage = () => {
     });
   };
 
-  console.log(data?.pages[0]?.posts.length);
-
   return (
     <>
       <Layout>

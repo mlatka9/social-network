@@ -1,7 +1,11 @@
 import { z } from 'zod';
 import { prisma } from '@/server/db/client';
 import createProtectedRouter from '@/server/router/protected-router';
-import { postDetailsInclude, populatePost } from '@/server/router/utils';
+import {
+  postDetailsInclude,
+  populatePost,
+  getMyFollowingIds,
+} from '@/server/router/utils';
 
 const bookmarkRouter = createProtectedRouter()
   .query('getAll', {
@@ -29,8 +33,10 @@ const bookmarkRouter = createProtectedRouter()
         },
       });
 
+      const myFollowingIds = await getMyFollowingIds(ctx.session.user.id);
+
       const populatedPosts = posts.map((post) =>
-        populatePost(post, ctx.session.user.id)
+        populatePost(post, ctx.session.user.id, myFollowingIds)
       );
 
       // eslint-disable-next-line no-undef-init
