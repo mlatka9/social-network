@@ -29,7 +29,7 @@ const uploadImage = async (
   });
 
   return {
-    url: response.data.url,
+    url: response.data.secure_url,
     width: response.data.width,
     height: response.data.height,
   };
