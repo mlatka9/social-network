@@ -12,6 +12,7 @@ import ErrorFallback from '../common/error-fallback';
 import Loading from '../common/loading';
 import ImageGallery from './image-gallery';
 import RepostBadge from '../post-card/repost-badge';
+import MentionsList from '../post-card/mentions-list';
 
 interface PostDetailsProps {
   postId: string;
@@ -61,7 +62,7 @@ const PostDetails = ({ postId }: PostDetailsProps) => {
               postCreatedAt={post.createdAt}
             />
             <TagsList tags={post.tags} />
-            <p className="mb-3">{post.content}</p>
+            <p className="mb-3 overflow-hidden">{post.content}</p>
             {post.link && <PostCardLink link={post.link} />}
             {!!post.images.length && <ImageGallery images={post.images} />}
             {post.shareParent && (
@@ -70,7 +71,7 @@ const PostDetails = ({ postId }: PostDetailsProps) => {
                 <PostThumbnail sharedPost={post.shareParent} />
               </>
             )}
-
+            <MentionsList mentions={post.mentions} />
             <PostCardFooter post={post} />
           </div>
         </div>

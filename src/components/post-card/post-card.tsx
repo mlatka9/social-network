@@ -72,7 +72,9 @@ const PostCard = ({ post }: PostCardProps) => {
       <div className="md:ml-14">
         <TagsList tags={post.tags} />
         <div className="relative">
-          <p className="mb-3 whitespace-pre-wrap">{post.content}</p>
+          <p className="mb-3 whitespace-pre-wrap overflow-hidden">
+            {post.content}
+          </p>
           {post.link && <PostCardLink link={post.link} />}
           <ImagesGrid images={post.images} />
           {post.shareParent && (

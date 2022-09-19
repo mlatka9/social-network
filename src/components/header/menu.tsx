@@ -31,6 +31,10 @@ const Menu = () => {
     setIsDropdownShown(!isDropdownShow);
   };
 
+  const closeDropDown = () => {
+    setIsDropdownShown(false);
+  };
+
   if (!me) return <div>Loading</div>;
 
   return (
@@ -59,7 +63,9 @@ const Menu = () => {
         />
       </button>
 
-      {isDropdownShow && <DropdownMenu userId={me.id} />}
+      {isDropdownShow && (
+        <DropdownMenu userId={me.id} closeDropDown={closeDropDown} />
+      )}
     </div>
   );
 };

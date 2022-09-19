@@ -18,22 +18,20 @@ body {
 /* Firefox */
 * {
   scrollbar-width: auto;
-  scrollbar-color: #bbb7c8 #ffffff;
+  /* scrollbar-color: #bbb7c8 #ffffff; */
 }
 
 /* Chrome, Edge, and Safari */
 *::-webkit-scrollbar {
-  width: 14px;
+  width: 12px;
 }
 
 *::-webkit-scrollbar-track {
-  background: #ffffff;
+  @apply bg-white dark:bg-slate-600;
 }
 
 *::-webkit-scrollbar-thumb {
-  background-color: #bbb7c8;
-  border-radius: 10px;
-  border: 2px solid #ffffff;
+  @apply bg-slate-300 dark:bg-gray-800 border-2 border-white dark:border-slate-600 border-solid  rounded-xl;
 }
 
 @layer {

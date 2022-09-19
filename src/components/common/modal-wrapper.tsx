@@ -44,14 +44,13 @@ const ModalWrapper = ({
         onClick={(e) => e.stopPropagation()}
         className={clsx(
           [
-            'fixed p-4 lg:p-10 bg-white z-[10] inset-0 mx-2 lg:mx-auto m-auto rounded-lg overflow-y-scroll dark:bg-primary-dark-100 min-h-[80vh]',
+            'flex flex-col fixed p-4 pr-0 lg:px-10 lg:pr-0 bg-white z-[10] inset-0 m-2 lg:mx-auto rounded-lg dark:bg-primary-dark-100',
           ],
-          !isBig && 'h-fit lg:max-w-2xl max-h-[90vh]',
-          isBig &&
-            'lg:max-w-[800px] mx-auto mt-10 inset-0 rounded-b-none max-h-[1000px]'
+          !isBig && 'lg:max-w-2xl',
+          isBig && 'lg:max-w-[800px] mx-auto mt-10 inset-0 rounded-b-none'
         )}
       >
-        <div className="flex justify-between items-center ">
+        <div className="flex justify-between items-center pr-4 lg:pr-10">
           <div className="font-poppins font-semibold ">{title}</div>
           <button
             type="button"
@@ -61,8 +60,8 @@ const ModalWrapper = ({
             <CloseIcon />
           </button>
         </div>
-        <hr className="mt-3 mb-5 dark:border-primary-700" />
-        <div className="">{children}</div>
+        <hr className="mt-3 mb-5 dark:border-primary-700 mr-4 lg:mr-10" />
+        <div className="overflow-y-scroll pr-4 lg:pr-10">{children}</div>
       </div>
     </div>,
     document.querySelector('#modal') as HTMLElement

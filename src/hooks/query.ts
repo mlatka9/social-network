@@ -240,3 +240,7 @@ export const useSuggestedUsersQuery = (limit?: number) =>
 export const useSuggestedCommunitiesQuery = (limit?: number) => {
   return trpc.useQuery(['explore.getSuggestedCommunities', { limit }]);
 };
+
+export const useNotificationsQuery = () => {
+  return trpc.useInfiniteQuery(['notification.getAll', {}]);
+};

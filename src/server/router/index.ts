@@ -8,6 +8,7 @@ import tagRouter from '@/server/router/tag';
 import communityRouter from '@/server/router/community';
 import searchRouter from '@/server/router/search';
 import exploreRouter from '@/server/router/explore';
+import notificationRouter from '@/server/router/notification';
 import { createRouter } from './context';
 
 export const appRouter = createRouter()
@@ -19,7 +20,8 @@ export const appRouter = createRouter()
   .merge('tags.', tagRouter)
   .merge('community.', communityRouter)
   .merge('search.', searchRouter)
-  .merge('explore.', exploreRouter);
+  .merge('explore.', exploreRouter)
+  .merge('notification.', notificationRouter);
 
 // export type definition of API
 export type AppRouter = typeof appRouter;

@@ -2,6 +2,8 @@ import { useRouter } from 'next/router';
 import { useState, useRef, useEffect } from 'react';
 import { useOnClickOutside } from 'usehooks-ts';
 
+const NO_SELECTION_INDEX = -1;
+
 interface UseSuggestionListProps<T> {
   data?: T[];
   onSelect: (selectedItem: T) => void;
@@ -12,14 +14,15 @@ const useSuggestionList = <T,>({
   onSelect,
 }: UseSuggestionListProps<T>) => {
   const router = useRouter();
-  const [selectedItemIndex, setSelectedItem] = useState<number>(0);
+  const [selectedItemIndex, setSelectedItem] =
+    useState<number>(NO_SELECTION_INDEX);
 
   const [isSuggestionShow, setIsSuggestionShow] = useState(false);
   const containerRef = useRef<HTMLInputElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    setSelectedItem(0);
+    setSelectedItem(NO_SELECTION_INDEX);
   }, [data.length]);
 
   useEffect(() => {
@@ -28,7 +31,7 @@ const useSuggestionList = <T,>({
   }, [router.asPath]);
 
   const handleClickOutside = () => {
-    setSelectedItem(0);
+    setSelectedItem(NO_SELECTION_INDEX);
     setIsSuggestionShow(false);
   };
 
@@ -36,8 +39,6 @@ const useSuggestionList = <T,>({
 
   const setNextItem = () => {
     if (!data?.length) return;
-    // if (selectedItemIndex === 0) {
-    //   setSelectedItem(0);
     if (selectedItemIndex + 1 === data.length) {
       setSelectedItem(0);
     } else {
@@ -64,7 +65,7 @@ const useSuggestionList = <T,>({
       setPrevItem();
     }
     if (e.key === 'Enter') {
-      if (data && selectedItemIndex !== undefined) {
+      if (data && selectedItemIndex) {
         const selectedItem = data[selectedItemIndex];
         if (selectedItem) {
           onSelect(selectedItem);

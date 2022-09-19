@@ -3,8 +3,18 @@ import * as React from 'react';
 import { SVGProps } from 'react';
 
 const Spinner = (props: SVGProps<SVGSVGElement>) => {
+  const [mounted, setMounted] = React.useState(false);
   const { resolvedTheme } = useTheme();
   const fill = resolvedTheme === 'dark' ? 'white' : '#3b82f6';
+
+  // useEffect only runs on the client, so now we can safely show the UI
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return null;
+  }
 
   return (
     <svg

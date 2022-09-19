@@ -44,6 +44,7 @@
     "react-time-ago": "^7.2.1",
     "react-toastify": "^9.0.8",
     "superjson": "^1.9.1",
+    "tailwind-scrollbar": "^2.0.1",
     "usehooks-ts": "^2.6.0",
     "uuid": "^8.3.2",
     "zod": "^3.17.3"
