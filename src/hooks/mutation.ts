@@ -204,3 +204,25 @@ export const useToggleUserShareMutation = (onSuccessCb: () => void) => {
 
   return mutation.mutate;
 };
+
+export const useMarkNotificationAsRead = () => {
+  const utils = trpc.useContext();
+  const mutation = trpc.useMutation(['notification.markAsRead'], {
+    onSuccess() {
+      utils.invalidateQueries(['notification.count']);
+      utils.invalidateQueries(['notification.getAll']);
+    },
+  });
+  return mutation.mutate;
+};
+
+export const useMarkAllNotificationAsRead = () => {
+  const utils = trpc.useContext();
+  const mutation = trpc.useMutation(['notification.markAllAsRead'], {
+    onSuccess() {
+      utils.invalidateQueries(['notification.count']);
+      utils.invalidateQueries(['notification.getAll']);
+    },
+  });
+  return mutation.mutate;
+};

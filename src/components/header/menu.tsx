@@ -4,6 +4,7 @@ import { useOnClickOutside } from 'usehooks-ts';
 import Image from 'next/image';
 import { useSession } from 'next-auth/react';
 import clsx from 'clsx';
+import { useNotificationsCountQuery } from '@/hooks/query';
 import DropdownMenu from './dropdown-menu';
 import CaretDownIcon from '../common/icons/caret-down';
 
@@ -11,9 +12,10 @@ const Menu = () => {
   const router = useRouter();
 
   const { data: session } = useSession();
-  const me = session?.user;
+  const me = session?.user!;
 
   const [isDropdownShow, setIsDropdownShown] = useState(false);
+  const { data: notificationCount } = useNotificationsCountQuery();
 
   const ref = useRef(null);
 
@@ -35,13 +37,11 @@ const Menu = () => {
     setIsDropdownShown(false);
   };
 
-  if (!me) return <div>Loading</div>;
-
   return (
     <div ref={ref}>
       <button
         type="button"
-        className=" relative overflow-hidden flex items-center"
+        className=" relative flex items-center"
         onClick={toggleDropDown}
       >
         <div
@@ -61,10 +61,20 @@ const Menu = () => {
           height="40"
           className="rounded-full"
         />
+        {!!notificationCount && (
+          <div>
+            <div className="animate-ping w-3 h-3 bg-red-500 absolute rounded-full right-0 top-0" />
+            <div className="w-3 h-3 bg-red-500 absolute rounded-full right-0 top-0" />
+          </div>
+        )}
       </button>
 
       {isDropdownShow && (
-        <DropdownMenu userId={me.id} closeDropDown={closeDropDown} />
+        <DropdownMenu
+          userId={me.id}
+          closeDropDown={closeDropDown}
+          notificationCount={notificationCount}
+        />
       )}
     </div>
   );

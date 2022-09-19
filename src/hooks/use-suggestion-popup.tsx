@@ -65,7 +65,7 @@ const useSuggestionList = <T,>({
       setPrevItem();
     }
     if (e.key === 'Enter') {
-      if (data && selectedItemIndex) {
+      if (data && selectedItemIndex !== undefined) {
         const selectedItem = data[selectedItemIndex];
         if (selectedItem) {
           onSelect(selectedItem);

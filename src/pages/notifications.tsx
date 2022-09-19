@@ -4,9 +4,17 @@ import { GetServerSidePropsContext } from 'next';
 import Layout from '@/components/layouts/main-layout';
 import { authOptions } from 'src/pages/api/auth/[...nextauth]';
 import NotificationsList from '@/components/notifications/notifications-list';
+import Button from '@/components/common/button';
+import { useMarkAllNotificationAsRead } from '@/hooks/mutation';
 
 const Notifications = () => {
-  const { data, fetchNextPage, hasNextPage } = useNotificationsQuery();
+  const { data, fetchNextPage, hasNextPage, isSuccess } =
+    useNotificationsQuery();
+  const markAsRead = useMarkAllNotificationAsRead();
+
+  const onClick = () => {
+    markAsRead();
+  };
 
   return (
     <Layout>
@@ -18,11 +26,21 @@ const Notifications = () => {
           discover
         </p>
       </h1>
-      <NotificationsList
-        data={data}
-        fetchNextPage={fetchNextPage}
-        hasNextPage={hasNextPage}
-      />
+      <div className="flex flex-col">
+        <Button isSmall className="ml-auto mb-3" onClick={onClick}>
+          mark all as read
+        </Button>
+        <NotificationsList
+          data={data}
+          fetchNextPage={fetchNextPage}
+          hasNextPage={hasNextPage}
+        />
+        {isSuccess && !data?.pages[0]?.notifications.length && (
+          <div className="bg-primary-0 dark:bg-primary-dark-200 p-3 rounded-xl text-primary-500 dark:text-primary-dark-700 flex items-center min-h-[100px] text-lg">
+            {`if someone marks you, we'll let you know 🤔`}
+          </div>
+        )}
+      </div>
     </Layout>
   );
 };

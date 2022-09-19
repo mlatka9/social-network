@@ -35,7 +35,7 @@ const Home: NextPage = () => {
       }
     );
   };
-  const { data, fetchNextPage, hasNextPage } = useInfiniteFeedQuery({
+  const { data, fetchNextPage, hasNextPage, isSuccess } = useInfiniteFeedQuery({
     sort,
     time,
   });
@@ -63,7 +63,7 @@ const Home: NextPage = () => {
           fetchNextPage={fetchNextPage}
           hasNextPage={hasNextPage}
         />
-        {!data?.pages[0]?.posts.length && (
+        {isSuccess && !data?.pages[0]?.posts.length && (
           <div className="bg-primary-0 dark:bg-primary-dark-200 p-3 rounded-xl text-primary-500 dark:text-primary-dark-700 flex items-center min-h-[100px] text-lg">
             <Link href="/explore">
               <a className="text-blue-500 font-bold mr-1 group relative flex items-center font-poppins">

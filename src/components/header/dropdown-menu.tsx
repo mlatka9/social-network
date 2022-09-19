@@ -9,13 +9,19 @@ import BookmarkIcon from '@/components/common/icons/bookmark-empty';
 import LogOutIcon from '@/components/common/icons/log-out';
 import GraphIcon from '../common/icons/graph';
 import HashIcon from '../common/icons/hash';
+import ExclamationIcon from '../common/icons/exclamation';
 
 interface DropdownMenuProps {
   userId: string;
   closeDropDown: () => void;
+  notificationCount: number | undefined;
 }
 
-const DropdownMenu = ({ userId, closeDropDown }: DropdownMenuProps) => (
+const DropdownMenu = ({
+  userId,
+  closeDropDown,
+  notificationCount,
+}: DropdownMenuProps) => (
   <>
     <div
       aria-label="Close modal"
@@ -31,7 +37,7 @@ const DropdownMenu = ({ userId, closeDropDown }: DropdownMenuProps) => (
       <ul>
         <li className="hover:bg-slate-100  dark:hover:bg-primary-dark-200 rounded-lg flex items-center">
           <Link href={`/user/${userId}`}>
-            <a className="px-3 py-3 w-full rounded-lg flex">
+            <a className="px-3 py-3 w-full rounded-lg flex items-center">
               <ProfileIcon />
               <span className="ml-2">Profile</span>
             </a>
@@ -39,7 +45,7 @@ const DropdownMenu = ({ userId, closeDropDown }: DropdownMenuProps) => (
         </li>
         <li className="lg:hidden hover:bg-slate-100 dark:hover:bg-primary-dark-200  rounded-lg flex items-center w-full   ">
           <Link href="/bookmarks">
-            <a className="px-3 py-3 w-full rounded-lg flex">
+            <a className="px-3 py-3 w-full rounded-lg flex items-center">
               <BookmarkIcon />
               <span className="ml-2">Bookmarks</span>
             </a>
@@ -47,7 +53,7 @@ const DropdownMenu = ({ userId, closeDropDown }: DropdownMenuProps) => (
         </li>
         <li className="lg:hidden hover:bg-slate-100 dark:hover:bg-primary-dark-200  rounded-lg flex items-center w-full   ">
           <Link href="/community">
-            <a className="px-3 py-3 w-full rounded-lg flex">
+            <a className="px-3 py-3 w-full rounded-lg flex items-center">
               <GraphIcon />
               <span className="ml-2">Communities</span>
             </a>
@@ -55,9 +61,22 @@ const DropdownMenu = ({ userId, closeDropDown }: DropdownMenuProps) => (
         </li>
         <li className="lg:hidden hover:bg-slate-100  dark:hover:bg-primary-dark-200  rounded-lg flex items-center w-full   ">
           <Link href="/explore">
-            <a className="px-3 py-3 w-full rounded-lg flex">
+            <a className="px-3 py-3 w-full rounded-lg flex items-center">
               <HashIcon />
               <span className="ml-2">Explore</span>
+            </a>
+          </Link>
+        </li>
+        <li className="hover:bg-slate-100  dark:hover:bg-primary-dark-200  rounded-lg flex items-center w-full   ">
+          <Link href="/notifications">
+            <a className="px-3 py-3 w-full rounded-lg flex items-center relative">
+              <ExclamationIcon />
+              <span className="ml-2">Notifications</span>
+              {!!notificationCount && (
+                <div className="w-5 h-5 flex items-center justify-center text-sm text-white bg-red-500 absolute rounded-full right-1 top-1/2 -translate-y-1/2">
+                  {notificationCount}
+                </div>
+              )}
             </a>
           </Link>
         </li>

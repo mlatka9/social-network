@@ -244,3 +244,7 @@ export const useSuggestedCommunitiesQuery = (limit?: number) => {
 export const useNotificationsQuery = () => {
   return trpc.useInfiniteQuery(['notification.getAll', {}]);
 };
+
+export const useNotificationsCountQuery = () => {
+  return trpc.useQuery(['notification.count']);
+};

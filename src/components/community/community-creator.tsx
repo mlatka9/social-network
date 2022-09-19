@@ -45,7 +45,10 @@ const CommunityCreator = ({ handleCloseCreator }: CommunityCreatorProps) => {
   if (!isSuccess) return <>Loading</>;
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col space-y-4">
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="flex flex-col space-y-4 pt-2"
+    >
       <FormInput
         label="name"
         name="name"
