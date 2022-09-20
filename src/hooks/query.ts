@@ -242,7 +242,7 @@ export const useSuggestedCommunitiesQuery = (limit?: number) => {
 };
 
 export const useNotificationsQuery = () => {
-  return trpc.useInfiniteQuery(['notification.getAll', {}]);
+  return trpc.useQuery(['notification.getAll']);
 };
 
 export const useNotificationsCountQuery = () => {

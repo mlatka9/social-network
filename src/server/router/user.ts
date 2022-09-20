@@ -171,6 +171,20 @@ const userRouter = createProtectedRouter()
               },
         },
       });
+
+      if(!isUserFollowed) {
+        await prisma.notification.create({
+          data: {
+            userId: input.userId,
+          }
+        }).then(notification=>prisma.notificationStartFollow.create({
+            data: {
+              notificationId: notification.id,
+              userIdNotificationStartFollow: ctx.session.user.id
+            }
+          }))
+      }
+
     },
   })
   .mutation('update', {

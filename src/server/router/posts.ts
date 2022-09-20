@@ -293,16 +293,33 @@ const postRouter = createProtectedRouter()
         },
       });
 
-      if (input.mentions) {
+      if (input.mentions?.length) {
         await prisma.mention.createMany({
           data: input.mentions?.map((mention) => ({
             postId: post.id,
             userId: mention,
           })),
         });
+
+        const mentions = input.mentions.map((m) =>
+          prisma.notification
+            .create({
+              data: {
+                userId: m,
+              },
+            })
+            .then((notification) => prisma.notificationMention.create({
+                data: {
+                  notificationId: notification.id,
+                  postId: post.id,
+                },
+              }))
+        );
+
+        await Promise.all(mentions);
       }
 
-      if (input.images) {
+      if (input.images?.length) {
         await prisma.image.createMany({
           data: input.images.map((image) => ({
             alt: image.imageAlt,

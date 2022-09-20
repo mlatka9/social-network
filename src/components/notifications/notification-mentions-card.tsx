@@ -1,26 +1,27 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import { useMarkNotificationAsRead } from '@/hooks/mutation';
-import { NotificationType } from '@/types/db';
+import { NotificationMentionsType } from '@/types/db';
 import Image from 'next/image';
 import Link from 'next/link';
 import ReactTimeAgo from 'react-time-ago';
 
 interface NotificationCardProps {
-  notification: NotificationType;
+  notification: NotificationMentionsType;
 }
-const NotificationCard = ({ notification }: NotificationCardProps) => {
+const NotificationMentionCard = ({ notification }: NotificationCardProps) => {
   const markAsReaded = useMarkNotificationAsRead();
 
   const onClick = () => {
     markAsReaded({ notificationId: notification.id });
   };
+
   return (
     <Link href={`post/${notification.postId}`}>
       <a className="block" onClick={onClick}>
         <div className=" bg-primary-0 dark:bg-primary-dark-200 px-5 py-3 flex items-center text-primary-600 rounded-lg">
           <Image
-            src={notification.post.user.image || '/images/fallback.svg'}
+            src={notification.postAutor.image || '/images/fallback.svg'}
             width={40}
             height={40}
             alt=""
@@ -30,7 +31,7 @@ const NotificationCard = ({ notification }: NotificationCardProps) => {
           <div className="ml-3 flex flex-col">
             <p className="dark:text-primary-dark-600">
               <span className="font-medium text-primary-800 dark:text-primary-dark-800 mr-1">
-                {notification.post.user.name}
+                {notification.postAutor.name}
               </span>
               has mentioned you in post
             </p>
@@ -45,4 +46,4 @@ const NotificationCard = ({ notification }: NotificationCardProps) => {
   );
 };
 
-export default NotificationCard;
+export default NotificationMentionCard;

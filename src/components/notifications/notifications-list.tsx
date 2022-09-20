@@ -1,35 +1,19 @@
-import { useInView } from 'react-intersection-observer';
-import { useEffect, Fragment } from 'react';
-import { InfiniteData } from '@tanstack/react-query';
-import { NotificationType } from '@/types/db';
+import {
+  NotificationMentionsType,
+  NotificationStartFollowType,
+  NotificationsType,
+} from '@/types/db';
+import { NotificationKind } from '@/server/router/types';
 import Loading from '../common/loading';
-import NotificationCard from './notification-card';
-
-interface NotificationInfinityData {
-  notifications: NotificationType[];
-  nextCursor: string | undefined;
-}
+import NotificationMentionCard from './notification-mentions-card';
+import NotificationsStartFollowCard from './notification-start-follow-card';
 
 interface NotificationsListProps {
-  data: InfiniteData<NotificationInfinityData> | undefined;
-  hasNextPage: boolean | undefined;
-  fetchNextPage: () => void;
+  notifications: NotificationsType | undefined;
 }
 
-const NotificationsList = ({
-  data,
-  fetchNextPage,
-  hasNextPage,
-}: NotificationsListProps) => {
-  const { ref, inView } = useInView();
-
-  useEffect(() => {
-    if (inView && hasNextPage) {
-      fetchNextPage();
-    }
-  }, [inView, fetchNextPage, hasNextPage]);
-
-  if (!data)
+const NotificationsList = ({ notifications }: NotificationsListProps) => {
+  if (!notifications)
     return (
       <div className="space-y-5 ">
         <div className="dark:bg-primary-dark-200 bg-primary-0">
@@ -44,19 +28,33 @@ const NotificationsList = ({
       </div>
     );
 
+  const flattedNotifications = [
+    ...notifications.notificationsMentions,
+    ...notifications.notificationsStartFollow,
+  ].sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+
+  const isNotificationMention = (
+    notification: typeof flattedNotifications[number]
+  ): notification is NotificationMentionsType =>
+    notification.type === NotificationKind.MENTION;
+
+  const isNotificationStartFollow = (
+    notification: typeof flattedNotifications[number]
+  ): notification is NotificationStartFollowType =>
+    notification.type === NotificationKind.START_FOLLOW;
+
   return (
     <div className="space-y-5 mb-10">
-      {data.pages.map((page) => (
-        <Fragment key={page.nextCursor || 'page'}>
-          {page.notifications.map((notification) => (
-            <NotificationCard
-              key={notification.postId}
-              notification={notification}
-            />
-          ))}
-        </Fragment>
-      ))}
-      {hasNextPage && <div ref={ref} className="w-full h-10 " />}
+      {flattedNotifications.map((n) => {
+        if (isNotificationMention(n)) {
+          return <NotificationMentionCard key={n.id} notification={n} />;
+        }
+        if (isNotificationStartFollow(n)) {
+          return <NotificationsStartFollowCard key={n.id} notification={n} />;
+          
+        }
+        throw new Error('Unsupported type');
+      })}
     </div>
   );
 };

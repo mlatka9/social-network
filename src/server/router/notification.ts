@@ -1,32 +1,21 @@
 import { z } from 'zod';
 import { prisma } from '@/server/db/client';
 import createProtectedRouter from '@/server/router/protected-router';
+import { NotificationKind } from './types';
 
 const notificationRouter = createProtectedRouter()
   .query('getAll', {
-    input: z.object({
-      limit: z.number().min(1).max(100).nullish(),
-      cursor: z.string().nullish(),
-    }),
-    async resolve({ ctx, input }) {
-      const { cursor } = input;
-      const limit = input.limit ?? 10;
-      const mentions = await prisma.mention.findMany({
-        take: limit + 1,
+    async resolve({ ctx }) {
+      const notificationMentions = await prisma.notificationMention.findMany({
         where: {
-          userId: ctx.session.user.id,
-          isReaded: false,
-          post: {
-            isDeleted: false,
-            NOT: {
-              userId: ctx.session.user.id,
-            },
+          notification: {
+            userId: ctx.session.user.id,
           },
         },
         include: {
+          notification: true,
           post: {
-            select: {
-              id: true,
+            include: {
               user: {
                 select: {
                   image: true,
@@ -36,37 +25,59 @@ const notificationRouter = createProtectedRouter()
             },
           },
         },
-        cursor: cursor ? { id: cursor } : undefined,
-        orderBy: {
-          createdAt: 'desc',
-        },
       });
 
-      // eslint-disable-next-line no-undef-init
-      let nextCursor: typeof cursor | undefined = undefined;
+      const notificationsStartFollow =
+        await prisma.notificationStartFollow.findMany({
+          where: {
+            notification: {
+              userId: ctx.session.user.id,
+            },
+          },
+          include: {
+            notification: true,
+            userNotificationStartFollow: {
+              select: {
+                name: true,
+                image: true,
+              },
+            },
+          },
+        });
 
-      if (mentions.length > limit) {
-        const nextItem = mentions.pop();
-        nextCursor = nextItem!.id;
-      }
-      return {
-        notifications: mentions,
-        nextCursor,
+      const notifications = {
+        notificationsMentions: notificationMentions.map(
+          (m) => ({
+            id: m.id,
+            isRead: m.notification.isRead,
+            createdAt: m.notification.createdAt,
+            type: NotificationKind.MENTION,
+            postId: m.postId,
+            postAutor: {
+              name: m.post.user.name,
+              image: m.post.user.image
+            }
+          })
+        ),
+        notificationsStartFollow: notificationsStartFollow.map((n) => ({
+          id: n.id,
+          isRead: n.notification.isRead,
+          createdAt: n.notification.createdAt,
+          type: NotificationKind.START_FOLLOW,
+          user: n.userNotificationStartFollow,
+          userId: n.userIdNotificationStartFollow
+        })),
       };
+
+      return notifications;
     },
   })
   .query('count', {
     async resolve({ ctx }) {
-      return prisma.mention.count({
+      return prisma.notification.count({
         where: {
           userId: ctx.session.user.id,
-          isReaded: false,
-          post: {
-            isDeleted: false,
-            NOT: {
-              userId: ctx.session.user.id,
-            },
-          },
+          isRead: false,
         },
       });
     },
@@ -76,24 +87,24 @@ const notificationRouter = createProtectedRouter()
       notificationId: z.string(),
     }),
     async resolve({ input }) {
-      return prisma.mention.update({
+      return prisma.notification.update({
         where: {
           id: input.notificationId,
         },
         data: {
-          isReaded: true,
+          isRead: true,
         },
       });
     },
   })
   .mutation('markAllAsRead', {
     async resolve({ ctx }) {
-      return prisma.mention.updateMany({
+      return prisma.notification.updateMany({
         where: {
           userId: ctx.session.user.id,
         },
         data: {
-          isReaded: true,
+          isRead: true,
         },
       });
     },

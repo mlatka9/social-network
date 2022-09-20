@@ -8,7 +8,7 @@ import Button from '@/components/common/button';
 import { useMarkAllNotificationAsRead } from '@/hooks/mutation';
 
 const Notifications = () => {
-  const { data, fetchNextPage, hasNextPage, isSuccess } =
+  const { data } =
     useNotificationsQuery();
   const markAsRead = useMarkAllNotificationAsRead();
 
@@ -30,16 +30,16 @@ const Notifications = () => {
         <Button isSmall className="ml-auto mb-3" onClick={onClick}>
           mark all as read
         </Button>
+
         <NotificationsList
-          data={data}
-          fetchNextPage={fetchNextPage}
-          hasNextPage={hasNextPage}
+          notifications={data}
         />
-        {isSuccess && !data?.pages[0]?.notifications.length && (
+
+        {/* {isSuccess && !data?.pages[0]?.notifications.length && (
           <div className="bg-primary-0 dark:bg-primary-dark-200 p-3 rounded-xl text-primary-500 dark:text-primary-dark-700 flex items-center min-h-[100px] text-lg">
             {`if someone marks you, we'll let you know 🤔`}
           </div>
-        )}
+        )} */}
       </div>
     </Layout>
   );

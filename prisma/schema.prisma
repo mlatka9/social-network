@@ -40,26 +40,29 @@ model Session {
 }
 
 model User {
-  id                   String               @id @default(cuid())
-  name                 String?              @db.Text
-  email                String?              @unique
-  emailVerified        DateTime?
-  image                String?              @db.Text
-  bannerImage          String?              @db.Text
-  accounts             Account[]
-  sessions             Session[]
-  followedBy           User[]               @relation("UserFollows")
-  following            User[]               @relation("UserFollows")
-  bio                  String               @default("") @db.Text
-  posts                Post[]               @relation(name: "createdPosts")
-  comments             Comment[]
-  likedPosts           PostLike[]
-  likedComments        CommentLike[]
-  bookmarks            Bookmark[]
-  communities          UserCommunity[]
-  mentions             Mention[]
-  favouriteCommunities FavouriteCommunity[]
-  sharedPost           UserShare[]
+  id                      String                    @id @default(cuid())
+  name                    String?                   @db.Text
+  email                   String?                   @unique
+  emailVerified           DateTime?
+  image                   String?                   @db.Text
+  bannerImage             String?                   @db.Text
+  bio                     String                    @default("") @db.Text
+  accounts                Account[]
+  sessions                Session[]
+  followedBy              User[]                    @relation("UserFollows")
+  following               User[]                    @relation("UserFollows")
+  posts                   Post[]                    @relation(name: "createdPosts")
+  comments                Comment[]
+  likedPosts              PostLike[]
+  likedComments           CommentLike[]
+  bookmarks               Bookmark[]
+  communities             UserCommunity[]
+  mentions                Mention[]
+  favouriteCommunities    FavouriteCommunity[]
+  sharedPost              UserShare[]
+  notifications           Notification[]
+  // NotificationMention     NotificationMention[]
+  NotificationStartFollow NotificationStartFollow[]
 }
 
 model VerificationToken {
@@ -71,36 +74,100 @@ model VerificationToken {
 }
 
 model Post {
-  id            String      @id @default(cuid())
-  content       String?     @db.VarChar(280)
-  user          User        @relation(name: "createdPosts", fields: [userId], references: [id], onDelete: Cascade)
-  userId        String      @db.Text
-  comments      Comment[]
-  likes         PostLike[]
-  bookmarkedBy  Bookmark[]
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @updatedAt
-  images        Image[]     @relation(name: "addedImages")
-  isDeleted     Boolean     @default(false)
-  tags          PostTag[]
-  shareParentId String?     @db.Text
-  shareParent   Post?       @relation("Share", fields: [shareParentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  shares        Post[]      @relation("Share")
-  community     Community?  @relation(fields: [communityId], references: [id], onDelete: Cascade)
-  communityId   String?     @db.Text
-  mentions      Mention[]
-  link          String?
-  sharedBy      UserShare[]
+  id                  String                @id @default(cuid())
+  content             String?               @db.VarChar(280)
+  user                User                  @relation(name: "createdPosts", fields: [userId], references: [id], onDelete: Cascade)
+  userId              String                @db.Text
+  comments            Comment[]
+  likes               PostLike[]
+  bookmarkedBy        Bookmark[]
+  createdAt           DateTime              @default(now())
+  updatedAt           DateTime              @updatedAt
+  images              Image[]               @relation(name: "addedImages")
+  isDeleted           Boolean               @default(false)
+  tags                PostTag[]
+  shareParentId       String?               @db.Text
+  shareParent         Post?                 @relation("Share", fields: [shareParentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  shares              Post[]                @relation("Share")
+  community           Community?            @relation(fields: [communityId], references: [id], onDelete: Cascade)
+  communityId         String?               @db.Text
+  mentions            Mention[]
+  link                String?
+  sharedBy            UserShare[]
+  NotificationMention NotificationMention[] @relation(name: "notificationMention")
 }
 
 model Mention {
-  id            String      @id @default(cuid())
   userId String
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   postId String
   post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
-  createdAt     DateTime    @default(now())
-  isReaded Boolean @default(false)
+
+  @@unique([userId, postId])
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  isRead    Boolean  @default(false)
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  notificationMention            NotificationMention?
+  notificationStartFollow        NotificationStartFollow?
+  notificationCommunityNewMember NotificationCommunityNewMember?
+  notificationPostComment        NotificationPostComment?
+  notificationCommentReply       NotificationCommentReply?
+}
+
+model NotificationMention {
+  id String @id @default(cuid())
+
+  notification   Notification @relation(fields: [notificationId], references: [id])
+  notificationId String       @unique
+
+  postId String
+  post   Post   @relation(name: "notificationMention", fields: [postId], references: [id], onDelete: NoAction)
+
+  // mentionedUserId String
+  // mentionedUser   User   @relation(fields: [mentionedUserId], references: [id], onDelete: NoAction)
+}
+
+model NotificationStartFollow {
+  id String @id @default(cuid())
+
+  notification   Notification @relation(fields: [notificationId], references: [id])
+  notificationId String       @unique
+
+  userIdNotificationStartFollow String
+  userNotificationStartFollow   User   @relation(fields: [userIdNotificationStartFollow], references: [id], onDelete: NoAction)
+}
+
+model NotificationCommunityNewMember {
+  id             String       @id @default(cuid())
+  notification   Notification @relation(fields: [id], references: [id])
+  notificationId String
+  communityId    String
+  userId         String
+}
+
+model NotificationPostComment {
+  id             String       @id @default(cuid())
+  notification   Notification @relation(fields: [id], references: [id])
+  notificationId String
+  userId         String
+  postId         String
+  commentId      String
+}
+
+model NotificationCommentReply {
+  id             String       @id @default(cuid())
+  notification   Notification @relation(fields: [id], references: [id])
+  notificationId String
+  userId         String
+  postId         String
+  commentId      String
 }
 
 model UserShare {
