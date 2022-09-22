@@ -11,7 +11,7 @@ interface NotificationPostCommentCardProps {
 const NotificationPostCommentCard = ({
   notification,
 }: NotificationPostCommentCardProps) => (
-  <Link href={`post/${notification.postId}`}>
+  <Link href={`post/${notification.postId}#${notification.comentId}`}>
     <a className="block">
       <NotificationCardWrapper
         imageUrl={notification.user.image}

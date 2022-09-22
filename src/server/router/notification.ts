@@ -165,6 +165,7 @@ const notificationRouter = createProtectedRouter()
           user: n.comment.user,
           commentMessage: n.comment.message,
           postId: n.comment.postId,
+          comentId: n.commentId
         })),
         notificationsCommentReply: notificationsCommentReply.map((n) => ({
           id: n.notification.id,
@@ -174,6 +175,7 @@ const notificationRouter = createProtectedRouter()
           user: n.comment.user,
           commentMessage: n.comment.message,
           postId: n.comment.postId,
+          comentId: n.commentId
         })),
       };
 

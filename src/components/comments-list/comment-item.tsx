@@ -28,7 +28,10 @@ const CommentItem = ({ comment }: CommentitemProps) => {
 
   return (
     <>
-      <div className="bg-white gap-x-3 py-3 rounded-lg shadow-sm mb-3 dark:bg-primary-dark-200">
+      <div
+        className="bg-white gap-x-3 py-3 rounded-lg shadow-sm mb-3 dark:bg-primary-dark-200"
+        id={`comment-${comment.id}`}
+      >
         <Author
           authorId={comment.userId}
           authorImage={comment.user.image}

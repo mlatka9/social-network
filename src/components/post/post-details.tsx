@@ -2,6 +2,8 @@ import { usePostQuery, usePostCommentsQuery } from 'src/hooks/query';
 import { useAddCommentMutation } from 'src/hooks/mutation';
 import CommentsList from '@/components/comments-list/comments-list';
 import CommentInput from '@/components/comments-list/comment-input';
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
 import Author from '../post-card/author';
 import TagsList from '../post-card/tags-list';
 import PostCardFooter from '../post-card/post-card-footer';
@@ -19,6 +21,8 @@ interface PostDetailsProps {
 }
 
 const PostDetails = ({ postId }: PostDetailsProps) => {
+  const router = useRouter();
+
   const {
     data: post,
     isError,
@@ -36,6 +40,21 @@ const PostDetails = ({ postId }: PostDetailsProps) => {
       parentId: null,
     });
   };
+
+  useEffect(() => {
+    if (!isCommentsSuccess) return;
+    const commentId = router.asPath.split('#')[1];
+    if (!commentId) return;
+    const selector = `#comment-${commentId}`;
+    try {
+      const commentElement = document.querySelector(selector);
+      if (!commentElement) return;
+      commentElement.scrollIntoView({ behavior: 'smooth' });
+    } catch (e) {
+      // eslint-disable-next-line no-console
+      console.log('invalide comment id');
+    }
+  }, [router.asPath, isCommentsSuccess]);
 
   if (isError) {
     return <ErrorFallback message="This post does't exists" />;
