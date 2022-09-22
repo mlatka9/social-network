@@ -40,8 +40,6 @@ const PostList = ({ data, fetchNextPage, hasNextPage }: PostListProps) => {
       </div>
     );
 
-  // console.log(data.pages);
-
   return (
     <div className="space-y-5 mb-10">
       {data.pages.map((page) => (

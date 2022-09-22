@@ -81,6 +81,7 @@ const commentRouter = createProtectedRouter()
       message: z.string(),
     }),
     async resolve({ input, ctx }) {
+
       const createdComment = await prisma.comment.create({
         data: {
           message: input.message,
@@ -89,26 +90,63 @@ const commentRouter = createProtectedRouter()
           userId: ctx.session.user.id,
         },
       });
-      const comment = await prisma.comment.findFirstOrThrow({
-        where: {
-          id: createdComment.id,
-        },
-        include: {
-          _count: true,
-          likes: true,
-        },
-      });
 
-      // eslint-disable-next-line @typescript-eslint/naming-convention
-      const { _count, likes, ...commentData } = comment;
+      const post = await prisma.post.findFirstOrThrow({
+         where: {
+          id: input.postId,
+         }
+      })
 
-      return {
-        ...commentData,
-        likeCount: _count.likes,
-        likedByMe: likes.some(
-          (postLike) => postLike.userId === ctx.session.user.id
-        ),
-      };
+      if(input.parentId) {
+        const parentComment = await prisma.comment.findFirstOrThrow({
+          where: {
+            id: input.parentId
+          }
+        })
+        await prisma.notification.create({
+          data: {
+            userId: parentComment.userId,
+          }
+        }).then(notification=>prisma.notificationCommentReply.create({
+            data: {
+              notificationId: notification.id,
+              commentId: createdComment.id
+            }
+          }))
+      } else {
+        await prisma.notification.create({
+          data: {
+            userId: post.userId,
+          }
+        }).then(notification=>prisma.notificationPostComment.create({
+            data: {
+              notificationId: notification.id,
+              commentId: createdComment.id
+            }
+          }))
+      }
+      
+
+    //   const comment = await prisma.comment.findFirstOrThrow({
+    //     where: {
+    //       id: createdComment.id,
+    //     },
+    //     include: {
+    //       _count: true,
+    //       likes: true,
+    //     },
+    //   });
+
+    //   // eslint-disable-next-line @typescript-eslint/naming-convention
+    //   const { _count, likes, ...commentData } = comment;
+
+    //   return {
+    //     ...commentData,
+    //     likeCount: _count.likes,
+    //     likedByMe: likes.some(
+    //       (postLike) => postLike.userId === ctx.session.user.id
+    //     ),
+    //   };
     },
   })
   .mutation('delete', {

@@ -23,7 +23,7 @@ body {
 
 /* Chrome, Edge, and Safari */
 *::-webkit-scrollbar {
-  width: 12px;
+  @apply md:w-3;
 }
 
 *::-webkit-scrollbar-track {

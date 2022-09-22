@@ -5,11 +5,18 @@ import { NotificationKind } from './types';
 
 const notificationRouter = createProtectedRouter()
   .query('getAll', {
-    async resolve({ ctx }) {
+    input: z.object({
+       unread: z.boolean().optional()
+    }),
+
+    async resolve({ ctx, input }) {
+      const {unread} = input
+
       const notificationMentions = await prisma.notificationMention.findMany({
         where: {
           notification: {
             userId: ctx.session.user.id,
+            isRead: unread ? false : undefined
           },
         },
         include: {
@@ -32,6 +39,7 @@ const notificationRouter = createProtectedRouter()
           where: {
             notification: {
               userId: ctx.session.user.id,
+              isRead: unread ? false : undefined
             },
           },
           include: {
@@ -45,27 +53,127 @@ const notificationRouter = createProtectedRouter()
           },
         });
 
+      const notificationsCommunityNewMember =
+        await prisma.notificationCommunityNewMember.findMany({
+          where: {
+            notification: {
+              userId: ctx.session.user.id,
+              isRead: unread ? false : undefined
+            },
+          },
+          include: {
+            notification: true,
+            user: {
+              select: {
+                id: true,
+                image: true,
+                name: true,
+              },
+            },
+            community: true,
+          },
+        });
+
+      const notificationsPostComment =
+        await prisma.notificationPostComment.findMany({
+          where: {
+            notification: {
+              userId: ctx.session.user.id,
+              isRead: unread ? false : undefined
+            },
+          },
+          include: {
+            notification: true,
+            comment: {
+              include: {
+                user: {
+                  select: {
+                    id: true,
+                    image: true,
+                    name: true,
+                  },
+                },
+              },
+            },
+          },
+        });
+
+      const notificationsCommentReply =
+        await prisma.notificationCommentReply.findMany({
+          where: {
+            notification: {
+              userId: ctx.session.user.id,
+              isRead: unread ? false : undefined
+            },
+          },
+          include: {
+            notification: true,
+            comment: {
+              include: {
+                user: {
+                  select: {
+                    id: true,
+                    image: true,
+                    name: true,
+                  },
+                },
+              },
+            },
+          },
+        });
+
       const notifications = {
-        notificationsMentions: notificationMentions.map(
-          (m) => ({
-            id: m.id,
-            isRead: m.notification.isRead,
-            createdAt: m.notification.createdAt,
-            type: NotificationKind.MENTION,
-            postId: m.postId,
-            postAutor: {
-              name: m.post.user.name,
-              image: m.post.user.image
-            }
-          })
-        ),
+        notificationsMentions: notificationMentions.map((m) => ({
+          id: m.notification.id,
+          isRead: m.notification.isRead,
+          createdAt: m.notification.createdAt,
+          type: NotificationKind.MENTION,
+          postId: m.postId,
+          postContent: m.post.content,
+          postAutor: {
+            name: m.post.user.name,
+            image: m.post.user.image,
+          },
+        })),
         notificationsStartFollow: notificationsStartFollow.map((n) => ({
-          id: n.id,
+          id: n.notification.id,
           isRead: n.notification.isRead,
           createdAt: n.notification.createdAt,
           type: NotificationKind.START_FOLLOW,
           user: n.userNotificationStartFollow,
-          userId: n.userIdNotificationStartFollow
+          userId: n.userIdNotificationStartFollow,
+        })),
+        notificationsCommunityNewMember: notificationsCommunityNewMember.map(
+          (n) => ({
+            id: n.notification.id,
+            isRead: n.notification.isRead,
+            createdAt: n.notification.createdAt,
+            type: NotificationKind.COMMUNITY_NEW_MEMBER,
+            user: n.user,
+            community: {
+              id: n.communityId,
+              name: n.community.name,
+              image: n.community.image
+            }
+          })
+        ),
+        notificationsPostComment: notificationsPostComment.map((n) => ({
+          id: n.notification.id,
+          isRead: n.notification.isRead,
+          createdAt: n.notification.createdAt,
+          type: NotificationKind.POST_COMMENT,
+          user: n.comment.user,
+          commentMessage: n.comment.message,
+          postId: n.comment.postId,
+        })),
+        notificationsCommentReply: notificationsCommentReply.map((n) => ({
+          id: n.notification.id,
+          isRead: n.notification.isRead,
+          createdAt: n.notification.createdAt,
+          type: NotificationKind.COMMENT_REPLY,
+          user: n.comment.user,
+          commentMessage: n.comment.message,
+          postId: n.comment.postId,
         })),
       };
 
@@ -87,7 +195,7 @@ const notificationRouter = createProtectedRouter()
       notificationId: z.string(),
     }),
     async resolve({ input }) {
-      return prisma.notification.update({
+      await prisma.notification.update({
         where: {
           id: input.notificationId,
         },

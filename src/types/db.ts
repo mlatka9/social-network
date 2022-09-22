@@ -19,3 +19,9 @@ export type NotificationsType = inferQueryOutput<'notification.getAll'>;
 export type NotificationMentionsType = inferQueryOutput<'notification.getAll'>['notificationsMentions'][0]
 
 export type NotificationStartFollowType = inferQueryOutput<'notification.getAll'>['notificationsStartFollow'][0]
+
+export type NotificationCommunityNewMember = inferQueryOutput<'notification.getAll'>['notificationsCommunityNewMember'][0]
+
+export type NotificationPostComment = inferQueryOutput<'notification.getAll'>['notificationsPostComment'][0]
+
+export type NotificationCommentReply = inferQueryOutput<'notification.getAll'>['notificationsCommentReply'][0]

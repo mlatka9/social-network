@@ -1,4 +1,3 @@
-import { useNotificationsQuery } from 'src/hooks/query';
 import { unstable_getServerSession } from 'next-auth';
 import { GetServerSidePropsContext } from 'next';
 import Layout from '@/components/layouts/main-layout';
@@ -6,15 +5,28 @@ import { authOptions } from 'src/pages/api/auth/[...nextauth]';
 import NotificationsList from '@/components/notifications/notifications-list';
 import Button from '@/components/common/button';
 import { useMarkAllNotificationAsRead } from '@/hooks/mutation';
+import Filters from '@/components/user-profile/profile-filters';
+import { FilterData } from '@/components/user-profile/types';
 
 const Notifications = () => {
-  const { data } =
-    useNotificationsQuery();
   const markAsRead = useMarkAllNotificationAsRead();
 
   const onClick = () => {
     markAsRead();
   };
+
+  const filterData: FilterData[] = [
+    {
+      id: '1',
+      displayName: 'all',
+      filterName: undefined,
+    },
+    {
+      id: '2',
+      displayName: 'unread',
+      filterName: 'unread',
+    },
+  ];
 
   return (
     <Layout>
@@ -27,19 +39,11 @@ const Notifications = () => {
         </p>
       </h1>
       <div className="flex flex-col">
-        <Button isSmall className="ml-auto mb-3" onClick={onClick}>
+        <Button isSmall className="ml-auto mb-5" onClick={onClick}>
           mark all as read
         </Button>
-
-        <NotificationsList
-          notifications={data}
-        />
-
-        {/* {isSuccess && !data?.pages[0]?.notifications.length && (
-          <div className="bg-primary-0 dark:bg-primary-dark-200 p-3 rounded-xl text-primary-500 dark:text-primary-dark-700 flex items-center min-h-[100px] text-lg">
-            {`if someone marks you, we'll let you know 🤔`}
-          </div>
-        )} */}
+        <Filters filters={filterData} />
+        <NotificationsList />
       </div>
     </Layout>
   );

@@ -40,29 +40,30 @@ model Session {
 }
 
 model User {
-  id                      String                    @id @default(cuid())
-  name                    String?                   @db.Text
-  email                   String?                   @unique
-  emailVerified           DateTime?
-  image                   String?                   @db.Text
-  bannerImage             String?                   @db.Text
-  bio                     String                    @default("") @db.Text
-  accounts                Account[]
-  sessions                Session[]
-  followedBy              User[]                    @relation("UserFollows")
-  following               User[]                    @relation("UserFollows")
-  posts                   Post[]                    @relation(name: "createdPosts")
-  comments                Comment[]
-  likedPosts              PostLike[]
-  likedComments           CommentLike[]
-  bookmarks               Bookmark[]
-  communities             UserCommunity[]
-  mentions                Mention[]
-  favouriteCommunities    FavouriteCommunity[]
-  sharedPost              UserShare[]
-  notifications           Notification[]
+  id                             String                           @id @default(cuid())
+  name                           String?                          @db.Text
+  email                          String?                          @unique
+  emailVerified                  DateTime?
+  image                          String?                          @db.Text
+  bannerImage                    String?                          @db.Text
+  bio                            String                           @default("") @db.Text
+  accounts                       Account[]
+  sessions                       Session[]
+  followedBy                     User[]                           @relation("UserFollows")
+  following                      User[]                           @relation("UserFollows")
+  posts                          Post[]                           @relation(name: "createdPosts")
+  comments                       Comment[]
+  likedPosts                     PostLike[]
+  likedComments                  CommentLike[]
+  bookmarks                      Bookmark[]
+  communities                    UserCommunity[]
+  mentions                       Mention[]
+  favouriteCommunities           FavouriteCommunity[]
+  sharedPost                     UserShare[]
+  notifications                  Notification[]
   // NotificationMention     NotificationMention[]
-  NotificationStartFollow NotificationStartFollow[]
+  notificationStartFollow        NotificationStartFollow[]
+  notificationCommunityNewMember NotificationCommunityNewMember[] @relation("userNotificationCommunityNewMember")
 }
 
 model VerificationToken {
@@ -146,28 +147,33 @@ model NotificationStartFollow {
 
 model NotificationCommunityNewMember {
   id             String       @id @default(cuid())
-  notification   Notification @relation(fields: [id], references: [id])
-  notificationId String
-  communityId    String
-  userId         String
+  notification   Notification @relation(fields: [notificationId], references: [id])
+  notificationId String       @unique
+
+  communityId String
+  community   Community @relation(name: "communityNotificationCommunityNewMember", fields: [communityId], references: [id], onDelete: NoAction)
+
+  userId String
+  user   User   @relation(name: "userNotificationCommunityNewMember", fields: [userId], references: [id], onDelete: NoAction)
+
 }
 
 model NotificationPostComment {
   id             String       @id @default(cuid())
-  notification   Notification @relation(fields: [id], references: [id])
-  notificationId String
-  userId         String
-  postId         String
-  commentId      String
+  notification   Notification @relation(fields: [notificationId], references: [id])
+  notificationId String       @unique
+
+  commentId String
+  comment   Comment @relation(name: "commentNotificationPostComment", fields: [commentId], references: [id], onDelete: NoAction)
 }
 
 model NotificationCommentReply {
   id             String       @id @default(cuid())
-  notification   Notification @relation(fields: [id], references: [id])
-  notificationId String
-  userId         String
-  postId         String
-  commentId      String
+  notification   Notification @relation(fields: [notificationId], references: [id])
+  notificationId String       @unique
+
+  commentId String
+  comment   Comment @relation(name: "commentNotificationCommentReply", fields: [commentId], references: [id], onDelete: NoAction)
 }
 
 model UserShare {
@@ -190,19 +196,21 @@ model Image {
 }
 
 model Comment {
-  id        String        @id @default(uuid())
-  message   String        @db.Text
-  createdAt DateTime      @default(now())
-  updatedAt DateTime      @updatedAt
-  user      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId    String        @db.Text
-  post      Post          @relation(fields: [postId], references: [id], onDelete: Cascade)
-  postId    String        @db.Text
-  likes     CommentLike[]
-  parent    Comment?      @relation("ParentChild", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  children  Comment[]     @relation("ParentChild")
-  parentId  String?
-  isDeleted Boolean       @default(false)
+  id                       String                     @id @default(uuid())
+  message                  String                     @db.Text
+  createdAt                DateTime                   @default(now())
+  updatedAt                DateTime                   @updatedAt
+  user                     User                       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId                   String                     @db.Text
+  post                     Post                       @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId                   String                     @db.Text
+  likes                    CommentLike[]
+  parent                   Comment?                   @relation("ParentChild", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  children                 Comment[]                  @relation("ParentChild")
+  parentId                 String?
+  isDeleted                Boolean                    @default(false)
+  notificationPostComment  NotificationPostComment[]  @relation(name: "commentNotificationPostComment")
+  notificationCommentReply NotificationCommentReply[] @relation(name: "commentNotificationCommentReply")
 }
 
 model PostLike {
@@ -258,6 +266,8 @@ model Community {
   favouriteBy FavouriteCommunity[]
   categoryId  String
   category    Category             @relation(fields: [categoryId], references: [id])
+
+  notificationCommunityNewMember NotificationCommunityNewMember[] @relation("communityNotificationCommunityNewMember")
 }
 
 model FavouriteCommunity {

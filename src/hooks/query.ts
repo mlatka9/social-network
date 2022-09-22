@@ -241,8 +241,28 @@ export const useSuggestedCommunitiesQuery = (limit?: number) => {
   return trpc.useQuery(['explore.getSuggestedCommunities', { limit }]);
 };
 
-export const useNotificationsQuery = () => {
-  return trpc.useQuery(['notification.getAll']);
+export const useNotificationsQuery = (unread?: boolean) => {
+  const utils = trpc.useContext();
+  return trpc.useQuery(['notification.getAll', {unread}], {
+    
+    initialData: () => {
+  
+      if(unread) {
+        const allNotifications = utils.getQueryData(['notification.getAll', {unread: false}])
+        if(!allNotifications) return undefined;
+        
+        return ({
+          notificationsMentions: allNotifications?.notificationsMentions.filter(n=>!n.isRead) || [],
+          notificationsStartFollow: allNotifications?.notificationsStartFollow.filter(n=>!n.isRead) || [],
+          notificationsCommunityNewMember: allNotifications?.notificationsCommunityNewMember.filter(n=>!n.isRead) || [],
+          notificationsPostComment: allNotifications?.notificationsPostComment.filter(n=>!n.isRead) || [],
+          notificationsCommentReply: allNotifications?.notificationsCommentReply.filter(n=>!n.isRead) || [],
+        })
+      }
+
+      return undefined;
+    }
+  });
 };
 
 export const useNotificationsCountQuery = () => {

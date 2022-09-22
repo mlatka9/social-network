@@ -54,7 +54,7 @@ const PostDetails = ({ postId }: PostDetailsProps) => {
             )}
             {!!post.sharedBy.length && <RepostBadge users={post.sharedBy} />}
           </div>
-          <div className="bg-white w-full mb-5  rounded-lg dark:bg-primary-dark-100 mt-2">
+          <div className=" w-full mb-5  rounded-lg mt-2">
             <Author
               authorId={post.user.id}
               authorImage={post.user.image}

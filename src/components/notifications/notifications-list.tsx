@@ -1,19 +1,23 @@
-import {
-  NotificationMentionsType,
-  NotificationStartFollowType,
-  NotificationsType,
-} from '@/types/db';
-import { NotificationKind } from '@/server/router/types';
 import Loading from '../common/loading';
 import NotificationMentionCard from './notification-mentions-card';
 import NotificationsStartFollowCard from './notification-start-follow-card';
+import NotificationsCommunityNewMemberCard from './notification-community-new-member-card';
+import NotificationPostCommentCard from './notification-post-comment-card';
+import NotificationCommentReplyCard from './notification-comment-reply-card';
+import useNotificationList from './use-notification-list';
 
-interface NotificationsListProps {
-  notifications: NotificationsType | undefined;
-}
+const NotificationsList = () => {
+  const {
+    isSuccess,
+    flattedNotifications,
+    isNotificationCommentReply,
+    isNotificationCommunityNewMember,
+    isNotificationMention,
+    isNotificationStartFollow,
+    isNotificationsPostComment,
+  } = useNotificationList();
 
-const NotificationsList = ({ notifications }: NotificationsListProps) => {
-  if (!notifications)
+  if (!isSuccess)
     return (
       <div className="space-y-5 ">
         <div className="dark:bg-primary-dark-200 bg-primary-0">
@@ -28,30 +32,25 @@ const NotificationsList = ({ notifications }: NotificationsListProps) => {
       </div>
     );
 
-  const flattedNotifications = [
-    ...notifications.notificationsMentions,
-    ...notifications.notificationsStartFollow,
-  ].sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
-
-  const isNotificationMention = (
-    notification: typeof flattedNotifications[number]
-  ): notification is NotificationMentionsType =>
-    notification.type === NotificationKind.MENTION;
-
-  const isNotificationStartFollow = (
-    notification: typeof flattedNotifications[number]
-  ): notification is NotificationStartFollowType =>
-    notification.type === NotificationKind.START_FOLLOW;
-
   return (
     <div className="space-y-5 mb-10">
       {flattedNotifications.map((n) => {
+        if (isNotificationCommentReply(n)) {
+          return <NotificationCommentReplyCard key={n.id} notification={n} />;
+        }
         if (isNotificationMention(n)) {
           return <NotificationMentionCard key={n.id} notification={n} />;
         }
         if (isNotificationStartFollow(n)) {
           return <NotificationsStartFollowCard key={n.id} notification={n} />;
-          
+        }
+        if (isNotificationsPostComment(n)) {
+          return <NotificationPostCommentCard key={n.id} notification={n} />;
+        }
+        if (isNotificationCommunityNewMember(n)) {
+          return (
+            <NotificationsCommunityNewMemberCard key={n.id} notification={n} />
+          );
         }
         throw new Error('Unsupported type');
       })}

@@ -10,7 +10,8 @@ import ModalWrapper from '@/components/common/modal-wrapper';
 import Layout from '@/components/layouts/main-layout';
 import UserProfileHero from '@/components/user-profile/user-profile-hero';
 import ErrorFallback from '@/components/common/error-fallback';
-import ProfileFilters from '@/components/user-profile/profile-filters';
+import Filters from '@/components/user-profile/profile-filters';
+import { FilterData } from '@/components/user-profile/types';
 
 const User = () => {
   const router = useRouter();
@@ -50,10 +51,28 @@ const User = () => {
     );
   }
 
+  const filters: FilterData[] = [
+    {
+      id: '1',
+      filterName: undefined,
+      displayName: 'posts & shares',
+    },
+    {
+      id: '2',
+      filterName: 'images',
+      displayName: 'images',
+    },
+    {
+      id: '3',
+      filterName: 'likes',
+      displayName: 'likes',
+    },
+  ];
+
   return (
     <Layout>
       <UserProfileHero userDetails={userDetails} />
-      <ProfileFilters />
+      <Filters filters={filters} />
       <PostList
         data={data}
         fetchNextPage={fetchNextPage}

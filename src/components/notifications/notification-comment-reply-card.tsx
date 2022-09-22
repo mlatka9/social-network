@@ -1,37 +1,39 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
-import { NotificationMentionsType } from '@/types/db';
+import { NotificationCommentReply } from '@/types/db';
 import Link from 'next/link';
 import ReactTimeAgo from 'react-time-ago';
 import NotificationCardWrapper from './notification-card-wrapper';
 
-interface NotificationCardProps {
-  notification: NotificationMentionsType;
+interface NotificationCommentReplyCardProps {
+  notification: NotificationCommentReply;
 }
-const NotificationMentionCard = ({ notification }: NotificationCardProps) => (
+const NotificationCommentReplyCard = ({
+  notification,
+}: NotificationCommentReplyCardProps) => (
   <Link href={`post/${notification.postId}`}>
     <a className="block">
       <NotificationCardWrapper
-        imageUrl={notification.postAutor.image}
+        imageUrl={notification.user.image}
         isRead={notification.isRead}
         notificationId={notification.id}
       >
         <p className="dark:text-primary-dark-600">
           <span className="font-medium text-primary-800 dark:text-primary-dark-800 mr-1">
-            {notification.postAutor.name}
+            {notification.user.name}
           </span>
-          has mentioned you in post
+          replied to your comment
         </p>
         <ReactTimeAgo
           date={notification.createdAt}
           className="font-medium text-xs text-gray-400 dark:text-primary-dark-600"
         />
         <p className="text-primary-600 dark:text-primary-dark-600 text-sm italic mt-3 ring-2 ring-blue-400/30 rounded-md p-2">
-          {notification.postContent}
+          {notification.commentMessage}
         </p>
       </NotificationCardWrapper>
     </a>
   </Link>
 );
 
-export default NotificationMentionCard;
+export default NotificationCommentReplyCard;

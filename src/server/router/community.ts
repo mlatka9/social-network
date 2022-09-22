@@ -276,6 +276,7 @@ const communityRouter = createProtectedRouter()
       communityId: z.string(),
     }),
     async resolve({ input, ctx }) {
+
       const member = await prisma.userCommunity.findUnique({
         where: {
           userId_communityId: {
@@ -301,6 +302,25 @@ const communityRouter = createProtectedRouter()
             userId: ctx.session.user.id,
           },
         });
+
+        const communityOwner = await prisma.userCommunity.findFirstOrThrow({
+          where: {
+            role: "ADMIN",
+            communityId: input.communityId
+          }
+        })
+
+        await prisma.notification.create({
+          data: {
+            userId: communityOwner.userId,
+          }
+        }).then(notification=>prisma.notificationCommunityNewMember.create({
+            data: {
+              notificationId: notification.id,
+              communityId: input.communityId,
+              userId: ctx.session.user.id
+            }
+          }))
       }
     },
   })
