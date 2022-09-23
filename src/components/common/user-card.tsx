@@ -28,7 +28,7 @@ const UserCard = ({
   const myId = session?.user?.id!;
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col overflow-hidden">
       <div className="flex mb-3">
         <UserProfilePicture imageUrl={image} userID={id} />
         <div className="ml-3">
