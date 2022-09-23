@@ -64,7 +64,7 @@ const PostDetails = ({ postId }: PostDetailsProps) => {
     <>
       {isPostSuccess ? (
         <div className="mb-20">
-          <div className="lg:flex space-y-2 lg:space-y-0 lg:space-x-5 items-baseline">
+          <div className="lg:flex space-y-2 lg:space-y-0 lg:space-x-5 items-baseline ml-14">
             {post.communityId && post.communityName && (
               <CommunityBadge
                 communityId={post.communityId}
