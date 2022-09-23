@@ -30,7 +30,7 @@ export const getImageHeightRatio = (
     return 50;
   }
   if (imageNumber === 2) {
-    return 80;
+    return 100;
   }
   if (imageNumber === 3) {
     if (imageIndex === 0) {
@@ -47,7 +47,14 @@ const ImagesGrid = ({ images }: ImagesGridProps) => {
   if (images.length === 1) {
     const image = images[0]!;
     return (
-      <div>
+      <div className="relative">
+        <Image
+          layout="fill"
+          src={image.fallbackUrl}
+          objectFit="cover"
+          className="rounded-lg absolute"
+          alt=""
+        />
         <Image
           layout="responsive"
           width={image.width}
@@ -76,6 +83,13 @@ const ImagesGrid = ({ images }: ImagesGridProps) => {
                 images.length === 3 && index === 2 && 'self-end'
               )}
             >
+              <Image
+                layout="fill"
+                src={image.fallbackUrl}
+                objectFit="cover"
+                className="rounded-lg absolute"
+                alt=""
+              />
               <Image
                 layout="responsive"
                 width={widthRatio}

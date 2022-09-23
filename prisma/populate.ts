@@ -53,6 +53,7 @@ async function main() {
 
   await prisma.image.createMany({
     data: IMAGES.map((image) => ({
+      fallbackUrl: "",
       url: image.url,
       postId: image.postId,
       alt: '',

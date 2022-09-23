@@ -155,7 +155,6 @@ model NotificationCommunityNewMember {
 
   userId String
   user   User   @relation(name: "userNotificationCommunityNewMember", fields: [userId], references: [id], onDelete: NoAction)
-
 }
 
 model NotificationPostComment {
@@ -186,13 +185,14 @@ model UserShare {
 }
 
 model Image {
-  id     String @id @default(cuid())
-  url    String @db.Text
-  alt    String @db.Text
-  post   Post   @relation(name: "addedImages", fields: [postId], references: [id], onDelete: Cascade)
-  postId String @db.Text
-  width  Int
-  height Int
+  id          String @id @default(cuid())
+  url         String @db.Text
+  fallbackUrl String @db.Text
+  alt         String @db.Text
+  post        Post   @relation(name: "addedImages", fields: [postId], references: [id], onDelete: Cascade)
+  postId      String @db.Text
+  width       Int
+  height      Int
 }
 
 model Comment {

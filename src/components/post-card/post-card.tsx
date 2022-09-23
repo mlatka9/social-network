@@ -48,7 +48,7 @@ const PostCard = ({ post }: PostCardProps) => {
           goToPostDetails();
         }
       }}
-      className="bg-primary-0 dark:bg-primary-dark-200 w-full p-5 shadow-sm rounded-lg cursor-pointer"
+      className=" bg-primary-0 dark:bg-primary-dark-200 w-full p-5 shadow-sm rounded-lg cursor-pointer "
       onClick={goToPostDetails}
     >
       <div className="lg:flex ml-14 space-y-2 lg:space-y-0 lg:space-x-5 items-baseline">
@@ -60,7 +60,6 @@ const PostCard = ({ post }: PostCardProps) => {
         )}
         {post.sharedBy.length > 0 && <RepostBadge users={post.sharedBy} />}
       </div>
-
       <div className="flex mt-2">
         <Author
           authorId={post.user.id}
@@ -91,4 +90,4 @@ const PostCard = ({ post }: PostCardProps) => {
   );
 };
 
-export default React.memo(PostCard);
+export default PostCard;

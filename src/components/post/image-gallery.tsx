@@ -2,7 +2,7 @@ import { Image as ImageType } from '@prisma/client';
 import clsx from 'clsx';
 import Image from 'next/image';
 
-import { useState } from 'react';
+import React, { useState } from 'react';
 import ChevronLeftIcon from '../common/icons/chevron-left';
 import ChevronRightIcon from '../common/icons/chevron-right';
 
@@ -31,33 +31,44 @@ const ImageGallery = ({ images }: ImageGalleryProps) => {
   if (images.length === 1) {
     const image = images[0]!;
     return (
-      <Image
-        key={image.id}
-        src={image.url}
-        width={image.width}
-        height={image.height}
-        layout="responsive"
-        objectFit="contain"
-      />
+      <div className="relative">
+        <Image src={image.fallbackUrl} layout="fill" objectFit="contain" />
+        <Image
+          src={image.url}
+          width={image.width}
+          height={image.height}
+          layout="responsive"
+          objectFit="contain"
+        />
+      </div>
     );
   }
 
   return (
     <div className="relative flex h-[300px] lg:h-[500px]">
       {images.map((image, index) => (
-        <Image
-          key={image.id}
-          src={image.url}
-          layout="fill"
-          width={image.width}
-          height={image.height}
-          objectFit="contain"
-          className={clsx(
-            'transition-all duration-300 absolute',
-            index < currentImageIndex && '-translate-x-full opacity-0',
-            index > currentImageIndex && 'translate-x-full opacity-0'
-          )}
-        />
+        <React.Fragment key={image.id}>
+          <Image
+            src={image.fallbackUrl}
+            layout="fill"
+            objectFit="contain"
+            className={clsx(
+              'transition-all duration-300 absolute',
+              index < currentImageIndex && '-translate-x-full opacity-0',
+              index > currentImageIndex && 'translate-x-full opacity-0'
+            )}
+          />
+          <Image
+            src={image.url}
+            layout="fill"
+            objectFit="contain"
+            className={clsx(
+              'transition-all duration-300 absolute',
+              index < currentImageIndex && '-translate-x-full opacity-0',
+              index > currentImageIndex && 'translate-x-full opacity-0'
+            )}
+          />
+        </React.Fragment>
       ))}
 
       {isPrevImage && (

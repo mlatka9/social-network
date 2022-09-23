@@ -121,6 +121,7 @@ const usePostInput = ({
         ? imageUrls.map((image) => ({
             imageAlt: 'alt',
             imageUrl: image.url,
+            fallbackUrl: image.fallbackUrl,
             width: image.width,
             height: image.height,
           }))

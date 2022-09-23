@@ -255,6 +255,7 @@ const postRouter = createProtectedRouter()
             imageAlt: z.string(),
             width: z.number(),
             height: z.number(),
+            fallbackUrl: z.string(),
           })
         )
         .nullable(),
@@ -322,6 +323,7 @@ const postRouter = createProtectedRouter()
       if (input.images?.length) {
         await prisma.image.createMany({
           data: input.images.map((image) => ({
+            fallbackUrl: image.fallbackUrl,
             alt: image.imageAlt,
             url: image.imageUrl,
             postId: post.id,
