@@ -32,7 +32,7 @@ const CommunitiesPage = () => {
         </Button>
       </div>
 
-      <div className="max-w-[680px] mx-auto lg:mx-0 w-full">
+      <div className="mx-auto lg:mx-0 w-full">
         <div className="lg:hidden ">
           <Button
             className=" fixed bottom-2 right-2 rounded-full w-min text-sm"

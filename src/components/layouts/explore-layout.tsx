@@ -1,16 +1,14 @@
 import { ReactNode } from 'react';
 import TrendingTagsList from '@/components/common/trending-tags-list';
 import { ToastContainer } from 'react-toastify';
-
 import Header from '../header/header';
 import BackButton from '../common/back-button';
-import SuggestionList from '../community/suggestion-list';
 
 interface LayoutProps {
   children: ReactNode;
 }
 
-const MainLayout = ({ children }: LayoutProps) => (
+const ExploreLayout = ({ children }: LayoutProps) => (
   <div>
     <Header />
     <div className="no-scroll-shake">
@@ -21,7 +19,7 @@ const MainLayout = ({ children }: LayoutProps) => (
         </main>
         <div className="sticky h-fit top-[92px] space-y-5 lg:block hidden">
           <TrendingTagsList />
-          <SuggestionList />
+          {/* <SuggestionList /> */}
         </div>
       </div>
     </div>
@@ -29,4 +27,4 @@ const MainLayout = ({ children }: LayoutProps) => (
   </div>
 );
 
-export default MainLayout;
+export default ExploreLayout;

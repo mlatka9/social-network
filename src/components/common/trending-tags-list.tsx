@@ -6,6 +6,8 @@ import Loading from './loading';
 const TrendingTagsList = () => {
   const { isSuccess, data } = useTrendingTagsQuery();
 
+  if (isSuccess && !data.length) return null;
+
   return (
     <aside className=" bg-white rounded-xl dark:bg-primary-dark-200">
       <TextHeader className=" py-3 px-5 ">Trends this week</TextHeader>

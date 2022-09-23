@@ -4,9 +4,11 @@ import { GetServerSidePropsContext } from 'next';
 import Layout from '@/components/layouts/main-layout';
 import { authOptions } from 'src/pages/api/auth/[...nextauth]';
 import PostList from '@/components/post/post-list';
+import FallbackCard from '@/components/common/fallback-card';
 
 const Bookmarks = () => {
-  const { data, fetchNextPage, hasNextPage } = useUserBookmarkedPostsQuery();
+  const { data, fetchNextPage, hasNextPage, isSuccess } =
+    useUserBookmarkedPostsQuery();
 
   return (
     <Layout>
@@ -18,12 +20,14 @@ const Bookmarks = () => {
           discover
         </p>
       </h1>
-
       <PostList
         data={data}
         fetchNextPage={fetchNextPage}
         hasNextPage={hasNextPage}
       />
+      {isSuccess && !data?.pages[0]?.posts.length && (
+        <FallbackCard>All your booksmarks will be there 😉</FallbackCard>
+      )}
     </Layout>
   );
 };

@@ -25,3 +25,7 @@ export type NotificationCommunityNewMember = inferQueryOutput<'notification.getA
 export type NotificationPostComment = inferQueryOutput<'notification.getAll'>['notificationsPostComment'][0]
 
 export type NotificationCommentReply = inferQueryOutput<'notification.getAll'>['notificationsCommentReply'][0]
+
+export type SuggestedUser = inferQueryOutput<'explore.getSuggestedUsers'>[0]
+
+export type SuggestedCommunity = inferQueryOutput<'explore.getSuggestedCommunities'>[0]

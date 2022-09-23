@@ -5,6 +5,10 @@ import Loading from '../common/loading';
 const SuggestedCommunitiesList = () => {
   const { data, isSuccess } = useSuggestedCommunitiesQuery();
 
+  if (isSuccess && !data.length) {
+    return null;
+  }
+
   return (
     <>
       <h2 className="font-poppins text-lg font-medium text-primary-600 mb-3 dark:text-primary-dark-600">

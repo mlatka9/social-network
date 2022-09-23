@@ -5,6 +5,10 @@ import UserCard from '../common/user-card';
 const SuggestedUsersList = () => {
   const { data, isSuccess } = useSuggestedUsersQuery();
 
+  if (isSuccess && !data.length) {
+    return null;
+  }
+
   return (
     <>
       <h2 className="font-poppins text-lg font-medium text-primary-600 dark:text-primary-dark-600 mb-3">

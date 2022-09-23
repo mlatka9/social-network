@@ -5,6 +5,7 @@ import NotificationsCommunityNewMemberCard from './notification-community-new-me
 import NotificationPostCommentCard from './notification-post-comment-card';
 import NotificationCommentReplyCard from './notification-comment-reply-card';
 import useNotificationList from './use-notification-list';
+import FallbackCard from '../common/fallback-card';
 
 const NotificationsList = () => {
   const {
@@ -31,6 +32,14 @@ const NotificationsList = () => {
         </div>
       </div>
     );
+
+  if (isSuccess && !flattedNotifications.length) {
+    return (
+      <FallbackCard>
+        when something important happens, we&apos;ll let you know about it 😉
+      </FallbackCard>
+    );
+  }
 
   return (
     <div className="space-y-5 mb-10">
