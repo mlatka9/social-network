@@ -33,9 +33,9 @@ const EmojiPicker = ({ setValue, control }: EmojiPickerProps) => {
   };
 
   return (
-    <div className="relative inline-block mr-1 " ref={ref}>
+    <div className="relative inline-block mr-2" ref={ref}>
       <button
-        className="cursor-pointer self-start h-6 w-6 mr-auto mb-2"
+        className="cursor-pointer self-start h-5 w-5 mr-auto mb-2"
         onClick={toggleIsPickerOpen}
         type="button"
       >

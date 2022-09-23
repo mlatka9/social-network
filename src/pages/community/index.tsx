@@ -9,6 +9,7 @@ import ModalWrapper from '@/components/common/modal-wrapper';
 import CommunityCreator from '@/components/community/community-creator';
 import BackButton from '@/components/common/back-button';
 import CommunityList from '@/components/community/community-list';
+import Head from 'next/head';
 import { authOptions } from '../api/auth/[...nextauth]';
 
 const CommunitiesPage = () => {
@@ -23,39 +24,46 @@ const CommunitiesPage = () => {
   };
 
   return (
-    <CommunityLayout>
-      <div className="hidden lg:block sticky h-fit top-[92px] space-y-5">
-        <BackButton />
-        <CategoryList />
-        <Button className="w-full" onClick={handleOpenCreator}>
-          Create community
-        </Button>
-      </div>
+    <>
+      <Head>
+        <title>Communities</title>
+        <meta property="og:title" content="Communities" />
+      </Head>
 
-      <div className="mx-auto lg:mx-0 w-full">
-        <div className="lg:hidden ">
-          <Button
-            className=" fixed bottom-2 right-2 rounded-full w-min text-sm"
-            onClick={handleOpenCreator}
-          >
+      <CommunityLayout>
+        <div className="hidden lg:block sticky h-fit top-[92px] space-y-5">
+          <BackButton />
+          <CategoryList />
+          <Button className="w-full" onClick={handleOpenCreator}>
             Create community
           </Button>
-          <CategoryList />
-          <div className="mb-2" />
         </div>
-        <CommunityFilter />
-        <CommunityList />
-      </div>
 
-      {isCommunityCreatorOpen && (
-        <ModalWrapper
-          handleCloseModal={handleCloseCreator}
-          title="Create community"
-        >
-          <CommunityCreator handleCloseCreator={handleCloseCreator} />
-        </ModalWrapper>
-      )}
-    </CommunityLayout>
+        <div className="mx-auto lg:mx-0 w-full">
+          <div className="lg:hidden ">
+            <Button
+              className=" fixed bottom-2 right-2 rounded-full w-min text-sm"
+              onClick={handleOpenCreator}
+            >
+              Create community
+            </Button>
+            <CategoryList />
+            <div className="mb-2" />
+          </div>
+          <CommunityFilter />
+          <CommunityList />
+        </div>
+
+        {isCommunityCreatorOpen && (
+          <ModalWrapper
+            handleCloseModal={handleCloseCreator}
+            title="Create community"
+          >
+            <CommunityCreator handleCloseCreator={handleCloseCreator} />
+          </ModalWrapper>
+        )}
+      </CommunityLayout>
+    </>
   );
 };
 

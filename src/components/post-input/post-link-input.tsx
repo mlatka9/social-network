@@ -49,12 +49,12 @@ const PostLinkInput = ({
 
       <label
         htmlFor="link-toggle"
-        className="inline-block mr-2 cursor-pointer "
+        className="inline-block mr-2 cursor-pointer relative focus-within:ring"
       >
         <input
           id="link-toggle"
           type="checkbox"
-          className="mr-2 hidden"
+          className="mr-2 absolute w-full h-full opacity-0 cursor-pointer"
           {...register('link.isOpen')}
         />
         <LinkIcon />

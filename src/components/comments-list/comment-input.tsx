@@ -35,7 +35,7 @@ const CommentInput = ({ onMessageSubmit }: CommentInputProps) => {
         onChange={({ target }) => setCommentMessageValue(target.value)}
       />
       <Button type="submit" className="self-center absolute right-1" isSmall>
-        Add
+        Submit
       </Button>
     </form>
   );

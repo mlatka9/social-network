@@ -61,7 +61,9 @@ const ModalWrapper = ({
           </button>
         </div>
         <hr className="mt-3 mb-5 dark:border-primary-700 mr-4 lg:mr-10" />
-        <div className="overflow-y-scroll pr-4 lg:pr-10">{children}</div>
+        <div className="overflow-y-scroll p-[1px] pr-4 lg:pr-10">
+          {children}
+        </div>
       </div>
     </div>,
     document.querySelector('#modal') as HTMLElement

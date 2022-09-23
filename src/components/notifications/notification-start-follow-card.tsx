@@ -23,7 +23,7 @@ const NotificationsStartFollowCard = ({
           <span className="font-medium  text-primary-800 dark:text-primary-dark-800 mr-1">
             {notification.user.name}
           </span>
-          has started followed you
+          started following you
         </p>
         <ReactTimeAgo
           date={notification.createdAt}

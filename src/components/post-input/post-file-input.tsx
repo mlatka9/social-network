@@ -34,7 +34,7 @@ const PostFileInput = ({
   return (
     <>
       <button
-        className="cursor-pointer self-start h-6 w-6 mr-auto mb-2"
+        className="cursor-pointer self-start h-5 w-5 mr-auto mb-2"
         onClick={openFilePicker}
         type="button"
       >

@@ -12,6 +12,7 @@ import UserProfileHero from '@/components/user-profile/user-profile-hero';
 import ErrorFallback from '@/components/common/error-fallback';
 import Filters from '@/components/user-profile/profile-filters';
 import { FilterData } from '@/components/user-profile/types';
+import Head from 'next/head';
 
 const User = () => {
   const router = useRouter();
@@ -45,9 +46,15 @@ const User = () => {
 
   if (isUserError) {
     return (
-      <Layout>
-        <ErrorFallback message="This user does't exists" />
-      </Layout>
+      <>
+        <Head>
+          <title>User</title>
+          <meta property="og:title" content="User" />
+        </Head>
+        <Layout>
+          <ErrorFallback message="This user does't exists" />
+        </Layout>
+      </>
     );
   }
 
@@ -70,26 +77,32 @@ const User = () => {
   ];
 
   return (
-    <Layout>
-      <UserProfileHero userDetails={userDetails} />
-      <Filters filters={filters} />
-      <PostList
-        data={data}
-        fetchNextPage={fetchNextPage}
-        hasNextPage={hasNextPage}
-      />
-      {(section === 'followers' || section === 'following') && (
-        <ModalWrapper title="Followers" handleCloseModal={closeModal}>
-          <UserFollows section={section} userId={userId} />
-        </ModalWrapper>
-      )}
+    <>
+      <Head>
+        <title>User</title>
+        <meta property="og:title" content="User" />
+      </Head>
+      <Layout>
+        <UserProfileHero userDetails={userDetails} />
+        <Filters filters={filters} />
+        <PostList
+          data={data}
+          fetchNextPage={fetchNextPage}
+          hasNextPage={hasNextPage}
+        />
+        {(section === 'followers' || section === 'following') && (
+          <ModalWrapper title="Followers" handleCloseModal={closeModal}>
+            <UserFollows section={section} userId={userId} />
+          </ModalWrapper>
+        )}
 
-      {section === 'settings' && (
-        <ModalWrapper title="Settings" handleCloseModal={closeModal}>
-          <ProfileSettings handleCloseModal={closeModal} />
-        </ModalWrapper>
-      )}
-    </Layout>
+        {section === 'settings' && (
+          <ModalWrapper title="Settings" handleCloseModal={closeModal}>
+            <ProfileSettings handleCloseModal={closeModal} />
+          </ModalWrapper>
+        )}
+      </Layout>
+    </>
   );
 };
 

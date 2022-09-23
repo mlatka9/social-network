@@ -9,6 +9,7 @@ import {
 } from '@/hooks/query';
 import FallbackCard from '@/components/common/fallback-card';
 import ExploreLayout from '@/components/layouts/explore-layout';
+import Head from 'next/head';
 import { authOptions } from '../api/auth/[...nextauth]';
 
 const ExplorePage = () => {
@@ -17,28 +18,34 @@ const ExplorePage = () => {
     useSuggestedCommunitiesQuery();
 
   return (
-    <ExploreLayout>
-      <h1 className="font-poppins mb-10 mt-5 ">
-        <p className="font-bold text-neutral-800 dark:text-primary-dark-800 text-2xl">
-          Explore
-        </p>
-      </h1>
+    <>
+      <Head>
+        <title>Explore</title>
+        <meta property="og:title" content="Explore" />
+      </Head>
+      <ExploreLayout>
+        <h1 className="font-poppins mb-10 mt-5 ">
+          <p className="font-bold text-neutral-800 dark:text-primary-dark-800 text-2xl">
+            Explore
+          </p>
+        </h1>
 
-      {isUsersSuccess &&
-      isCommunitiesSuccess &&
-      !users.length &&
-      !communities.length ? (
-        <FallbackCard>
-          Our community still grow. We&apos;ll have something for you soon 😉
-        </FallbackCard>
-      ) : (
-        <>
-          <SuggestedUsersList />
-          <div className="mt-10" />
-          <SuggestedCommunitiesList />
-        </>
-      )}
-    </ExploreLayout>
+        {isUsersSuccess &&
+        isCommunitiesSuccess &&
+        !users.length &&
+        !communities.length ? (
+          <FallbackCard>
+            Our community still grow. We&apos;ll have something for you soon 😉
+          </FallbackCard>
+        ) : (
+          <>
+            <SuggestedUsersList />
+            <div className="mt-10" />
+            <SuggestedCommunitiesList />
+          </>
+        )}
+      </ExploreLayout>
+    </>
   );
 };
 

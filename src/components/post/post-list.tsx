@@ -17,7 +17,9 @@ interface PostListProps {
 }
 
 const PostList = ({ data, fetchNextPage, hasNextPage }: PostListProps) => {
-  const { ref, inView } = useInView();
+  const { ref, inView } = useInView({
+    rootMargin: '500px',
+  });
 
   useEffect(() => {
     if (inView && hasNextPage) {
@@ -49,7 +51,7 @@ const PostList = ({ data, fetchNextPage, hasNextPage }: PostListProps) => {
           ))}
         </Fragment>
       ))}
-      {hasNextPage && <div ref={ref} className="w-full h-10 " />}
+      {hasNextPage && <div ref={ref} className="w-full h-10 bg-red-300" />}
     </div>
   );
 };

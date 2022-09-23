@@ -15,6 +15,7 @@ import TextHeader from '@/components/common/text-header';
 import PostsSortPanel from '@/components/common/posts-sort-panel';
 import Loading from '@/components/common/loading';
 import ErrorFallback from '@/components/common/error-fallback';
+import Head from 'next/head';
 import { authOptions } from '../api/auth/[...nextauth]';
 
 const Community = () => {
@@ -39,37 +40,53 @@ const Community = () => {
 
   if (isError) {
     return (
-      <Layout>
-        <ErrorFallback message="This community does't exists" />
-      </Layout>
+      <>
+        <Head>
+          <title>Community</title>
+          <meta property="og:title" content="Community" />
+        </Head>
+        <Layout>
+          <ErrorFallback message="This community does't exists" />
+        </Layout>
+      </>
     );
   }
 
   return (
-    <Layout>
-      {isDetailsSuccess ? (
-        <>
-          <CommunityProfileHero community={community} />
-          {community.joinedByMe && (
-            <div className="bg-primary-0 dark:bg-primary-dark-200 px-5 py-3 rounded-lg mb-5">
-              <TextHeader className="pb-3">Post something</TextHeader>
-              <hr className="mb-3 dark:border-primary-700" />
-              <PostInput communityId={communityId} />
-            </div>
-          )}
-        </>
-      ) : (
-        <div className="space-y-10 bg-primary-0 dark:bg-primary-dark-200">
-          <Loading height={440} />
-        </div>
-      )}
-      <PostsSortPanel pathname={`/community/${communityId}`} />
-      <PostList
-        data={posts}
-        fetchNextPage={fetchNextPage}
-        hasNextPage={hasNextPage}
-      />
-    </Layout>
+    <>
+      <Head>
+        <title>community - {community?.name}</title>
+        <meta
+          property="og:title"
+          content={`community - ${community?.name}`}
+          key="title"
+        />
+      </Head>
+      <Layout>
+        {isDetailsSuccess ? (
+          <>
+            <CommunityProfileHero community={community} />
+            {community.joinedByMe && (
+              <div className="bg-primary-0 dark:bg-primary-dark-200 px-5 py-3 rounded-lg mb-5">
+                <TextHeader className="pb-3">Post something</TextHeader>
+                <hr className="mb-3 dark:border-primary-700" />
+                <PostInput communityId={communityId} />
+              </div>
+            )}
+          </>
+        ) : (
+          <div className="space-y-10 bg-primary-0 dark:bg-primary-dark-200">
+            <Loading height={440} />
+          </div>
+        )}
+        <PostsSortPanel pathname={`/community/${communityId}`} />
+        <PostList
+          data={posts}
+          fetchNextPage={fetchNextPage}
+          hasNextPage={hasNextPage}
+        />
+      </Layout>
+    </>
   );
 };
 

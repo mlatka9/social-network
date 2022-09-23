@@ -11,7 +11,7 @@ body {
 }
 
 *:focus-visible {
-  outline: 2px dashed red;
+  @apply outline-0 ring;
 }
 
 /* ===== Scrollbar CSS ===== */

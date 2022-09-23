@@ -180,6 +180,7 @@ export const useCommunitiesQuery = (category?: string, filter?: string) =>
     ['community.getAll', { categoryId: category, filter }],
     {
       getNextPageParam: (lastPage) => lastPage.nextCursor,
+      keepPreviousData: true,
     }
   );
 

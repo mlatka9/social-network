@@ -39,11 +39,12 @@ const CommunityCard = ({
             alt=""
             className="rounded-lg block"
             objectFit="cover"
+            unoptimized
           />
         </div>
       </Link>
       <div className="flex w-full">
-        <div className="ml-3 dark:text-primary-dark-800">
+        <div className="ml-5 dark:text-primary-dark-800">
           <Link href={`/community/${id}`}>
             <a className="font-poppins font-medium hover:underline mr-1">
               {name}

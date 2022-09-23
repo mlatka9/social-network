@@ -19,7 +19,7 @@ const useCategoryList = () => {
       undefined,
       {
         shallow: true,
-        scroll: false,
+        scroll: true,
       }
     );
   };

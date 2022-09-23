@@ -13,6 +13,7 @@ import TextHeader from '@/components/common/text-header';
 import PostsSortPanel from '@/components/common/posts-sort-panel';
 import Link from 'next/link';
 import HashIcon from '@/components/common/icons/hash';
+import Head from 'next/head';
 import { authOptions } from './api/auth/[...nextauth]';
 
 const Home: NextPage = () => {
@@ -48,6 +49,10 @@ const Home: NextPage = () => {
 
   return (
     <>
+      <Head>
+        <title>Twitterek</title>
+        <meta property="og:title" content="Twitterek" />
+      </Head>
       <Layout>
         <div className="bg-primary-0 dark:bg-primary-dark-200 px-5 py-3 rounded-lg mt-3 lg:mt-0">
           <TextHeader className="pb-3">Post something</TextHeader>

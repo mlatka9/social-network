@@ -22,7 +22,11 @@ const PostTagsInput = ({ control, setValue }: PostTagsInputProps) => {
   };
 
   const addTag = (tag: string) => {
-    const formattedTagName = tag.trim().toLowerCase().replaceAll('#', '');
+    const formattedTagName = tag
+      .trim()
+      .toLowerCase()
+      .replaceAll('#', '')
+      .replaceAll(' ', '');
     const isAlreadyInState = tags.some((t) => t === formattedTagName);
     if (isAlreadyInState || !formattedTagName) {
       setTagInputValue('');

@@ -2,6 +2,7 @@ import { useCommunitiesQuery } from '@/hooks/query';
 import { useRouter } from 'next/router';
 import { Fragment, useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
+import FallbackCard from '../common/fallback-card';
 import Loading from '../common/loading';
 import CommunityCard from './community-card';
 
@@ -12,6 +13,7 @@ const CommunityList = () => {
 
   const category = router.query.category as string | undefined;
   const filter = router.query.filter as string | undefined;
+
   const { data, isSuccess, hasNextPage, fetchNextPage } = useCommunitiesQuery(
     category,
     filter
@@ -68,6 +70,9 @@ const CommunityList = () => {
             ))}
           </Fragment>
         ))}
+        {!category && isSuccess && !data?.pages[0]?.posts.length && (
+          <FallbackCard>You can create first community 😊</FallbackCard>
+        )}
         <div ref={ref} className="w-full h-10 " />
       </div>
     </main>

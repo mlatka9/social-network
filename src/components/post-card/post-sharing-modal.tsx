@@ -27,23 +27,26 @@ const PostSharingModal = ({
 
   return (
     <ModalWrapper handleCloseModal={closeSharingModal} title="Share">
-      <label
-        htmlFor="checked-toggle"
-        className="inline-flex relative items-center cursor-pointer mb-5"
-      >
-        <input
-          type="checkbox"
-          value=""
-          id="checked-toggle"
-          className="sr-only peer"
-          checked={isQuoteShare}
-          onChange={() => setIsQuoteShare(!isQuoteShare)}
-        />
-        <div className="w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-500 dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-500" />
-        <span className="ml-3 text-sm font-medium text-gray-900 dark:text-gray-300">
+      <div className="flex items-center mt-1">
+        <span className="mr-3 text-sm font-medium text-gray-900 dark:text-gray-300">
           Quote Share
         </span>
-      </label>
+        <label
+          htmlFor="checked-toggle"
+          className="inline-flex relative items-center cursor-pointer"
+        >
+          <input
+            type="checkbox"
+            value=""
+            id="checked-toggle"
+            className="sr-only peer"
+            checked={isQuoteShare}
+            onChange={() => setIsQuoteShare(!isQuoteShare)}
+          />
+          <div className="w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-500 dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-500" />
+        </label>
+      </div>
+
       {isQuoteShare ? (
         <div className="bg-primary-0 dark:bg-primary-dark-200 px-5 py-3 rounded-lg">
           <PostInput
