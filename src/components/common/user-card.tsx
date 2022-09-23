@@ -49,7 +49,11 @@ const UserCard = ({
           followedByMe={followedByMe}
         />
       </div>
-      {bio && <p className="text-sm text-neutral-900  mb-3">{bio}</p>}
+      {bio && (
+        <p className="text-sm text-neutral-900  mb-3 dark:text-primary-dark-600">
+          {bio}
+        </p>
+      )}
 
       {myId !== id && mutualUserNumber > 0 && (
         <div className=" text-sm text-neutral-600 dark:text-primary-dark-500">

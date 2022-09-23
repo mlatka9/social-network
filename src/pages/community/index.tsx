@@ -31,9 +31,11 @@ const CommunitiesPage = () => {
       </Head>
 
       <CommunityLayout>
-        <div className="hidden lg:block sticky h-fit top-[92px] space-y-5">
+        <div className="hidden lg:block h-fit sticky top-[92px] space-y-5">
           <BackButton />
-          <CategoryList />
+          <div className="overflow-y-scroll h-[600px] rounded-xl">
+            <CategoryList />
+          </div>
           <Button className="w-full" onClick={handleOpenCreator}>
             Create community
           </Button>
