@@ -1,12 +1,13 @@
 import { ReactNode } from 'react';
 import Header from '@/components/header/header';
 import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.min.css';
 
 interface LayoutProps {
   children: ReactNode;
 }
 
-const MainLayout = ({ children }: LayoutProps) => (
+const CommunityLayout = ({ children }: LayoutProps) => (
   <div>
     <Header />
     <div className="no-scroll-shake">
@@ -14,10 +15,8 @@ const MainLayout = ({ children }: LayoutProps) => (
         {children}
       </div>
     </div>
-    <div className="relative">
-      <ToastContainer autoClose={3000} position="bottom-right" />
-    </div>
+    <ToastContainer autoClose={3000} position="bottom-right" />
   </div>
 );
 
-export default MainLayout;
+export default CommunityLayout;

@@ -19,7 +19,6 @@ const ExploreLayout = ({ children }: LayoutProps) => (
         </main>
         <div className="sticky h-fit top-[92px] space-y-5 lg:block hidden">
           <TrendingTagsList />
-          {/* <SuggestionList /> */}
         </div>
       </div>
     </div>

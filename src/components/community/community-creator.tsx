@@ -17,8 +17,8 @@ interface CommunityCreatorProps {
 
 const CommunityCreator = ({ handleCloseCreator }: CommunityCreatorProps) => {
   const onSuccessCb = () => {
-    toast('Community created', { type: 'success' });
     handleCloseCreator();
+    toast('Community created', { type: 'success' });
   };
 
   const addCommunity = useAddCommunity(onSuccessCb);
@@ -39,7 +39,6 @@ const CommunityCreator = ({ handleCloseCreator }: CommunityCreatorProps) => {
 
   const onSubmit = (data: FormInputType) => {
     addCommunity({ name: data.name, categoryId: data.category });
-    handleCloseCreator();
   };
 
   if (!isSuccess) return <>Loading</>;
