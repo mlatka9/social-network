@@ -47,7 +47,7 @@ const PostThumbnail = ({
     >
       <div className="flex items-center p-2">
         <Image
-          src={sharedPost.user.image || '/images/fallback.svg'}
+          src={sharedPost.user.image || '/images/avatar-fallback.svg'}
           alt=""
           width="20"
           height="20"

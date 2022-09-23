@@ -100,7 +100,7 @@ const CommunitySettings = ({
     <>
       <FormImages
         bannerImage={communityDetails.bannerImage}
-        image={communityDetails.image}
+        image={communityDetails.image || '/images/community-fallback.svg'}
         draftBannerImageFile={draftBannerImageFile}
         draftImageFile={draftImageFile}
         setBanner={setBanner}
@@ -121,6 +121,10 @@ const CommunitySettings = ({
               minLength: {
                 message: 'Name must be at least 3 characters long',
                 value: 3,
+              },
+              maxLength: {
+                message: 'Name can be up to 30 characters long',
+                value: 30,
               },
             }}
             register={register}

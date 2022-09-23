@@ -37,7 +37,12 @@ const SearchCard = ({ searchEntry, isSelected }: SearchCardProps) => {
         >
           <div className="w-10 h-10 relative mr-2">
             <Image
-              src={searchEntry.image || '/images/fallback.svg'}
+              src={
+                searchEntry.image ||
+                (searchEntry.type === SearchType.USER
+                  ? '/images/avatar-fallback.svg'
+                  : '/images/community-fallback.svg')
+              }
               width="40"
               height="40"
               alt=""

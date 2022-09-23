@@ -84,7 +84,7 @@ const FormImages = ({
         onClick={openImage}
       >
         <Image
-          src={draftImage || image || '/images/fallback.svg'}
+          src={draftImage || image || '/images/avatar-fallback.svg'}
           layout="fill"
           alt=""
           objectFit="cover"

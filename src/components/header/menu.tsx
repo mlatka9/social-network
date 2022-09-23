@@ -54,7 +54,7 @@ const Menu = () => {
         </div>
         <Image
           layout="fixed"
-          src={me.image || '/images/fallback.svg'}
+          src={me.image || '/images/avatar-fallback.svg'}
           alt=""
           objectFit="cover"
           width="40"

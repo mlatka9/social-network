@@ -32,7 +32,9 @@ const CommentContent = ({
         </button>
       </div>
     ) : (
-      <p className="text-neutral-800 dark:text-white">{commentMessage}</p>
+      <p className="text-neutral-800 dark:text-white overflow-hidden">
+        {commentMessage}
+      </p>
     )}
   </div>
 );

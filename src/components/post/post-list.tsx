@@ -51,7 +51,7 @@ const PostList = ({ data, fetchNextPage, hasNextPage }: PostListProps) => {
           ))}
         </Fragment>
       ))}
-      {hasNextPage && <div ref={ref} className="w-full h-10 bg-red-300" />}
+      {hasNextPage && <div ref={ref} className="w-full h-10" />}
     </div>
   );
 };

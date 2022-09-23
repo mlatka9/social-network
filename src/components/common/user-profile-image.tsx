@@ -12,7 +12,7 @@ const UserProfilePicture = ({ userID, imageUrl }: UserProfileImage) => (
   <Link href={`/user/${userID}`}>
     <a className="h-10" onClick={(e) => e.stopPropagation()}>
       <Image
-        src={imageUrl || '/images/fallback.svg'}
+        src={imageUrl || '/images/avatar-fallback.svg'}
         width="40"
         height="40"
         layout="fixed"

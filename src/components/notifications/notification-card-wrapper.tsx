@@ -32,7 +32,7 @@ const NotificationCardWrapper = ({
       onClick={handleMarkAsRead}
     >
       <Image
-        src={imageUrl || '/images/fallback.svg'}
+        src={imageUrl || '/images/avatar-fallback.svg'}
         width={40}
         height={40}
         alt=""

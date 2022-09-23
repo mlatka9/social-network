@@ -42,7 +42,8 @@ const CommentsList = ({
     <div
       className={clsx([
         'w-full ',
-        depth !== 0 && 'pl-10 border-l-2 border-l-neutral-300',
+        depth !== 0 &&
+          'pl-10 border-l-2 border-l-neutral-300 dark:border-l-primary-dark-300',
       ])}
     >
       {commentsWithCurrentDepth.map((comment) => (

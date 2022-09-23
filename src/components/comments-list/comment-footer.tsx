@@ -57,7 +57,7 @@ const CommentFooter = ({
       <button
         type="button"
         onClick={toggleIsReplying}
-        className="ml-auto font-medium text-xs text-gray-400 hover:text-neutral-800 transition-colors"
+        className="ml-auto font-medium text-xs text-gray-400 hover:text-neutral-800 dark:hover:text-primary-dark-600 transition-colors"
       >
         Reply
       </button>
@@ -66,14 +66,14 @@ const CommentFooter = ({
           <button
             type="button"
             onClick={toggleIsEditing}
-            className="ml-3 font-medium text-xs text-gray-400 hover:text-neutral-800 transition-colors"
+            className="ml-3 font-medium text-xs text-gray-400 hover:text-neutral-800 dark:hover:text-primary-dark-600 transition-colors"
           >
             Edit
           </button>
           <button
             type="button"
             onClick={handleDeleteComment}
-            className="ml-3 font-medium text-xs text-red-400 hover:text-red-500 transition-colors"
+            className="ml-3 font-medium text-xs text-red-400 hover:text-red-500 dark:hover:text-red-300 transition-colors"
           >
             Delete
           </button>

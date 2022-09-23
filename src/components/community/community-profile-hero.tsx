@@ -56,7 +56,7 @@ const CommunityProfileHero = ({ community }: CommunityProfileHeroProps) => {
       <div className="flex p-6 min-h-[160px] rounded-xl bg-primary-0 dark:bg-primary-dark-200 mb-10 relative -mt-10 flex-col md:flex-row items-center md:items-start">
         <div className="relative -mt-20 p-1 bg-primary-0 dark:bg-primary-dark-200 rounded-lg shrink-0 w-fit">
           <Image
-            src={community.image || '/images/fallback.svg'}
+            src={community.image || '/images/community-fallback.svg'}
             width="150"
             height="150"
             className="rounded-lg"
@@ -65,21 +65,17 @@ const CommunityProfileHero = ({ community }: CommunityProfileHeroProps) => {
           />
         </div>
 
-        <div className="md:ml-4 md:w-full">
-          <div className="flex items-start justify-between flex-col md:flex-row">
-            <div className="flex flex-col items-center mx-auto md:items-start md:mx-0">
-              <div className="mx-auto md:mx-0 flex flex-col items-center md:items-start">
-                <Link href={`/community?category=${community.categoryId}`}>
-                  <a className="hover:underline text-center md:text-left">
-                    {community.category.name}
-                  </a>
-                </Link>
-
-                <h1 className="font-poppins font-semibold text-2xl">
-                  {community.name}
-                </h1>
-              </div>
-
+        <div className="md:ml-4 w-full">
+          <div className="grid md:grid-cols-[auto_1fr] w-full">
+            <div className="flex flex-col items-center md:items-start overflow-hidden mr-5">
+              <Link href={`/community?category=${community.categoryId}`}>
+                <a className="hover:underline text-center md:text-left">
+                  {community.category.name}
+                </a>
+              </Link>
+              <h1 className="font-poppins font-semibold text-2xl">
+                {community.name}
+              </h1>
               <div className="text-xs  text-neutral-500 tracking-wide font-medium flex space-x-4   mt-3 md:mt-[6px] mb-5 md:mb-0">
                 <Link href={getMembersHref()} shallow>
                   <a className="hover:underline">
@@ -94,7 +90,7 @@ const CommunityProfileHero = ({ community }: CommunityProfileHeroProps) => {
               </div>
             </div>
 
-            <div className="flex itmes-center ml-auto space-x-3 mx-auto md:mx-0 md:ml-auto">
+            <div className="flex mx-auto md:mx-0 md:ml-auto items-center mb-auto space-x-2">
               <CommunityFavouriteIcon
                 communityId={community.id}
                 isMyfavourite={community.isMyfavourite}
@@ -110,7 +106,8 @@ const CommunityProfileHero = ({ community }: CommunityProfileHeroProps) => {
               )}
             </div>
           </div>
-          <p className="text-center md:text-left font-medium text-neutral-600 dark:text-primary-dark-700 mt-6 max-w-sm">
+
+          <p className="text-center md:text-left font-medium text-neutral-600 dark:text-primary-dark-700 mt-6">
             {community.description}
           </p>
         </div>

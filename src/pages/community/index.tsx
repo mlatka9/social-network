@@ -42,7 +42,7 @@ const CommunitiesPage = () => {
         <div className="mx-auto lg:mx-0 w-full">
           <div className="lg:hidden ">
             <Button
-              className=" fixed bottom-2 right-2 rounded-full w-min text-sm"
+              className="fixed bottom-2 right-2 rounded-full w-min text-sm shadow-lg"
               onClick={handleOpenCreator}
             >
               Create community

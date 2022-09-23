@@ -44,7 +44,7 @@ const UserProfileHero = ({ userDetails }: UserProfileHeroProps) => {
       <div className="flex p-6 min-h-[160px] rounded-xl bg-primary-0 dark:bg-primary-dark-200 mb-10 relative -mt-10 flex-col md:flex-row items-center md:items-start">
         <div className="relative -mt-20 p-1 bg-primary-0 dark:bg-primary-dark-200 rounded-lg shrink-0 w-fit">
           <Image
-            src={userDetails?.image || '/images/fallback.svg'}
+            src={userDetails?.image || '/images/avatar-fallback.svg'}
             width="150"
             height="150"
             className="rounded-lg"
@@ -54,8 +54,8 @@ const UserProfileHero = ({ userDetails }: UserProfileHeroProps) => {
         </div>
 
         <div className="md:ml-4 md:w-full">
-          <div className="flex justify-between flex-col md:flex-row ">
-            <div className="flex flex-col">
+          <div className="grid md:grid-cols-[auto_1fr] w-full">
+            <div className="flex flex-col items-center md:items-start overflow-hidden mr-5">
               <h1 className="font-poppins font-semibold text-2xl  text-center md:text-left">
                 {userDetails?.name}
               </h1>

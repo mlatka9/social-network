@@ -44,10 +44,10 @@ const ModalWrapper = ({
         onClick={(e) => e.stopPropagation()}
         className={clsx(
           [
-            'flex flex-col fixed p-4 pr-0 lg:px-10 lg:pr-0 bg-white z-[10] inset-0 m-2 lg:mx-auto rounded-lg dark:bg-primary-dark-100',
+            'flex flex-col fixed p-4 pr-0 lg:px-10 lg:pr-0 bg-white z-[10] inset-0 lg:mx-auto rounded-lg dark:bg-primary-dark-100',
           ],
           !isBig && 'lg:max-w-2xl',
-          isBig && 'lg:max-w-[800px] mx-auto mt-10 inset-0 rounded-b-none'
+          isBig && 'lg:max-w-[800px] mx-auto mt-3 inset-0 rounded-b-none'
         )}
       >
         <div className="flex justify-between items-center pr-4 lg:pr-10">

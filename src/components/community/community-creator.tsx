@@ -62,6 +62,10 @@ const CommunityCreator = ({ handleCloseCreator }: CommunityCreatorProps) => {
             message: 'Name must be at least 3 characters long',
             value: 3,
           },
+          maxLength: {
+            message: 'Name can be up to 30 characters long',
+            value: 30,
+          },
         }}
         register={register}
       />

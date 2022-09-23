@@ -22,13 +22,7 @@ const NotificationsList = () => {
     return (
       <div className="space-y-5 ">
         <div className="dark:bg-primary-dark-200 bg-primary-0">
-          <Loading height={64} />
-        </div>
-        <div className="dark:bg-primary-dark-200 bg-primary-0">
-          <Loading height={70} />
-        </div>
-        <div className="dark:bg-primary-dark-200 bg-primary-0">
-          <Loading height={64} />
+          <Loading height={300} />
         </div>
       </div>
     );
