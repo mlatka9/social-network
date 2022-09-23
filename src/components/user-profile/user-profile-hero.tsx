@@ -59,7 +59,6 @@ const UserProfileHero = ({ userDetails }: UserProfileHeroProps) => {
               <h1 className="font-poppins font-semibold text-2xl  text-center md:text-left">
                 {userDetails?.name}
               </h1>
-
               <div className="text-xs text-neutral-500 tracking-wide font-medium flex space-x-4 mx-auto md:mx-0 mt-3 mb-5 md:mb-0">
                 <Link href={getSectionHref('following')} shallow replace>
                   <a className="hover:underline">
@@ -83,7 +82,7 @@ const UserProfileHero = ({ userDetails }: UserProfileHeroProps) => {
                 </Link>
               </div>
             </div>
-            <div className="mx-auto md:mx-0 ml-auto">
+            <div className="mx-auto md:mx-0 md:ml-auto">
               <UserProfileButton
                 userName={userDetails.name || ''}
                 userId={userDetails.id}
