@@ -6,6 +6,7 @@ interface CommentContentProps {
   onChangeDraftContent: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
   handleUpdateComment: () => void;
   commentMessage: string;
+  parentUserName: string | null;
 }
 
 const CommentContent = ({
@@ -14,6 +15,7 @@ const CommentContent = ({
   isEditing,
   onChangeDraftContent,
   commentMessage,
+  parentUserName,
 }: CommentContentProps) => (
   <div className="mb-5 ml-14 mt-2">
     {isEditing ? (
@@ -33,6 +35,11 @@ const CommentContent = ({
       </div>
     ) : (
       <p className="text-neutral-800 dark:text-white overflow-hidden">
+        {parentUserName && (
+          <span className="font-semibold text-blue-500 mr-1">
+            @{parentUserName}
+          </span>
+        )}
         {commentMessage}
       </p>
     )}

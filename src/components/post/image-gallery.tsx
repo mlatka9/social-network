@@ -32,8 +32,15 @@ const ImageGallery = ({ images }: ImageGalleryProps) => {
     const image = images[0]!;
     return (
       <div className="relative">
-        <Image src={image.fallbackUrl} layout="fill" objectFit="contain" />
         <Image
+          src={image.fallbackUrl}
+          layout="fill"
+          objectFit="contain"
+          className="blur-sm"
+          unoptimized
+        />
+        <Image
+          unoptimized
           src={image.url}
           width={image.width}
           height={image.height}
@@ -52,13 +59,15 @@ const ImageGallery = ({ images }: ImageGalleryProps) => {
             src={image.fallbackUrl}
             layout="fill"
             objectFit="contain"
+            unoptimized
             className={clsx(
-              'transition-all duration-300 absolute',
+              'transition-all duration-300 absolute blur-sm',
               index < currentImageIndex && '-translate-x-full opacity-0',
               index > currentImageIndex && 'translate-x-full opacity-0'
             )}
           />
           <Image
+            unoptimized
             src={image.url}
             layout="fill"
             objectFit="contain"

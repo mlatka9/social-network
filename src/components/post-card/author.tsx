@@ -18,7 +18,7 @@ const Author = ({
   authorName,
   postCreatedAt,
 }: AuthorProps) => (
-  <div className="flex overflow-hidden">
+  <div className="flex">
     <UserProfilePicture imageUrl={authorImage} userID={authorId} />
     <div className={clsx(['ml-4'])}>
       <Link href={`/user/${authorId}`}>

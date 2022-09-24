@@ -2,12 +2,11 @@ import { useSession } from 'next-auth/react';
 import clsx from 'clsx';
 import { PostDetailsType } from '@/types/db';
 import PostTagPicker from '@/components/post-input/post-tags-picker';
+import Image from 'next/image';
 import PostFileInput from './post-file-input';
-import UserProfilePicture from '../common/user-profile-image';
 import EmojiPicker from '../common/emoji-picker';
 import Button from '../common/button';
 import PostMentionsPicker from './post-mentions-picker';
-
 import 'react-toastify/dist/ReactToastify.css';
 import PostLinkInput from './post-link-input';
 import usePostInput from './use-post-input';
@@ -49,7 +48,17 @@ const PostInput = ({
   return (
     <form onSubmit={handleFormSubmit}>
       <div className="flex">
-        <UserProfilePicture imageUrl={me.image} userID={me.id} />
+        <div className="w-10 h-10">
+          <Image
+            src={me.image || '/images/avatar-fallback.svg'}
+            width="40"
+            height="40"
+            layout="fixed"
+            alt=""
+            className="rounded-lg"
+            objectFit="cover"
+          />
+        </div>
         <div
           {...getRootProps()}
           className={clsx(

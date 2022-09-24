@@ -7,14 +7,9 @@ import { SharedPostType } from '@/types/db';
 interface PostThumbnailProps {
   sharedPost: SharedPostType;
   disableLink?: boolean;
-  isSmall?: boolean;
 }
 
-const PostThumbnail = ({
-  sharedPost,
-  disableLink,
-  isSmall,
-}: PostThumbnailProps) => {
+const PostThumbnail = ({ sharedPost, disableLink }: PostThumbnailProps) => {
   const goToSharedPost = () => {
     if (disableLink) return;
     router.push(`/post/${sharedPost.id}`);
@@ -28,7 +23,7 @@ const PostThumbnail = ({
     );
   }
 
-  const firstImage = sharedPost.images[0]?.url;
+  const firstImage = sharedPost.images[0];
 
   return (
     <div
@@ -64,13 +59,20 @@ const PostThumbnail = ({
       <p className="mx-2 mb-2">{sharedPost.content}</p>
 
       {firstImage && (
-        <div className={clsx(['w-full h-96 relative  ', isSmall && '!h-'])}>
+        <div className={clsx('w-full h-96 relative rounded-md')}>
           <Image
-            src={firstImage}
+            src={firstImage.fallbackUrl}
             alt=""
             layout="fill"
             objectFit="cover"
-            className="rounded-lg"
+            className="absolute blur-sm rounded-md"
+          />
+          <Image
+            src={firstImage.url}
+            alt=""
+            layout="fill"
+            objectFit="cover"
+            className="rounded-md"
           />
         </div>
       )}

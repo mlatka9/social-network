@@ -37,7 +37,7 @@ const CategoriesList = () => {
         ) : (
           <>
             <div className="hidden lg:block w-full">
-              <Loading height={500} />
+              <Loading height={600} />
             </div>
             <div className="lg:hidden  w-full">
               <Loading height={76} />

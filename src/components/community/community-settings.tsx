@@ -137,7 +137,7 @@ const CommunitySettings = ({
             register={register}
             rules={{
               maxLength: {
-                message: 'Bio can be up to 300 characters long',
+                message: 'Description can be up to 300 characters long',
                 value: 300,
               },
             }}

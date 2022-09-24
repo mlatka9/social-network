@@ -25,12 +25,14 @@ const groupCommentsByParentId = (
 interface CommentsListProps {
   comments: CommentDetailsType[];
   parentId?: string | null;
+  parentUserName: string | null;
   depth?: number;
 }
 
 const CommentsList = ({
   comments,
   parentId = null,
+  parentUserName = null,
   depth = 0,
 }: CommentsListProps) => {
   const commentsByParentId = groupCommentsByParentId(comments);
@@ -43,15 +45,17 @@ const CommentsList = ({
       className={clsx([
         'w-full ',
         depth !== 0 &&
-          'pl-10 border-l-2 border-l-neutral-300 dark:border-l-primary-dark-300',
+          'pl-5 md:pl-10 border-l-2 border-l-neutral-300 dark:border-l-primary-dark-300',
+        depth > 3 && '!pl-0 border-l-0',
       ])}
     >
       {commentsWithCurrentDepth.map((comment) => (
         <div key={comment.id}>
-          <CommentItem comment={comment} />
+          <CommentItem comment={comment} parentUserName={parentUserName} />
           <CommentsList
             comments={comments}
             parentId={comment.id}
+            parentUserName={comment.user.name}
             depth={depth + 1}
           />
         </div>

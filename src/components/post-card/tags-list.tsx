@@ -13,7 +13,7 @@ const TagsList = ({ tags }: TagsListProps) => (
       <Link key={tag.name} href={`/tag/${tag.name}`}>
         <a onClick={(e) => e.stopPropagation()}>
           <div
-            className="bg-orange-600 text-white rounded-md p-1  flex items-center cursor-pointer"
+            className="bg-orange-600 text-white rounded-md p-1  flex items-center cursor-pointer hover:opacity-80 transition-opacity"
             style={{ backgroundColor: tag.color }}
           >
             <span className="text-sm">#{tag.name}</span>

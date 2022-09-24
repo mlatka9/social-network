@@ -167,6 +167,7 @@ const usePostInput = ({
     isSubmitButtonEnabled,
     errors,
     content,
+    isUploading,
   };
 };
 

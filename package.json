@@ -40,6 +40,7 @@
     "react-dropzone": "^14.2.2",
     "react-hook-form": "^7.34.0",
     "react-intersection-observer": "^9.4.0",
+    "react-masonry-css": "^1.0.16",
     "react-query": "^3.39.2",
     "react-time-ago": "^7.2.1",
     "react-toastify": "^9.0.8",

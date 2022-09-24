@@ -65,7 +65,7 @@ const CommunityProfileHero = ({ community }: CommunityProfileHeroProps) => {
           />
         </div>
 
-        <div className="md:ml-4 w-full">
+        <div className="md:ml-4 w-full overflow-hidden">
           <div className="grid md:grid-cols-[auto_1fr] w-full">
             <div className="flex flex-col items-center md:items-start overflow-hidden mr-5">
               <Link href={`/community?category=${community.categoryId}`}>

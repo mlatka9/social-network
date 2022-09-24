@@ -34,7 +34,7 @@ const CommentFooter = ({
   };
 
   return (
-    <div className="flex ml-14 mr-3">
+    <div className="flex ml-3 md:ml-14 mr-3">
       <button
         type="button"
         className={clsx([

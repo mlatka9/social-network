@@ -160,11 +160,13 @@ const communityRouter = createProtectedRouter()
     input: z.object({
       name: z.string(),
       categoryId: z.string(),
+      description: z.string()
     }),
     async resolve({ ctx, input }) {
       return prisma.community.create({
         data: {
           name: input.name,
+          description:input.description,
           category: {
             connect: {
               id: input.categoryId,

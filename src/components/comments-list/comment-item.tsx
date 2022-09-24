@@ -8,9 +8,10 @@ import DeletedCommenFallback from './deleted-comment-fallback';
 
 export interface CommentitemProps {
   comment: CommentDetailsType;
+  parentUserName: string | null;
 }
 
-const CommentItem = ({ comment }: CommentitemProps) => {
+const CommentItem = ({ comment, parentUserName }: CommentitemProps) => {
   const {
     onChangeDraftContent,
     handleAddCommentReply,
@@ -29,7 +30,7 @@ const CommentItem = ({ comment }: CommentitemProps) => {
   return (
     <>
       <div
-        className="bg-white gap-x-3 p-2 rounded-lg shadow-sm mb-3 dark:bg-primary-dark-200"
+        className="bg-blue-50/50 gap-x-3 p-2 rounded-lg mb-3 dark:bg-primary-dark-100"
         id={`comment-${comment.id}`}
       >
         <Author
@@ -44,6 +45,7 @@ const CommentItem = ({ comment }: CommentitemProps) => {
           handleUpdateComment={handleUpdateComment}
           isEditing={isEditing}
           onChangeDraftContent={onChangeDraftContent}
+          parentUserName={parentUserName}
         />
         <CommentFooter
           comment={comment}

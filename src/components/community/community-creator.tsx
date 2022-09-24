@@ -5,10 +5,12 @@ import FormInput from '@/components/common/form-input';
 import { toast } from 'react-toastify';
 import Button from '../common/button';
 import FormSelect from '../common/form-select';
+import FormTextarea from '../common/form-textarea';
 
 interface FormInputType {
   name: string;
   category: string;
+  description: string;
 }
 
 interface CommunityCreatorProps {
@@ -34,11 +36,16 @@ const CommunityCreator = ({ handleCloseCreator }: CommunityCreatorProps) => {
     defaultValues: {
       name: '',
       category: '',
+      description: '',
     },
   });
 
   const onSubmit = (data: FormInputType) => {
-    addCommunity({ name: data.name, categoryId: data.category });
+    addCommunity({
+      name: data.name,
+      categoryId: data.category,
+      description: data.description,
+    });
   };
 
   if (!isSuccess) return <>Loading</>;
@@ -67,6 +74,18 @@ const CommunityCreator = ({ handleCloseCreator }: CommunityCreatorProps) => {
           },
         }}
         register={register}
+      />
+      <FormTextarea
+        label="description"
+        name="description"
+        error={errors.description}
+        register={register}
+        rules={{
+          maxLength: {
+            message: 'Description can be up to 300 characters long',
+            value: 300,
+          },
+        }}
       />
       <FormSelect
         label="category"

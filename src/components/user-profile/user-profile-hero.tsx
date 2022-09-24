@@ -53,7 +53,7 @@ const UserProfileHero = ({ userDetails }: UserProfileHeroProps) => {
           />
         </div>
 
-        <div className="md:ml-4 md:w-full">
+        <div className="md:ml-4 md:w-full overflow-hidden">
           <div className="grid md:grid-cols-[auto_1fr] w-full">
             <div className="flex flex-col items-center md:items-start overflow-hidden mr-5">
               <h1 className="font-poppins font-semibold text-2xl  text-center md:text-left">
@@ -91,7 +91,7 @@ const UserProfileHero = ({ userDetails }: UserProfileHeroProps) => {
             </div>
           </div>
           {userDetails.bio && (
-            <p className="text-center md:text-left font-medium text-neutral-600 dark:text-primary-dark-700 mt-6 max-w-sm">
+            <p className="text-center md:text-left font-medium text-neutral-600 dark:text-primary-dark-700 mt-6">
               {userDetails.bio}
             </p>
           )}

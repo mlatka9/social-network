@@ -63,44 +63,46 @@ const PostDetails = ({ postId }: PostDetailsProps) => {
   return (
     <>
       {isPostSuccess ? (
-        <div className="mb-20">
-          <div className="lg:flex space-y-2 lg:space-y-0 lg:space-x-5 items-baseline ml-14">
-            {post.communityId && post.communityName && (
-              <CommunityBadge
-                communityId={post.communityId}
-                communityName={post.communityName}
+        <>
+          <div className="mb-20">
+            <div className="lg:flex space-y-2 lg:space-y-0 lg:space-x-5 items-baseline ml-14">
+              {post.communityId && post.communityName && (
+                <CommunityBadge
+                  communityId={post.communityId}
+                  communityName={post.communityName}
+                />
+              )}
+              {!!post.sharedBy.length && <RepostBadge users={post.sharedBy} />}
+            </div>
+            <div className=" w-full mb-5  rounded-lg mt-2">
+              <Author
+                authorId={post.user.id}
+                authorImage={post.user.image}
+                authorName={post.user.name}
+                postCreatedAt={post.createdAt}
               />
-            )}
-            {!!post.sharedBy.length && <RepostBadge users={post.sharedBy} />}
+              <TagsList tags={post.tags} />
+              <p className="mb-3 overflow-hidden">{post.content}</p>
+              {post.link && <PostCardLink link={post.link} />}
+              {!!post.images.length && <ImageGallery images={post.images} />}
+              {post.shareParent && (
+                <>
+                  <div className="mt-3 h-1" />
+                  <PostThumbnail sharedPost={post.shareParent} />
+                </>
+              )}
+              <MentionsList mentions={post.mentions} />
+              <PostCardFooter post={post} />
+            </div>
           </div>
-          <div className=" w-full mb-5  rounded-lg mt-2">
-            <Author
-              authorId={post.user.id}
-              authorImage={post.user.image}
-              authorName={post.user.name}
-              postCreatedAt={post.createdAt}
-            />
-            <TagsList tags={post.tags} />
-            <p className="mb-3 overflow-hidden">{post.content}</p>
-            {post.link && <PostCardLink link={post.link} />}
-            {!!post.images.length && <ImageGallery images={post.images} />}
-            {post.shareParent && (
-              <>
-                <div className="mt-3 h-1" />
-                <PostThumbnail sharedPost={post.shareParent} />
-              </>
-            )}
-            <MentionsList mentions={post.mentions} />
-            <PostCardFooter post={post} />
-          </div>
-        </div>
+          <CommentInput onMessageSubmit={handleAddComment} />
+        </>
       ) : (
         <Loading height={600} />
       )}
 
       {isCommentsSuccess ? (
         <>
-          <CommentInput onMessageSubmit={handleAddComment} />
           <CommentsList comments={comments} />
         </>
       ) : (

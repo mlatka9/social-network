@@ -16,7 +16,7 @@ const exploreRouter = createProtectedRouter()
       })
       .optional(),
     async resolve({ ctx, input }) {
-      const limit = input?.limit || 6;
+      const limit = input?.limit || 10;
       const myFollowing = await prisma.user.findMany({
         where: {
           followedBy: {
@@ -96,7 +96,7 @@ const exploreRouter = createProtectedRouter()
       })
       .optional(),
     async resolve({ ctx, input }) {
-      const limit = input?.limit || 6;
+      const limit = input?.limit || 10;
       const userCommunities = await prisma.community.findMany({
         where: {
           members: {
