@@ -9,9 +9,10 @@ import JoinCommunityButton from './join-community-button';
 import CommunitySettingsButton from './community-settings-button';
 import CommunitySettings from './community-settings';
 import CommunityFavouriteIcon from './community-favourite-icon';
+import Loading from '../common/loading';
 
 interface CommunityProfileHeroProps {
-  community: CommunityDetailsType;
+  community: CommunityDetailsType | undefined;
 }
 
 const CommunityProfileHero = ({ community }: CommunityProfileHeroProps) => {
@@ -41,6 +42,14 @@ const CommunityProfileHero = ({ community }: CommunityProfileHeroProps) => {
       query: { ...restParams, section: 'members' },
     };
   };
+
+  if (!community) {
+    return (
+      <div className="mb-10 dark:bg-primary-dark-200 bg-primary-0">
+        <Loading height={440} />
+      </div>
+    );
+  }
 
   return (
     <>

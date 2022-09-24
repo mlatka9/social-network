@@ -1,5 +1,3 @@
-import { useRouter } from 'next/router';
-import { useUserPostsQuery, useUserQuery } from 'src/hooks/query';
 import { unstable_getServerSession } from 'next-auth/next';
 import { authOptions } from 'src/pages/api/auth/[...nextauth]';
 import type { GetServerSidePropsContext } from 'next';
@@ -11,38 +9,22 @@ import Layout from '@/components/layouts/main-layout';
 import UserProfileHero from '@/components/user-profile/user-profile-hero';
 import ErrorFallback from '@/components/common/error-fallback';
 import Filters from '@/components/user-profile/profile-filters';
-import { FilterData } from '@/components/user-profile/types';
+
 import Head from 'next/head';
+import useUser from '@/components/user/use-user';
 
 const User = () => {
-  const router = useRouter();
-
-  const userId = router.query.userId as string;
-  const section = router.query?.section as string | undefined;
-  const filter = router.query?.filter as string | undefined;
-
-  const { data: userDetails, isError: isUserError } = useUserQuery(userId);
-  const { data, fetchNextPage, hasNextPage } = useUserPostsQuery(
+  const {
+    closeModal,
+    fetchNextPage,
+    filters,
+    hasNextPage,
+    isUserError,
+    postData,
+    section,
+    userDetails,
     userId,
-    filter
-  );
-
-  const closeModal = () => {
-    // eslint-disable-next-line @typescript-eslint/no-shadow
-    const { section, userId, ...restParams } = router.query;
-
-    router.replace(
-      {
-        pathname: `/user/${userId}`,
-        query: { ...restParams },
-      },
-      undefined,
-      {
-        shallow: true,
-        scroll: false,
-      }
-    );
-  };
+  } = useUser();
 
   if (isUserError) {
     return (
@@ -58,24 +40,6 @@ const User = () => {
     );
   }
 
-  const filters: FilterData[] = [
-    {
-      id: '1',
-      filterName: undefined,
-      displayName: 'posts & shares',
-    },
-    {
-      id: '2',
-      filterName: 'images',
-      displayName: 'images',
-    },
-    {
-      id: '3',
-      filterName: 'likes',
-      displayName: 'likes',
-    },
-  ];
-
   return (
     <>
       <Head>
@@ -86,7 +50,7 @@ const User = () => {
         <UserProfileHero userDetails={userDetails} />
         <Filters filters={filters} />
         <PostList
-          data={data}
+          data={postData}
           fetchNextPage={fetchNextPage}
           hasNextPage={hasNextPage}
         />
@@ -95,7 +59,6 @@ const User = () => {
             <UserFollows section={section} userId={userId} />
           </ModalWrapper>
         )}
-
         {section === 'settings' && (
           <ModalWrapper title="Settings" handleCloseModal={closeModal}>
             <ProfileSettings handleCloseModal={closeModal} />

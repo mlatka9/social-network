@@ -73,7 +73,7 @@ const DropdownMenu = ({
               <ExclamationIcon />
               <span className="ml-2">Notifications</span>
               {!!notificationCount && (
-                <div className="w-5 h-5 flex items-center justify-center text-sm text-white bg-red-500 absolute rounded-full right-1 top-1/2 -translate-y-1/2">
+                <div className="w-[22px] h-[22px] flex items-center justify-center text-sm text-white bg-red-500 absolute rounded-full right-1 top-1/2 -translate-y-1/2">
                   {notificationCount}
                 </div>
               )}

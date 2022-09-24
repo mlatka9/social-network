@@ -1,21 +1,15 @@
 import { unstable_getServerSession } from 'next-auth';
 import { GetServerSidePropsContext } from 'next/types';
-
 import SuggestedUsersList from '@/components/explore/suggested-users-list';
 import SuggestedCommunitiesList from '@/components/explore/suggested-communities-list';
-import {
-  useSuggestedCommunitiesQuery,
-  useSuggestedUsersQuery,
-} from '@/hooks/query';
 import FallbackCard from '@/components/common/fallback-card';
 import ExploreLayout from '@/components/layouts/explore-layout';
 import Head from 'next/head';
+import useExplore from '@/components/explore/use-explore';
 import { authOptions } from '../api/auth/[...nextauth]';
 
 const ExplorePage = () => {
-  const { data: users, isSuccess: isUsersSuccess } = useSuggestedUsersQuery();
-  const { data: communities, isSuccess: isCommunitiesSuccess } =
-    useSuggestedCommunitiesQuery();
+  const { isNotExploreData } = useExplore();
 
   return (
     <>
@@ -30,10 +24,7 @@ const ExplorePage = () => {
           </p>
         </h1>
 
-        {isUsersSuccess &&
-        isCommunitiesSuccess &&
-        !users.length &&
-        !communities.length ? (
+        {isNotExploreData ? (
           <FallbackCard>
             Our community still grow. We&apos;ll have something for you soon 😉
           </FallbackCard>

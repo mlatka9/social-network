@@ -75,7 +75,7 @@ const CommunityCard = ({
     </div>
 
     {description && (
-      <p className="text-sm text-neutral-600 dark:text-primary-dark-600">
+      <p className="text-sm text-neutral-600 dark:text-primary-dark-600 overflow-hidden">
         {description}
       </p>
     )}

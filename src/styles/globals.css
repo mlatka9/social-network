@@ -27,11 +27,11 @@ body {
 }
 
 *::-webkit-scrollbar-track {
-  @apply bg-white dark:bg-slate-600;
+  @apply bg-white dark:bg-primary-dark-200;
 }
 
 *::-webkit-scrollbar-thumb {
-  @apply bg-slate-300 dark:bg-gray-800 border-2 border-white dark:border-slate-600 border-solid  rounded-xl;
+  @apply bg-slate-300 dark:bg-primary-dark-300 border-2 border-white dark:border-primary-dark-200 border-solid  rounded-xl;
 }
 
 @layer {

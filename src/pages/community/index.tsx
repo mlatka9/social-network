@@ -3,13 +3,12 @@ import { unstable_getServerSession } from 'next-auth';
 import { useState } from 'react';
 import CommunityLayout from '@/components/layouts/community-layout';
 import CommunityFilter from '@/components/community/community-filter';
-import Button from '@/components/common/button';
-import CategoryList from '@/components/community/categories-list';
 import ModalWrapper from '@/components/common/modal-wrapper';
 import CommunityCreator from '@/components/community/community-creator';
-import BackButton from '@/components/common/back-button';
 import CommunityList from '@/components/community/community-list';
 import Head from 'next/head';
+import DestopCategoryPanel from '@/components/community/desktop-category-panel';
+import MobileCategoryPanel from '@/components/community/mobile-category-panel';
 import { authOptions } from '../api/auth/[...nextauth]';
 
 const CommunitiesPage = () => {
@@ -29,33 +28,13 @@ const CommunitiesPage = () => {
         <title>Communities</title>
         <meta property="og:title" content="Communities" />
       </Head>
-
       <CommunityLayout>
-        <div className="hidden lg:block h-fit sticky top-[92px] space-y-5">
-          <BackButton />
-          <div className="overflow-y-scroll h-[600px] rounded-xl">
-            <CategoryList />
-          </div>
-          <Button className="w-full" onClick={handleOpenCreator}>
-            Create community
-          </Button>
-        </div>
-
+        <DestopCategoryPanel handleOpenCreator={handleOpenCreator} />
         <div className="mx-auto lg:mx-0 w-full">
-          <div className="lg:hidden ">
-            <Button
-              className="fixed bottom-2 right-2 rounded-full w-min text-sm shadow-lg"
-              onClick={handleOpenCreator}
-            >
-              Create community
-            </Button>
-            <CategoryList />
-            <div className="mb-2" />
-          </div>
+          <MobileCategoryPanel handleOpenCreator={handleOpenCreator} />
           <CommunityFilter />
           <CommunityList />
         </div>
-
         {isCommunityCreatorOpen && (
           <ModalWrapper
             handleCloseModal={handleCloseCreator}

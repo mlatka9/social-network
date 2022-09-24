@@ -5,29 +5,11 @@ import Head from 'next/head';
 import { authOptions } from 'src/pages/api/auth/[...nextauth]';
 import NotificationsList from '@/components/notifications/notifications-list';
 import Button from '@/components/common/button';
-import { useMarkAllNotificationAsRead } from '@/hooks/mutation';
 import Filters from '@/components/user-profile/profile-filters';
-import { FilterData } from '@/components/user-profile/types';
+import useNotifications from '@/components/notifications/use-notifications';
 
 const Notifications = () => {
-  const markAsRead = useMarkAllNotificationAsRead();
-
-  const onClick = () => {
-    markAsRead();
-  };
-
-  const filterData: FilterData[] = [
-    {
-      id: '1',
-      displayName: 'all',
-      filterName: undefined,
-    },
-    {
-      id: '2',
-      displayName: 'unread',
-      filterName: 'unread',
-    },
-  ];
+  const { filterData, handleMarkAsRead } = useNotifications();
 
   return (
     <>
@@ -45,7 +27,7 @@ const Notifications = () => {
           </p>
         </h1>
         <div className="flex flex-col">
-          <Button isSmall className="ml-auto mb-5" onClick={onClick}>
+          <Button isSmall className="ml-auto mb-5" onClick={handleMarkAsRead}>
             mark all as read
           </Button>
           <Filters filters={filterData} />

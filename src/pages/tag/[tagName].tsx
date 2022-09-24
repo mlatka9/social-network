@@ -1,17 +1,15 @@
 import type { GetServerSidePropsContext } from 'next';
 import { unstable_getServerSession } from 'next-auth/next';
-import { useRouter } from 'next/router';
+
 import Head from 'next/head';
 import { authOptions } from 'src/pages/api/auth/[...nextauth]';
-import { usePostsWithTagQuery } from 'src/hooks/query';
+
 import Layout from '@/components/layouts/main-layout';
 import PostList from '@/components/post/post-list';
+import useTag from '@/components/tags/use-tags';
 
 const TagPage = () => {
-  const { query } = useRouter();
-
-  const tagName = query.tagName as string;
-  const { data, fetchNextPage, hasNextPage } = usePostsWithTagQuery(tagName);
+  const { data, fetchNextPage, hasNextPage, tagName } = useTag();
 
   return (
     <>

@@ -1,15 +1,13 @@
 import type { GetServerSidePropsContext } from 'next';
 import Head from 'next/head';
 import { unstable_getServerSession } from 'next-auth/next';
-import { useRouter } from 'next/router';
 import { authOptions } from 'src/pages/api/auth/[...nextauth]';
 import Layout from '@/components/layouts/main-layout';
 import PostDetails from '@/components/post/post-details';
+import usePost from '@/components/post/use-post';
 
 const PostPage = () => {
-  const { query } = useRouter();
-
-  const postId = query.postId as string;
+  const { postId } = usePost();
 
   return (
     <>

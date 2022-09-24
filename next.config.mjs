@@ -18,6 +18,11 @@ const withBundleAnalyzer = asd({
 });
 
 export default defineNextConfig({
+  // experimental: {
+  //   images: {
+  //     unoptimized: true,
+  //   }
+  // },
   reactStrictMode: true,
   swcMinify: true,
   images: {
