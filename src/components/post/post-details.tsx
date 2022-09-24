@@ -102,9 +102,7 @@ const PostDetails = ({ postId }: PostDetailsProps) => {
       )}
 
       {isCommentsSuccess ? (
-        <>
-          <CommentsList comments={comments} />
-        </>
+        <CommentsList comments={comments} />
       ) : (
         <Loading height={200} />
       )}

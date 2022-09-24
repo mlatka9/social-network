@@ -68,7 +68,7 @@ const PostSharingModal = ({
       )}
       {sharedPost && (
         <div className="mt-5 ">
-          <PostThumbnail sharedPost={sharedPost} isSmall disableLink />
+          <PostThumbnail sharedPost={sharedPost} disableLink />
         </div>
       )}
     </ModalWrapper>

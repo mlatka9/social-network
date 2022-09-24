@@ -25,7 +25,7 @@ const groupCommentsByParentId = (
 interface CommentsListProps {
   comments: CommentDetailsType[];
   parentId?: string | null;
-  parentUserName: string | null;
+  parentUserName?: string | null;
   depth?: number;
 }
 
