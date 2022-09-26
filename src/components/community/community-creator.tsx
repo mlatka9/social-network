@@ -6,6 +6,7 @@ import { toast } from 'react-toastify';
 import Button from '../common/button';
 import FormSelect from '../common/form-select';
 import FormTextarea from '../common/form-textarea';
+import LetterCounter from '../common/letter-counter';
 
 interface FormInputType {
   name: string;
@@ -75,18 +76,24 @@ const CommunityCreator = ({ handleCloseCreator }: CommunityCreatorProps) => {
         }}
         register={register}
       />
-      <FormTextarea
-        label="description"
-        name="description"
-        error={errors.description}
-        register={register}
-        rules={{
-          maxLength: {
-            message: 'Description can be up to 300 characters long',
-            value: 300,
-          },
-        }}
-      />
+      <div className="relative">
+        <FormTextarea
+          label="description"
+          name="description"
+          error={errors.description}
+          register={register}
+          rules={{
+            maxLength: {
+              message: 'Description can be up to 300 characters long',
+              value: 300,
+            },
+          }}
+        />
+        <LetterCounter
+          currentLength={watch('description').length}
+          maxLength={300}
+        />
+      </div>
       <FormSelect
         label="category"
         error={errors.category}

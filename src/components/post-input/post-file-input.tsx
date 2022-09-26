@@ -12,12 +12,14 @@ interface PostFileInputProps {
   control: Control<PostInputFormType>;
   setValue: UseFormSetValue<PostInputFormType>;
   openFilePicker: () => void;
+  disabled: boolean;
 }
 
 const PostFileInput = ({
   control,
   setValue,
   openFilePicker,
+  disabled,
 }: PostFileInputProps) => {
   const selectedImages = useWatch({
     control,
@@ -37,6 +39,7 @@ const PostFileInput = ({
         className="cursor-pointer self-start h-5 w-5 mr-auto mb-2"
         onClick={openFilePicker}
         type="button"
+        disabled={disabled}
       >
         <PhotoIcon />
       </button>

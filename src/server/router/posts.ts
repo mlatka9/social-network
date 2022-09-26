@@ -302,7 +302,9 @@ const postRouter = createProtectedRouter()
           })),
         });
 
-        const mentions = input.mentions.map((m) =>
+        const filteredMentions = input.mentions.filter(mention=>mention !== ctx.session.user.id)
+
+        const mentions = filteredMentions.map((m) =>
           prisma.notification
             .create({
               data: {

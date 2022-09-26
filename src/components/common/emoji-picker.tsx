@@ -11,9 +11,10 @@ import EmojiIcon from './icons/emoji';
 interface EmojiPickerProps {
   setValue: UseFormSetValue<PostInputFormType>;
   control: Control<PostInputFormType>;
+  disabled: boolean;
 }
 
-const EmojiPicker = ({ setValue, control }: EmojiPickerProps) => {
+const EmojiPicker = ({ setValue, control, disabled }: EmojiPickerProps) => {
   const { resolvedTheme } = useTheme();
   const [isPickerOpen, setIsPickerOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -35,6 +36,7 @@ const EmojiPicker = ({ setValue, control }: EmojiPickerProps) => {
   return (
     <div className="relative inline-block mr-2" ref={ref}>
       <button
+        disabled={disabled}
         className="cursor-pointer self-start h-5 w-5 mr-auto mb-2"
         onClick={toggleIsPickerOpen}
         type="button"

@@ -28,7 +28,7 @@ const FormTextarea = <TFormValues extends FieldValues>({
     <div className="relative pt-2 bg-primary-100 rounded-lg dark:bg-primary-dark-200">
       <textarea
         id={label}
-        className="min-h-[100px] max-h-[150px] bg-transparent block px-2 pb-2.5 w-full text-sm text-gray-900  border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600  focus:outline-none focus:ring-0 peer"
+        className="min-h-[110px] max-h-[150px] bg-transparent block px-2 pb-2.5 w-full text-sm text-gray-900  border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600  focus:outline-none focus:ring-0 peer"
         placeholder=" "
         {...(register && register(name, rules))}
         {...props}

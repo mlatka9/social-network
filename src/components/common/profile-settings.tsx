@@ -9,6 +9,7 @@ import FormTextarea from './form-textarea';
 import FormImages from './form-images';
 import Button from './button';
 import Loading from './loading';
+import LetterCounter from './letter-counter';
 
 export interface ProfileSettingsFormType {
   name: string;
@@ -57,6 +58,8 @@ const ProfileSettings = ({ handleCloseModal }: ProfileSettingsProps) => {
 
   const draftImageFile = watch('images')[0];
   const draftBannerImageFile = watch('bannerImages')[0];
+
+  const bioLength = watch('bio').length;
 
   const onSubmit = async (data: ProfileSettingsFormType) => {
     const { name, bio, bannerImages, images } = data;
@@ -129,19 +132,21 @@ const ProfileSettings = ({ handleCloseModal }: ProfileSettingsProps) => {
             }}
             register={register}
           />
-
-          <FormTextarea
-            label="bio"
-            name="bio"
-            error={errors.bio}
-            register={register}
-            rules={{
-              maxLength: {
-                message: 'Bio can be up to 300 characters long',
-                value: 300,
-              },
-            }}
-          />
+          <div className="relative">
+            <FormTextarea
+              label="bio"
+              name="bio"
+              error={errors.bio}
+              register={register}
+              rules={{
+                maxLength: {
+                  message: 'Bio can be up to 300 characters long',
+                  value: 300,
+                },
+              }}
+            />
+            <LetterCounter currentLength={bioLength} maxLength={300} />
+          </div>
         </div>
         <input type="file" {...register('images')} className="hidden" />
         <input type="file" {...register('bannerImages')} className="hidden" />

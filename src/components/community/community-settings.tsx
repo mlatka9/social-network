@@ -10,6 +10,7 @@ import FormTextarea from '../common/form-textarea';
 import FormInput from '../common/form-input';
 import Button from '../common/button';
 import FormSelect from '../common/form-select';
+import LetterCounter from '../common/letter-counter';
 
 export interface CommunitySettingsFormType {
   name: string;
@@ -129,20 +130,24 @@ const CommunitySettings = ({
             }}
             register={register}
           />
-
-          <FormTextarea
-            label="description"
-            name="description"
-            error={errors.description}
-            register={register}
-            rules={{
-              maxLength: {
-                message: 'Description can be up to 300 characters long',
-                value: 300,
-              },
-            }}
-          />
-
+          <div className="relative">
+            <FormTextarea
+              label="description"
+              name="description"
+              error={errors.description}
+              register={register}
+              rules={{
+                maxLength: {
+                  message: 'Description can be up to 300 characters long',
+                  value: 300,
+                },
+              }}
+            />
+            <LetterCounter
+              currentLength={watch('description').length}
+              maxLength={300}
+            />
+          </div>
           <FormSelect
             label="category"
             error={errors.category}

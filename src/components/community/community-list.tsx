@@ -19,6 +19,14 @@ const CommunityList = () => {
     filter
   );
 
+  const getFallBackMessage = () => {
+    if (filter === 'owned') return 'You can join some community 🤔';
+    if (filter === 'favourite')
+      return 'Your favourite communities will be there 😊';
+    if (filter === 'favourite') return 'You can join any community you like 😊';
+    return 'You can create first community 😊';
+  };
+
   useEffect(() => {
     if (inView && hasNextPage) {
       fetchNextPage();
@@ -72,7 +80,7 @@ const CommunityList = () => {
           </Fragment>
         ))}
         {!category && isSuccess && !data?.pages[0]?.posts.length && (
-          <FallbackCard>You can create first community 😊</FallbackCard>
+          <FallbackCard>{getFallBackMessage()}</FallbackCard>
         )}
         <div ref={ref} className="w-full h-10 " />
       </div>

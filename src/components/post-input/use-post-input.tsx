@@ -81,6 +81,7 @@ const usePostInput = ({
         Array(selectedImages.length + files.length).fill(0)
       );
     },
+    disabled: isUploading,
     validator: (file: File) => {
       if (getValues('images').some((image) => image.name === file.name)) {
         return {
@@ -155,6 +156,7 @@ const usePostInput = ({
     !isUploading && contentLength > 0 && contentLength <= 280;
 
   return {
+    isUploading,
     control,
     setValue,
     handleFormSubmit,
@@ -167,7 +169,6 @@ const usePostInput = ({
     isSubmitButtonEnabled,
     errors,
     content,
-    isUploading,
   };
 };
 

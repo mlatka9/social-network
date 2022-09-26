@@ -1,14 +1,15 @@
-import clsx from 'clsx';
 import { useEffect, useRef } from 'react';
 import { UseFormRegister } from 'react-hook-form';
+import LetterCounter from '../common/letter-counter';
 import { PostInputFormType } from './types';
 
 interface PostContentProps {
   register: UseFormRegister<PostInputFormType>;
   content: string;
+  disabled: boolean;
 }
 
-const PostContent = ({ register, content }: PostContentProps) => {
+const PostContent = ({ register, content, disabled }: PostContentProps) => {
   const contentLength = content.trim().length;
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
@@ -29,16 +30,10 @@ const PostContent = ({ register, content }: PostContentProps) => {
           ref(e);
           textareaRef.current = e;
         }}
+        disabled={disabled}
         className="pb-5 bg-primary-100  rounded-lg w-full placeholder:text-sm pl-2 min-h-[120px] max-h-[300px] block mb-3 dark:bg-primary-dark-300"
       />
-      <div
-        className={clsx(
-          'absolute right-3 bottom-1 font-medium text-xs text-gray-400 dark:text-primary-dark-600',
-          contentLength > 280 && '!text-red-500'
-        )}
-      >
-        {contentLength} / 280
-      </div>
+      <LetterCounter currentLength={contentLength} maxLength={280} />
     </div>
   );
 };

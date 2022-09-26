@@ -4,11 +4,13 @@ import { SearchUserType } from '@/types/db';
 interface SelectedTagsListProps {
   mentions: SearchUserType[];
   handleRemoveMention: (mentionId: string) => void;
+  disabled: boolean;
 }
 
 const SelectedMentionsList = ({
   mentions,
   handleRemoveMention,
+  disabled,
 }: SelectedTagsListProps) => (
   <div className="w-fit flex shrink-0">
     {mentions.map((mention) => (
@@ -17,13 +19,15 @@ const SelectedMentionsList = ({
         key={mention.id}
       >
         <span>@{mention.name}</span>
-        <button
-          type="button"
-          onClick={() => handleRemoveMention(mention.id)}
-          className="ml-1 justify-center flex items-center shrink-0 w-4 h-4"
-        >
-          <Image src="/icons/close.png" height="16" width="16" alt="" />
-        </button>
+        {!disabled && (
+          <button
+            type="button"
+            onClick={() => handleRemoveMention(mention.id)}
+            className="ml-1 justify-center flex items-center shrink-0 w-4 h-4"
+          >
+            <Image src="/icons/close.png" height="16" width="16" alt="" />
+          </button>
+        )}
       </div>
     ))}
   </div>

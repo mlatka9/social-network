@@ -11,8 +11,11 @@ const CommentInput = ({ onMessageSubmit }: CommentInputProps) => {
   const { data } = useSession();
   const [commentMessageValue, setCommentMessageValue] = useState('');
 
+  const submitDisabled = !commentMessageValue.length;
+
   const handleOnSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (submitDisabled) return;
     onMessageSubmit(commentMessageValue);
     setCommentMessageValue('');
   };
@@ -42,7 +45,12 @@ const CommentInput = ({ onMessageSubmit }: CommentInputProps) => {
         value={commentMessageValue}
         onChange={({ target }) => setCommentMessageValue(target.value)}
       />
-      <Button type="submit" className="self-center absolute right-1" isSmall>
+      <Button
+        type="submit"
+        className="self-center absolute right-1"
+        isSmall
+        disabled={submitDisabled}
+      >
         Submit
       </Button>
     </form>

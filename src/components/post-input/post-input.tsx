@@ -39,6 +39,7 @@ const PostInput = ({
     errors,
     content,
     getInputProps,
+    isUploading,
   } = usePostInput({
     sharedPostId: sharedPost?.id,
     submitCallback,
@@ -66,21 +67,40 @@ const PostInput = ({
             isImageDragged && 'outline-blue-500 outline-dashed'
           )}
         >
-          <PostContent content={content} register={register} />
-          <PostTagPicker control={control} setValue={setValue} />
-          <PostMentionsPicker control={control} setValue={setValue} />
+          <PostContent
+            content={content}
+            register={register}
+            disabled={isUploading}
+          />
+          <PostTagPicker
+            control={control}
+            setValue={setValue}
+            disabled={isUploading}
+          />
+          <PostMentionsPicker
+            control={control}
+            setValue={setValue}
+            disabled={isUploading}
+          />
           <PostLinkInput
             control={control}
             isLinkError={!!errors.link}
             register={register}
+            disabled={isUploading}
           />
-          <EmojiPicker setValue={setValue} control={control} />
+          <EmojiPicker
+            setValue={setValue}
+            control={control}
+            disabled={isUploading}
+          />
           <PostFileInput
             openFilePicker={openFilePicker}
             control={control}
             setValue={setValue}
+            disabled={isUploading}
           />
           <input {...getInputProps()} />
+
           {finalUploadProgress !== 0 && (
             <div className="w-full h-1 rounded-sm overflow-hidden">
               <div

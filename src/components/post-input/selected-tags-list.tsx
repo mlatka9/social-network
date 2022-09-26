@@ -5,9 +5,14 @@ import { PostInputFormType } from './types';
 interface SelectedTagsListProps {
   control: Control<PostInputFormType>;
   setValue: UseFormSetValue<PostInputFormType>;
+  disabled: boolean;
 }
 
-const SelectedTagsList = ({ control, setValue }: SelectedTagsListProps) => {
+const SelectedTagsList = ({
+  control,
+  setValue,
+  disabled,
+}: SelectedTagsListProps) => {
   const tags = useWatch({ control, name: 'tags', defaultValue: [] });
 
   const handleRemoveTag = (name: string) => {
@@ -25,13 +30,15 @@ const SelectedTagsList = ({ control, setValue }: SelectedTagsListProps) => {
           key={tag}
         >
           <span>#{tag}</span>
-          <button
-            type="button"
-            onClick={() => handleRemoveTag(tag)}
-            className="ml-1 justify-center flex items-center shrink-0 w-4 h-4"
-          >
-            <Image src="/icons/close.png" height="16" width="16" alt="" />
-          </button>
+          {!disabled && (
+            <button
+              type="button"
+              onClick={() => handleRemoveTag(tag)}
+              className="ml-1 justify-center flex items-center shrink-0 w-4 h-4"
+            >
+              <Image src="/icons/close.png" height="16" width="16" alt="" />
+            </button>
+          )}
         </div>
       ))}
     </>

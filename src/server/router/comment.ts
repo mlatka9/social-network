@@ -103,17 +103,21 @@ const commentRouter = createProtectedRouter()
             id: input.parentId
           }
         })
-        await prisma.notification.create({
-          data: {
-            userId: parentComment.userId,
-          }
-        }).then(notification=>prisma.notificationCommentReply.create({
+        if(parentComment.userId !== ctx.session.user.id) {
+          await prisma.notification.create({
             data: {
-              notificationId: notification.id,
-              commentId: createdComment.id
+              userId: parentComment.userId,
             }
-          }))
-      } else {
+          }).then(notification=>prisma.notificationCommentReply.create({
+              data: {
+                notificationId: notification.id,
+                commentId: createdComment.id
+              }
+            }))
+        }
+      
+      } else if(post.userId !== ctx.session.user.id){
+        
         await prisma.notification.create({
           data: {
             userId: post.userId,
@@ -124,6 +128,7 @@ const commentRouter = createProtectedRouter()
               commentId: createdComment.id
             }
           }))
+       
       }
       
 

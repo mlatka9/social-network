@@ -7,9 +7,14 @@ import { PostInputFormType } from './types';
 interface PostUserPickerProps {
   control: Control<PostInputFormType>;
   setValue: UseFormSetValue<PostInputFormType>;
+  disabled: boolean;
 }
 
-const PostMentionsPicker = ({ control, setValue }: PostUserPickerProps) => {
+const PostMentionsPicker = ({
+  control,
+  setValue,
+  disabled,
+}: PostUserPickerProps) => {
   const mentions = useWatch({ control, name: 'mentions', defaultValue: [] });
 
   const setMentions = (newMentions: SearchUserType[]) => {
@@ -28,8 +33,11 @@ const PostMentionsPicker = ({ control, setValue }: PostUserPickerProps) => {
       <SelectedMentionsList
         mentions={mentions}
         handleRemoveMention={handleRemoveMention}
+        disabled={disabled}
       />
-      <PostMentionsInput mentions={mentions} setMentions={setMentions} />
+      {!disabled && (
+        <PostMentionsInput mentions={mentions} setMentions={setMentions} />
+      )}
     </div>
   );
 };
