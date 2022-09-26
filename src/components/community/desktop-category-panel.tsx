@@ -11,7 +11,7 @@ const DestopCategoryPanel = ({
 }: DestopCategoryPanelProps) => (
   <div className="hidden lg:block h-fit sticky top-[92px] space-y-5">
     <BackButton />
-    <div className="overflow-y-scroll h-[600px] rounded-xl">
+    <div className="overflow-y-scroll max-h-[600px] rounded-xl">
       <CategoryList />
     </div>
     <Button className="w-full" onClick={handleOpenCreator}>
