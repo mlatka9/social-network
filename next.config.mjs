@@ -31,6 +31,7 @@ export default defineNextConfig({
       'res.cloudinary.com',
       'cloudflare-ipfs.com',
       'loremflickr.com',
+      'avatars.githubusercontent.com'
     ],
   },
 });
