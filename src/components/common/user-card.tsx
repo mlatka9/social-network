@@ -11,6 +11,7 @@ interface UserCardProps {
   bio: string;
   mutualUsers: { id: string; name: string | null }[];
   followedByMe: boolean;
+  hasShortBio?: boolean;
 }
 
 const UserCard = ({
@@ -21,11 +22,17 @@ const UserCard = ({
   name,
   mutualUsers,
   followedByMe,
+  hasShortBio,
 }: UserCardProps) => {
   const mutualUserNumber = mutualUsers.length;
 
   const { data: session } = useSession();
   const myId = session?.user?.id!;
+
+  const formattedBio =
+    hasShortBio && bio.length > 100
+      ? bio.slice(0, 100).trim().concat('...')
+      : bio;
 
   return (
     <div className="flex flex-col overflow-hidden">
@@ -51,7 +58,7 @@ const UserCard = ({
       </div>
       {bio && (
         <p className="text-sm text-neutral-900  mb-3 dark:text-primary-dark-600">
-          {bio}
+          {formattedBio}
         </p>
       )}
 

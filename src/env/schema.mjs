@@ -12,6 +12,8 @@ export const serverSchema = z.object({
   // NEXTAUTH_URL: z.string().url(),
   GOOGLE_CLIENT_ID: z.string(),
   GOOGLE_CLIENT_SECRET: z.string(),
+  GITHUB_CLIENT_ID: z.string(),
+  GITHUB_CLIENT_SECRET: z.string(),
   EMAIL_SERVER: z.string(),
   EMAIL_SERVER_USER: z.string(),
   EMAIL_SERVER_PASSWORD: z.string(),

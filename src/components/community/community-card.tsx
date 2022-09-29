@@ -14,6 +14,7 @@ type CommunityCardProps = {
   isOwner: boolean;
   joinedByMe: boolean;
   isMyfavourite: boolean;
+  hasShortDescription?: boolean;
 };
 
 const CommunityCard = ({
@@ -26,73 +27,84 @@ const CommunityCard = ({
   isOwner,
   joinedByMe,
   isMyfavourite,
-}: CommunityCardProps) => (
-  <div className="rounded-lg space-y-3">
-    <div className="flex">
-      <Link href={`/community/${id}`}>
-        <div className="shrink-0 cursor-pointer">
-          <Image
-            src={image || '/images/community-fallback.svg'}
-            width="40"
-            height="40"
-            layout="fixed"
-            alt=""
-            className="rounded-lg block"
-            objectFit="cover"
-            unoptimized
-          />
-        </div>
-      </Link>
+  hasShortDescription,
+}: CommunityCardProps) => {
+  const formattedDescription =
+    hasShortDescription && description.length > 100
+      ? description.slice(0, 100).trim().concat('...')
+      : description;
 
-      <div className="grid grid-cols-[auto_1fr] w-full">
-        <div className="mx-5 dark:text-primary-dark-800 overflow-hidden">
-          <Link href={`/community/${id}`}>
-            <a className="font-poppins font-medium hover:underline block">
-              {name}
-            </a>
-          </Link>
-          <p className=" text-neutral-500 dark:text-primary-dark-600 text-xs font-medium">
-            {membersCount} Members
-          </p>
-        </div>
+  return (
+    <div className="rounded-lg space-y-3">
+      <div className="flex">
+        <Link href={`/community/${id}`}>
+          <div className="shrink-0 cursor-pointer">
+            <Image
+              src={image || '/images/community-fallback.svg'}
+              width="40"
+              height="40"
+              layout="fixed"
+              alt=""
+              className="rounded-lg block"
+              objectFit="cover"
+              unoptimized
+            />
+          </div>
+        </Link>
 
-        <div className="ml-auto flex sm:space-x-1 flex-col-reverse items-baseline justify-end sm:flex-row">
-          {isOwner && (
-            <div className="ml-auto text-sm  bg-yellow-200 dark:bg-yellow-300 text-yellow-800 px-1 py-[2px] rounded-md mb-1">
-              onwer
-            </div>
-          )}
-          {joinedByMe && (
-            <div className="ml-auto text-sm  bg-orange-200 dark:bg-orange-300 text-orange-900 px-1 py-[2px] rounded-md mb-1">
-              joined
-            </div>
-          )}
-          <p className="text-sm font-medium font-poppins text-right dark:text-primary-dark-800">
-            {categoryName}
-          </p>
+        <div className="grid grid-cols-[auto_1fr] w-full">
+          <div className="mx-5 dark:text-primary-dark-800 overflow-hidden">
+            <Link href={`/community/${id}`}>
+              <a className="font-poppins font-medium hover:underline block">
+                {name}
+              </a>
+            </Link>
+            <p className=" text-neutral-500 dark:text-primary-dark-600 text-xs font-medium">
+              {membersCount} Members
+            </p>
+          </div>
+
+          <div className="ml-auto flex sm:space-x-1 flex-col-reverse items-baseline justify-end sm:flex-row">
+            {isOwner && (
+              <div className="ml-auto text-sm  bg-yellow-200 dark:bg-yellow-300 text-yellow-800 px-1 py-[2px] rounded-md mb-1">
+                onwer
+              </div>
+            )}
+            {joinedByMe && (
+              <div className="ml-auto text-sm  bg-orange-200 dark:bg-orange-300 text-orange-900 px-1 py-[2px] rounded-md mb-1">
+                joined
+              </div>
+            )}
+            <p className="text-sm font-medium font-poppins text-right dark:text-primary-dark-800">
+              {categoryName}
+            </p>
+          </div>
         </div>
       </div>
-    </div>
 
-    {description && (
-      <p className="text-sm text-neutral-600 dark:text-primary-dark-600 overflow-hidden">
-        {description}
-      </p>
-    )}
-
-    <div className="flex items-center ">
-      <CommunityFavouriteIcon isMyfavourite={isMyfavourite} communityId={id} />
-      {!isOwner && (
-        <JoinCommunityButton
-          communityName={name}
-          joinedByMe={joinedByMe}
-          communityId={id}
-          isSmall
-          className="ml-auto"
-        />
+      {description && (
+        <p className="text-sm text-neutral-600 dark:text-primary-dark-600 overflow-hidden">
+          {formattedDescription}
+        </p>
       )}
+
+      <div className="flex items-center ">
+        <CommunityFavouriteIcon
+          isMyfavourite={isMyfavourite}
+          communityId={id}
+        />
+        {!isOwner && (
+          <JoinCommunityButton
+            communityName={name}
+            joinedByMe={joinedByMe}
+            communityId={id}
+            isSmall
+            className="ml-auto"
+          />
+        )}
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 export default CommunityCard;

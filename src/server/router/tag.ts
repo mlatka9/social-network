@@ -47,7 +47,7 @@ const tagRouter = createProtectedRouter()
             postId: 'desc',
           },
         },
-        take: 5,
+        take: 4,
       });
 
       return data.map((tagData) => ({

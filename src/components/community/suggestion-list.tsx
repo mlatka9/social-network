@@ -30,6 +30,7 @@ const SuggestionList = () => {
           {userData.map((user) => (
             <div className=" px-5 py-3 rounded-md" key={user.id}>
               <UserCard
+                hasShortBio
                 followedByMe={user.followedByMe}
                 bio={user.bio}
                 followersCount={user.followersCount}
@@ -46,6 +47,7 @@ const SuggestionList = () => {
           {communityData.map((community) => (
             <div className=" px-5 py-3 rounded-md" key={community.id}>
               <CommunityCard
+                hasShortDescription
                 isMyfavourite={community.isMyfavourite}
                 id={community.id}
                 isOwner={community.isOwner}
