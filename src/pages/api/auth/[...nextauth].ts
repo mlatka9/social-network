@@ -57,6 +57,10 @@ export const authOptions: NextAuthOptions = {
       from: process.env.EMAIL_FROM,
     }),
   ],
+  pages: {
+    signIn: '/auth/signin',
+    verifyRequest: '/auth/verify-request', // (used for check email message)
+  }
 };
 
 export default NextAuth(authOptions);

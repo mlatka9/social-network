@@ -36,25 +36,28 @@ const UserCard = ({
 
   return (
     <div className="flex flex-col overflow-hidden">
-      <div className="flex mb-3">
+      <div className="flex mb-3 w-full">
         <UserProfilePicture imageUrl={image} userID={id} />
-        <div className="ml-3">
-          <Link href={`/user/${id}`}>
-            <a className="font-poppins font-medium hover:underline dark:text-primary-dark-800">
-              {name}
-            </a>
-          </Link>
-          <p className=" text-neutral-500 text-xs font-medium dark:text-primary-dark-600">
-            {followersCount} followers
-          </p>
+
+        <div className="grid grid-cols-[auto_1fr] w-full">
+          <div className="mx-3 overflow-hidden">
+            <Link href={`/user/${id}`}>
+              <a className="font-poppins font-medium hover:underline dark:text-primary-dark-800">
+                {name}
+              </a>
+            </Link>
+            <p className=" text-neutral-500 text-xs font-medium dark:text-primary-dark-600">
+              {followersCount} followers
+            </p>
+          </div>
+          <ButtonFollow
+            userName={name || ''}
+            userId={id}
+            isSmall
+            className="ml-auto mb-auto"
+            followedByMe={followedByMe}
+          />
         </div>
-        <ButtonFollow
-          userName={name || ''}
-          userId={id}
-          isSmall
-          className="ml-auto mb-auto"
-          followedByMe={followedByMe}
-        />
       </div>
       {bio && (
         <p className="text-sm text-neutral-900  mb-3 dark:text-primary-dark-600">

@@ -1,4 +1,5 @@
 import React from 'react';
+import clsx from "clsx";
 
 interface CommentContentProps {
   isEditing: boolean;
@@ -25,16 +26,16 @@ const CommentContent = ({
           value={draftContent}
           onChange={onChangeDraftContent}
         />
-        <button
+        <button disabled={!draftContent.length}
           type="button"
           onClick={handleUpdateComment}
-          className="ml-auto text-sm bg-blue-600 text-white  rounded-md px-2 py-1 mt-3 hover:bg-blue-400 transition-colors"
+          className={clsx("ml-auto text-sm bg-blue-500 text-white  rounded-md px-2 py-1 mt-3 hover:bg-blue-400 transition-colors", !draftContent.length && '!bg-blue-500/50 ')}
         >
           Save
         </button>
       </div>
     ) : (
-      <p className="text-neutral-800 dark:text-white overflow-hidden">
+      <p className="text-neutral-800 dark:text-white overflow-hidden whitespace-pre-wrap">
         {parentUserName && (
           <span className="font-semibold text-blue-500 mr-1">
             @{parentUserName}

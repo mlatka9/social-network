@@ -453,13 +453,13 @@ const postRouter = createProtectedRouter()
       postId: z.string(),
     }),
     async resolve({ ctx, input }) {
-      const isCurretUserPostAuthor = await prisma.post.count({
+      const isCurrentUserPostAuthor = await prisma.post.count({
         where: {
           id: input.postId,
           userId: ctx.session.user.id,
         },
       });
-      if (!isCurretUserPostAuthor) {
+      if (!isCurrentUserPostAuthor) {
         throw Error('You are not the owner of the post');
       }
 

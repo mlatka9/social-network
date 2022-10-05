@@ -53,7 +53,7 @@ const CommunityCard = ({
         </Link>
 
         <div className="grid grid-cols-[auto_1fr] w-full">
-          <div className="mx-5 dark:text-primary-dark-800 overflow-hidden">
+          <div className="mx-3 dark:text-primary-dark-800 overflow-hidden">
             <Link href={`/community/${id}`}>
               <a className="font-poppins font-medium hover:underline block">
                 {name}

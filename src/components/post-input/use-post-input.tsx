@@ -131,7 +131,7 @@ const usePostInput = ({
       mentions: mentions.map((mention) => mention.id),
       shareParentId: sharedPostId,
       communityId,
-      link: link.value,
+      link: getValues('link.isOpen') ?  link.value : undefined,
     });
 
     reset();
