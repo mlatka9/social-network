@@ -13,7 +13,7 @@ const ErrorFallback = ({ message }: ErrorFallbackProps) => {
   };
 
   return (
-    <div className="rounded-xl bg-primary-0 w-full h-[300px] font-poppins font-semibold text-primary-800 text-sm dark:text-primary-dark-800 flex justify-center items-center flex-col">
+    <div className="rounded-xl bg-primary-0 dark:bg-primary-dark-200 w-full h-[300px] font-poppins font-semibold text-primary-800 text-sm dark:text-primary-dark-800 flex justify-center items-center flex-col">
       <p className="mb-5">{message}</p>
       <Button className="ml-[unset]" onClick={goToHomePage}>
         Back to home

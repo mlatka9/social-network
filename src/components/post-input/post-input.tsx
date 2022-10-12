@@ -4,7 +4,7 @@ import { PostDetailsType } from '@/types/db';
 import PostTagPicker from '@/components/post-input/post-tags-picker';
 import Image from 'next/image';
 import PostFileInput from './post-file-input';
-import EmojiPicker from '../common/emoji-picker';
+import EmojiPicker from './emoji-picker';
 import Button from '../common/button';
 import PostMentionsPicker from './post-mentions-picker';
 import 'react-toastify/dist/ReactToastify.css';

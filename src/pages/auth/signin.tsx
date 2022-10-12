@@ -1,7 +1,7 @@
 import { getSession, signIn } from 'next-auth/react';
 import { GetServerSidePropsContext } from 'next';
 import Image from 'next/image';
-import FormInput from '@/components/common/form-input';
+import FormInput from '@/components/form/form-input';
 import GoogleIcon from '@/components/common/icons/google';
 import GithubIcon from '@/components/common/icons/github';
 import Button from '@/components/common/button';

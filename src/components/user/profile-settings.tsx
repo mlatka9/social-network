@@ -4,12 +4,12 @@ import { useState, useEffect } from 'react';
 import { useCurrentUserProfileQuery } from 'src/hooks/query';
 import { useProfileMutation } from 'src/hooks/mutation';
 import { toast } from 'react-toastify';
-import FormInput from './form-input';
-import FormTextarea from './form-textarea';
-import FormImages from './form-images';
-import Button from './button';
-import Loading from './loading';
-import LetterCounter from './letter-counter';
+import FormInput from '@/components/form/form-input';
+import FormTextarea from '../form/form-textarea';
+import FormImages from '../form/form-images';
+import Button from '../common/button';
+import Loading from '../common/loading';
+import LetterCounter from '../common/letter-counter';
 
 export interface ProfileSettingsFormType {
   name: string;

@@ -1,8 +1,8 @@
 import { unstable_getServerSession } from 'next-auth/next';
 import { authOptions } from 'src/pages/api/auth/[...nextauth]';
 import type { GetServerSidePropsContext } from 'next';
-import ProfileSettings from '@/components/common/profile-settings';
-import UserFollows from '@/components/common/user-follows';
+import ProfileSettings from '@/components/user/profile-settings';
+import UserFollows from '@/components/user/user-follows';
 import PostList from '@/components/post/post-list';
 import ModalWrapper from '@/components/common/modal-wrapper';
 import Layout from '@/components/layouts/main-layout';

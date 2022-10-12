@@ -5,11 +5,11 @@ import { useCommunityMutation } from 'src/hooks/mutation';
 import { useCategoryQuery } from 'src/hooks/query';
 import { CommunityDetailsType } from '@/types/db';
 import { toast } from 'react-toastify';
-import FormImages from '../common/form-images';
-import FormTextarea from '../common/form-textarea';
-import FormInput from '../common/form-input';
+import FormInput from '@/components/form/form-input';
+import FormSelect from '@/components/form/form-select';
+import FormImages from '../form/form-images';
+import FormTextarea from '../form/form-textarea';
 import Button from '../common/button';
-import FormSelect from '../common/form-select';
 import LetterCounter from '../common/letter-counter';
 
 export interface CommunitySettingsFormType {

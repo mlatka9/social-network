@@ -1,11 +1,11 @@
 import { useForm } from 'react-hook-form';
 import { useAddCommunity } from 'src/hooks/mutation';
 import { useCategoryQuery } from 'src/hooks/query';
-import FormInput from '@/components/common/form-input';
+import FormInput from '@/components/form/form-input';
 import { toast } from 'react-toastify';
+import FormSelect from '@/components/form/form-select';
 import Button from '../common/button';
-import FormSelect from '../common/form-select';
-import FormTextarea from '../common/form-textarea';
+import FormTextarea from '../form/form-textarea';
 import LetterCounter from '../common/letter-counter';
 
 interface FormInputType {

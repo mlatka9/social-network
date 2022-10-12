@@ -1,13 +1,13 @@
-import { useFollowersQuery } from 'src/hooks/query';
-import Loading from './loading';
-import UserCard from './user-card';
+import { useFollowingQuery } from 'src/hooks/query';
+import Loading from '@/components/common/loading';
+import UserCard from '@/components/common/user-card';
 
-interface FollowersListProps {
+interface FollowingListProps {
   userId: string;
 }
 
-const FollowersList = ({ userId }: FollowersListProps) => {
-  const { data, isSuccess } = useFollowersQuery(userId);
+const FollowingList = ({ userId }: FollowingListProps) => {
+  const { data, isSuccess } = useFollowingQuery(userId);
 
   if (!isSuccess) return <Loading height={500} />;
 
@@ -29,4 +29,4 @@ const FollowersList = ({ userId }: FollowersListProps) => {
   );
 };
 
-export default FollowersList;
+export default FollowingList;

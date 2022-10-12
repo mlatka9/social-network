@@ -25,7 +25,7 @@ const Home: NextPage = () => {
   return (
     <>
       <Head>
-        <title>Twitterek</title>
+        <title>Social Network</title>
         <meta property="og:title" content="Twitterek" />
       </Head>
       <MainLayout>

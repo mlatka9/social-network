@@ -1,8 +1,8 @@
 import clsx from 'clsx';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import FollowingList from '@/components/user/following-list';
 import FollowersList from './followers-list';
-import FollowingList from './following-list';
 
 interface FollowersListProps {
   section: 'followers' | 'following';

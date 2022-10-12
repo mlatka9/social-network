@@ -5,8 +5,8 @@ import { useTheme } from 'next-themes';
 import { useRef, useState } from 'react';
 import { Control, UseFormSetValue, useWatch } from 'react-hook-form';
 import { useOnClickOutside } from 'usehooks-ts';
-import { PostInputFormType } from '../post-input/types';
-import EmojiIcon from './icons/emoji';
+import { PostInputFormType } from './types';
+import EmojiIcon from '../common/icons/emoji';
 
 interface EmojiPickerProps {
   setValue: UseFormSetValue<PostInputFormType>;

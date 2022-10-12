@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import { Control, UseFormSetValue, useWatch } from 'react-hook-form';
 import PhotoIcon from '../common/icons/photo';
-import UploadImageThumbnail from '../common/upload-image-thumbnail';
+import UploadImageThumbnail from './upload-image-thumbnail';
 import {
   getImageHeightRatio,
   getImageWidthRatio,
