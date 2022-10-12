@@ -60,7 +60,7 @@ npm install
 4. Create .env file (see .env.example)
 
 ```
-echo "" > .env (for windows) touch .env (or unix)
+echo "" > .env (for windows) touch .env (for unix)
 ```
 
 5. Run server
