@@ -30,7 +30,7 @@ Implemented functionalities:
 
 ## Links
 
-- [live demo](https://twitter-clone-mlatka9.vercel.app)
+- [live demo](https://social-network.mlatka9.vercel.app/)
 - [github repo](https://github.com/mlatka9/twitter-clone)
 
 ## Screenshots
