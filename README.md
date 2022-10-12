@@ -1,8 +1,8 @@
-# Social Media App
+# Social Network
 
 ## Overview
 
-Allows users to share their moments with others and find people with the same passions
+Social Media App allows users to share their moments with others and find people with the same passions
 
 Implemented functionalities:
 - Login through magic links or other social media accounts
@@ -29,8 +29,8 @@ Implemented functionalities:
 
 ## Links
 
-- [demo](https://twitter-clone-mlatka9.vercel.app)
-- [github](https://github.com/mlatka9/twitter-clone)
+- [live demo](https://twitter-clone-mlatka9.vercel.app)
+- [github repo](https://github.com/mlatka9/twitter-clone)
 
 ## Screenshots
 
