@@ -24,6 +24,7 @@ Implemented functionalities:
 - Prisma
 - NextAuth
 - TRPC
+- PlanetScale
 - Cloudinary
 - Vercel
 
